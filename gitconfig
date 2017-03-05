@@ -1,0 +1,24 @@
+[user]
+	email = ejohnson
+	name = ejohnson
+[core]
+	editor = emacs -nw
+
+[color]
+	ui = true
+
+[color "branch"]
+        current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+         meta = yellow ul
+	 frag = cyan bold
+	 old = red bold
+	 new = green bold
+
+[color "status"]
+         added = yellow
+	 changed = green
+	 untracked = red bold
