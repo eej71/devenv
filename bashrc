@@ -1,5 +1,4 @@
 # -*-sh-*-
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
@@ -32,7 +31,9 @@ case "$EEJ_PROFILE" in
         function xed { emacsclient -n -c $@ 2> /dev/null; }
         function ted { emacsclient -n -c $@ 2> /dev/null; }
         ;;
+
     Work)
+        alias ls='ls --color=auto'
         source ~/git/contrib/completion/git-completion.bash
         source ~/git/contrib/completion/git-prompt.bash
         function ed { TERM=xterm-256color emacsclient -nw $@; }
@@ -40,12 +41,12 @@ case "$EEJ_PROFILE" in
         function ted { emacsclient -n -c --frame-parameters="((width . 170)(height . 40)(top . 10)(left . 10))" $@ 2> /dev/null; }
         xset r rate 350 60  # Defines the faster repeat rate for X11
         ;;
+
     *)
         echo "Unrecognized PROFILE=${EEJ_PROFILE}"
         ;;
 esac
 
-alias ls='ls --color=auto'
 alias ll="ls -lAXF --color=auto --block-size=512 --time-style=long-iso"
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -60,7 +61,7 @@ export HISTSIZE=100000
 export HISTFILESIZE=100000
 export PROMPT_DIRTRIM=4
 export PROMPT_COMMAND="history -a ; history -c ; history -r; $PROMPT_COMMAND"
-
+export PATH
 ## The notation \[ \] is used to tell bash that it presents as 0 onscreen chars
 ## \033[48;5;XYZm is a background color
 ## \033[38;5;XYZm is a foreground color
