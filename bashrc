@@ -25,8 +25,8 @@ fi
 # Specific domains
 case "$EEJ_PROFILE" in
     Home)
-        source /usr/local/Cellar/git/2.10.0/etc/bash_completion.d/git-completion.bash
-        source /usr/local/Cellar/git/2.10.0/etc/bash_completion.d/git-prompt.sh
+        source /usr/share/doc/git/contrib/completion/git-completion.bash
+        source /usr/share/doc/git/contrib/completion/git-prompt.sh
         function ed { TERM=xterm-256color emacsclient -nw $@; }
         function xed { emacsclient -n -c $@ 2> /dev/null; }
         function ted { emacsclient -n -c $@ 2> /dev/null; }
@@ -62,6 +62,7 @@ export HISTFILESIZE=100000
 export PROMPT_DIRTRIM=4
 export PROMPT_COMMAND="history -a ; history -c ; history -r; $PROMPT_COMMAND"
 export PATH
+export TERM=xterm-256color
 ## The notation \[ \] is used to tell bash that it presents as 0 onscreen chars
 ## \033[48;5;XYZm is a background color
 ## \033[38;5;XYZm is a foreground color

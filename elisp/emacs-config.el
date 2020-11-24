@@ -6,7 +6,6 @@
 (require 'spectral-theme)
 (require 'org-config)
 (require 'local-config)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -19,34 +18,18 @@
    ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
  '(backup-directory-alist (list (quote (".*" . "~/tmp/"))))
  '(beacon-color "#cc6666")
+ '(company-minimum-prefix-length 5)
  '(company-quickhelp-color-background "#DCDCCC")
  '(company-quickhelp-color-foreground "#4F4F4F")
- '(company-minimum-prefix-length 5)
  '(company-show-numbers t)
  '(company-tooltip-limit 20)
  '(compilation-skip-threshold 1)
  '(completion-ignore-case t t)
- '(custom-enabled-themes '(spectral))
+ '(custom-enabled-themes (quote (spectral)))
  '(custom-file "~/devenv/elisp/emacs-config.el")
  '(custom-safe-themes
    (quote
-    ("4219e359bae5bea2a683b3b310cf73fb7463d554558aaccf5660a5680ca76c53" "2887f73fc0a89beaa18688aad1ad019505c0b12aeba5137edb16cb03f32fbc8b"
-     "13c47ed0d5e869b2feec4d0dc4ea85e90c368f179d31c06fdb47024e5567c44d" "7218af3d77fc674a5f97d139602eabb5a1a8309b7a4daa6096a9a9e504d00bac"
-     "f84ee8bb083475063b643683475f706df42d8ffda4c740d68d9bfbfc687b2cda" "83bc3941e4818bdeb8e7cf5f2004c6df074e8d1ef11bcd377c216ce09b79dd2c"
-     "c33a497ccd1c131b60ed7c5862c88629c459867e455cc9ae248d1944e3675b1b" "319fc505eaf7556a9882d38a2f5d4d2cddad65b605668e6efbe5ed0ccdd0a5bd"
-     "b80abf8d5a52d81203383575bd8ca15777bd5e5c602dd757dc1ff539f18cc353" "cae15efb443ee0b3d16ded7f0ad1fafd0562236a9e55bd622f5b39f8c4415541"
-     "769f3b15c41931a29210f462f554e6168d76ee098e0e7c36cad8293548ea75dd" "d4f9bc75ab183f3f0cc8660c264e3483a8bb4c7090a4a8971888f7f7b068bd4b"
-     "b103fc29dc671f519feb4e5ba71d84fc29032db0b73f8788d4bf64344d7d9f53" "b8ca35a069b4252c25cc9fcfd6e21d030ae190fd5a25c29a9ac062718a4530f2"
-     "c2d4bcab3edf73fed7a28211547ff6f3f943900400b727f5b7d0505c4add1330" "90244bef6fa8785e1f963b4e347edd7bbe922bc4d96bc2458c472956358ab5dc"
-     "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879"
-     "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e"
-     "2930dff004a27127fc167b1747d459b7a959b5baba3ec533881fb57e87244205" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a"
-     "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
-     "d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4"
-     "718fb4e505b6134cc0eafb7dad709be5ec1ba7a7e8102617d87d3109f56d9615" "2022c5a92bbc261e045ec053aa466705999863f14b84c012a43f55a95bf9feb8"
-     "63151d1866700f4f4bf2aa5f845e79677e1fe80dd7136c408634a280ec85f902" "770e16452f34c14455950535982350ec5980f5f113ba1574f4658c930e20c69e"
-     "3728fd3ce10b4c0bdfd320962336f96cef112de554a00f9cc9875a27f12589e3" "6369644497a7dde1350dce08f404316c7cb19f2d1c1b937d412a8860c4eb02f5"
-     "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "0820d191ae80dcadc1802b3499f84c07a09803f2cb90b343678bdb03d225b26b" default)))
+    ("4219e359bae5bea2a683b3b310cf73fb7463d554558aaccf5660a5680ca76c53" "2887f73fc0a89beaa18688aad1ad019505c0b12aeba5137edb16cb03f32fbc8b" "13c47ed0d5e869b2feec4d0dc4ea85e90c368f179d31c06fdb47024e5567c44d" "7218af3d77fc674a5f97d139602eabb5a1a8309b7a4daa6096a9a9e504d00bac" "f84ee8bb083475063b643683475f706df42d8ffda4c740d68d9bfbfc687b2cda" "83bc3941e4818bdeb8e7cf5f2004c6df074e8d1ef11bcd377c216ce09b79dd2c" "c33a497ccd1c131b60ed7c5862c88629c459867e455cc9ae248d1944e3675b1b" "319fc505eaf7556a9882d38a2f5d4d2cddad65b605668e6efbe5ed0ccdd0a5bd" "b80abf8d5a52d81203383575bd8ca15777bd5e5c602dd757dc1ff539f18cc353" "cae15efb443ee0b3d16ded7f0ad1fafd0562236a9e55bd622f5b39f8c4415541" "769f3b15c41931a29210f462f554e6168d76ee098e0e7c36cad8293548ea75dd" "d4f9bc75ab183f3f0cc8660c264e3483a8bb4c7090a4a8971888f7f7b068bd4b" "b103fc29dc671f519feb4e5ba71d84fc29032db0b73f8788d4bf64344d7d9f53" "b8ca35a069b4252c25cc9fcfd6e21d030ae190fd5a25c29a9ac062718a4530f2" "c2d4bcab3edf73fed7a28211547ff6f3f943900400b727f5b7d0505c4add1330" "90244bef6fa8785e1f963b4e347edd7bbe922bc4d96bc2458c472956358ab5dc" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "2930dff004a27127fc167b1747d459b7a959b5baba3ec533881fb57e87244205" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "718fb4e505b6134cc0eafb7dad709be5ec1ba7a7e8102617d87d3109f56d9615" "2022c5a92bbc261e045ec053aa466705999863f14b84c012a43f55a95bf9feb8" "63151d1866700f4f4bf2aa5f845e79677e1fe80dd7136c408634a280ec85f902" "770e16452f34c14455950535982350ec5980f5f113ba1574f4658c930e20c69e" "3728fd3ce10b4c0bdfd320962336f96cef112de554a00f9cc9875a27f12589e3" "6369644497a7dde1350dce08f404316c7cb19f2d1c1b937d412a8860c4eb02f5" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "0820d191ae80dcadc1802b3499f84c07a09803f2cb90b343678bdb03d225b26b" default)))
  '(exec-path-from-shell-check-startup-files nil)
  '(fci-rule-color "#383838")
  '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
@@ -59,7 +42,6 @@
  '(helm-scroll-amount 8)
  '(helm-split-window-inside-p t)
  '(inhibit-startup-screen t)
- '(linum-format "%04d ")
  '(mode-line-format
    (quote
     (" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification sml/pos-id-separator smartrep-mode-line-string
@@ -106,13 +88,7 @@
  '(org-use-tag-inheritance t)
  '(package-selected-packages
    (quote
-    (protobuf-mode spaceline flatui-dark-theme auto-complete iedit merlin utop tuareg markdown-mode key-chord go-projectile counsel
-                   swiper web-mode goto-chg evil-visualstar ivy smart-mode-line-powerline-theme zop-to-char zenburn-theme which-key
-                   volatile-highlights vkill undo-tree solarized-theme smex smartrep smartparens smart-mode-line rainbow-mode
-                   rainbow-delimiters ov operate-on-number move-text magit lush-theme json-mode js2-mode imenu-anywhere ido-vertical-mode
-                   ido-ubiquitous helm-projectile guru-mode grizzl god-mode gitignore-mode gitconfig-mode git-timemachine gist ggtags geiser
-                   flycheck flx-ido expand-region exec-path-from-shell elisp-slime-nav editorconfig easy-kill discover-my-major diminish
-                   diff-hl crux company color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized browse-kill-ring beacon anzu ace-window)))
+    (helm-gtags company-anaconda anaconda-mode rainbow-mode elisp-slime-nav rainbow-delimiters company helm-ag helm-descbinds helm-projectile helm zop-to-char zenburn-theme which-key volatile-highlights undo-tree super-save smartrep smartparens projectile operate-on-number move-text magit imenu-anywhere hl-todo guru-mode gitignore-mode gitconfig-mode git-timemachine gist flycheck expand-region exec-path-from-shell editorconfig easy-kill discover-my-major diminish diff-hl crux browse-kill-ring anzu ag ace-window)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(prelude-clean-whitespace-on-save nil)
  '(prelude-guru nil)
@@ -138,9 +114,24 @@
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
-    ( (20 . "#BC8383")     (40 . "#CC9393")     (60 . "#DFAF8F")     (80 . "#D0BF8F")     (100 . "#E0CF9F")     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")    (160 . "#7F9F7F")    (180 . "#8FB28F")    (200 . "#9FC59F")     (220 . "#AFD8AF")     (240 . "#BFEBBF")
-     (260 . "#93E0E3")    (280 . "#6CA0A3")    (300 . "#7CB8BB")    (320 . "#8CD0D3")     (340 . "#94BFF3")     (360 . "#DC8CC3"))))
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks nil)
  '(visible-bell t)
@@ -157,7 +148,6 @@
 (tool-bar-mode nil)
 (recentf-mode t)
 (global-auto-revert-mode t)
-(global-linum-mode t)
 (global-flycheck-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -171,7 +161,7 @@
 
 (defadvice hack-dir-local-variables (around walk-dir-locals-file activate)
   (let* ((dir-locals-list (list dir-locals-file))
-         (walk-dir-locals-file (first dir-locals-list)))
+         (walk-dir-locals-file (car dir-locals-list)))
     (while (not (equal (concat "/" dir-locals-file) (expand-file-name walk-dir-locals-file)))
       (progn
         (setq walk-dir-locals-file (concat "../" walk-dir-locals-file))
@@ -196,4 +186,15 @@
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
+;; Why won't my configs work?
+(global-nlinum-mode -1)
+(menu-bar-mode -1)
+(global-display-line-numbers-mode) ;; Requires emacs 26
+
 (provide 'emacs-config)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

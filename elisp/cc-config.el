@@ -1,5 +1,5 @@
 (setq auto-mode-alist (cons '("\\.h\\'" . c++-mode) auto-mode-alist))
-
+(add-to-list 'load-path "~/devenv/elisp/cc-mode/")
 ;; Enables the return key to continue comments or strings
 (add-hook 'c-initialization-hook '(lambda () "" (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
 
@@ -10,9 +10,9 @@
   (aset buffer-display-table ?\^M []))
 
 (defun my-c-mode-common-hook ()
-  (linum-mode t)
   (remove-dos-eol)
+  (helm-gtags-mode t)
   (font-lock-mode 2))
 
-(add-hook 'prelude-mode-hook 'my-c-mode-common-hook)
+(add-hook 'prog-mode-hook 'my-c-mode-common-hook)
 (provide 'cc-config)

@@ -3,10 +3,10 @@
 (let* ((spectral/background   "#000000")
        (spectral/background+5 "#1c1c1c")
        (spectral/foreground   "#FFFFFF")
-       (spectral/turquoise    "#2AA198")
+       (spectral/turquoise    "#00Af87")
        (spectral/orange       "#FF951B")
        (spectral/pink         "#FF88FF")
-       (spectral/yellow       "#FFE329")
+       (spectral/yellow       "#d7d700")
        (spectral/green        "#61CE3C")
        (spectral/light-blue   "#82A6DF")
        (spectral/lightblue-2  "#87ffff")
@@ -67,7 +67,7 @@
    `(fringe                       ((t (:background ,spectral/background))))
    `(buffers-tab                  ((t (:foreground ,spectral/foreground :background ,spectral/background))))
    `(font-lock-builtin-face       ((t (:foreground "Khaki" :weight bold))))
-   `(font-lock-comment-face       ((t (:foreground ,spectral/limegreen-1 :background ,spectral/background+5))))
+   `(font-lock-comment-face       ((t (:foreground ,spectral/limegreen-1))))
    `(font-lock-comment-delimiter-face ((t (:foreground ,spectral/limegreen-1 :background ,spectral/background+5))))
    `(font-lock-doc-face           ((t (:foreground "SlateGray"))))
    `(font-lock-doc-string-face    ((t (:foreground ,spectral/orange))))
@@ -402,9 +402,6 @@
 ;;;;; helm-swoop
    `(helm-swoop-target-line-face ((t (:foreground ,spectral-fg :background ,spectral-bg+1))))
    `(helm-swoop-target-word-face ((t (:foreground ,spectral-yellow :background ,spectral-bg+2 :weight bold))))
-
-;;;;; linum-mode
-   `(linum ((t (:foreground ,spectral-green+2 :background ,spectral-bg))))
 
 ;;;;; lispy
    `(lispy-command-name-face ((t (:background ,spectral-bg-05 :inherit font-lock-function-name-face))))
