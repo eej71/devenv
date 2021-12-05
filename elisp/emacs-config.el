@@ -61,6 +61,7 @@
  '(org-clock-modeline-total 'today)
  '(org-clock-out-remove-zero-time-clocks t)
  '(org-clock-persist t)
+ '(org-clock-persist-file "~/devenv/org-clock-save.el")
  '(org-columns-default-format "%100ITEM %TODO %TAGS")
  '(org-deadline-warning-days 3)
  '(org-default-notes-file (concat org-directory "/notes.org"))
