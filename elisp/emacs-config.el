@@ -29,6 +29,8 @@
  '(custom-file "~/devenv/elisp/emacs-config.el")
  '(custom-safe-themes
    '("4219e359bae5bea2a683b3b310cf73fb7463d554558aaccf5660a5680ca76c53" "2887f73fc0a89beaa18688aad1ad019505c0b12aeba5137edb16cb03f32fbc8b" "13c47ed0d5e869b2feec4d0dc4ea85e90c368f179d31c06fdb47024e5567c44d" "7218af3d77fc674a5f97d139602eabb5a1a8309b7a4daa6096a9a9e504d00bac" "f84ee8bb083475063b643683475f706df42d8ffda4c740d68d9bfbfc687b2cda" "83bc3941e4818bdeb8e7cf5f2004c6df074e8d1ef11bcd377c216ce09b79dd2c" "c33a497ccd1c131b60ed7c5862c88629c459867e455cc9ae248d1944e3675b1b" "319fc505eaf7556a9882d38a2f5d4d2cddad65b605668e6efbe5ed0ccdd0a5bd" "b80abf8d5a52d81203383575bd8ca15777bd5e5c602dd757dc1ff539f18cc353" "cae15efb443ee0b3d16ded7f0ad1fafd0562236a9e55bd622f5b39f8c4415541" "769f3b15c41931a29210f462f554e6168d76ee098e0e7c36cad8293548ea75dd" "d4f9bc75ab183f3f0cc8660c264e3483a8bb4c7090a4a8971888f7f7b068bd4b" "b103fc29dc671f519feb4e5ba71d84fc29032db0b73f8788d4bf64344d7d9f53" "b8ca35a069b4252c25cc9fcfd6e21d030ae190fd5a25c29a9ac062718a4530f2" "c2d4bcab3edf73fed7a28211547ff6f3f943900400b727f5b7d0505c4add1330" "90244bef6fa8785e1f963b4e347edd7bbe922bc4d96bc2458c472956358ab5dc" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "2930dff004a27127fc167b1747d459b7a959b5baba3ec533881fb57e87244205" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "718fb4e505b6134cc0eafb7dad709be5ec1ba7a7e8102617d87d3109f56d9615" "2022c5a92bbc261e045ec053aa466705999863f14b84c012a43f55a95bf9feb8" "63151d1866700f4f4bf2aa5f845e79677e1fe80dd7136c408634a280ec85f902" "770e16452f34c14455950535982350ec5980f5f113ba1574f4658c930e20c69e" "3728fd3ce10b4c0bdfd320962336f96cef112de554a00f9cc9875a27f12589e3" "6369644497a7dde1350dce08f404316c7cb19f2d1c1b937d412a8860c4eb02f5" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "0820d191ae80dcadc1802b3499f84c07a09803f2cb90b343678bdb03d225b26b" default))
+ '(display-line-numbers-grow-only t)
+ '(display-line-numbers-width 3)
  '(exec-path-from-shell-check-startup-files nil)
  '(fci-rule-color "#383838")
  '(flycheck-color-mode-line-face-to-color 'mode-line-buffer-id)
@@ -49,7 +51,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-agenda-block-separator "")
- '(org-agenda-files '("~/foo.org"))
+ '(org-agenda-files '("~/org/projects.org"))
  '(org-agenda-log-mode-add-notes nil)
  '(org-agenda-log-mode-items '(clock))
  '(org-agenda-remove-tags t)
@@ -61,7 +63,7 @@
  '(org-clock-modeline-total 'today)
  '(org-clock-out-remove-zero-time-clocks t)
  '(org-clock-persist t)
- '(org-clock-persist-file "~/devenv/org-clock-save.el")
+ '(org-clock-persist-file "~/org/org-clock-save.el")
  '(org-columns-default-format "%100ITEM %TODO %TAGS")
  '(org-deadline-warning-days 3)
  '(org-default-notes-file (concat org-directory "/notes.org"))
