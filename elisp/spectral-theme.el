@@ -71,7 +71,7 @@
    `(font-lock-comment-delimiter-face ((t (:foreground ,spectral/limegreen-1 :background ,spectral/background+5))))
    `(font-lock-doc-face           ((t (:foreground "SlateGray"))))
    `(font-lock-doc-string-face    ((t (:foreground ,spectral/orange))))
-   `(font-lock-string-face        ((t (:foreground ,spectral/green :slant italic))))
+   `(font-lock-string-face        ((t (:foreground ,spectral/green :italic t))))
    `(font-lock-function-name-face ((t (:foreground ,spectral/pink))))
    `(font-lock-keyword-face       ((t (:foreground ,spectral/yellow :bold t :italic t))))
    `(font-lock-preprocessor-face  ((t (:foreground ,spectral/goldenrod))))
@@ -353,6 +353,7 @@
    `(git-gutter-fr:modified ((t (:foreground ,spectral-magenta :weight bold))))
 ;;;;; git-rebase
    `(git-rebase-hash ((t (:foreground, spectral-orange))))
+
 
    `(selectrum-prescient-primary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
    `(selectrum-prescient-secondary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
