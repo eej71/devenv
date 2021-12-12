@@ -9,7 +9,7 @@
        (spectral/yellow       "#d7d700")
        (spectral/green        "#61CE3C")
        (spectral/light-blue   "#82A6DF")
-       (spectral/lightblue-2  "#87ffff")
+       (spectral/lightblue-2  "#00ffff")
        (spectral/dark-blue    "#284050")
        (spectral/light-red    "#FA583F")
        (spectral/limegreen-1  "#87ffaf")
@@ -353,6 +353,10 @@
    `(git-gutter-fr:modified ((t (:foreground ,spectral-magenta :weight bold))))
 ;;;;; git-rebase
    `(git-rebase-hash ((t (:foreground, spectral-orange))))
+
+   `(selectrum-prescient-primary-highlight ((t (:foreground "white" :background "cyan" :bold t))))
+   `(selectrum-prescient-secondary-highlight ((t (:foreground "white" :background "cyan" :bold t))))
+   `(selectrum-current-candidate ((t (:foreground "white" :background "cyan" :bold t))))
 
    `(helm-header
      ((t (:foreground ,spectral-green
