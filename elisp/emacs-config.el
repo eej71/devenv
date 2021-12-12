@@ -22,6 +22,7 @@
  '(company-quickhelp-color-background "#DCDCCC")
  '(company-quickhelp-color-foreground "#4F4F4F")
  '(company-show-quick-access t)
+ '(company-show-numbers t)
  '(company-tooltip-limit 20)
  '(compilation-skip-threshold 1)
  '(completion-ignore-case t t)
@@ -35,13 +36,8 @@
  '(fci-rule-color "#383838")
  '(flycheck-color-mode-line-face-to-color 'mode-line-buffer-id)
  '(font-lock-maximum-decoration t)
+ '(global-display-line-numbers-mode nil)
  '(gtags-suggested-key-mapping t)
- '(helm-echo-input-in-header-line nil)
- '(helm-ff-file-name-history-use-recentf t)
- '(helm-ff-search-library-in-sexp t)
- '(helm-move-to-line-cycle-in-source t)
- '(helm-scroll-amount 8)
- '(helm-split-window-inside-p t)
  '(inhibit-startup-screen t)
  '(mode-line-format
    '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification sml/pos-id-separator smartrep-mode-line-string
@@ -55,7 +51,13 @@
  '(org-agenda-log-mode-add-notes nil)
  '(org-agenda-log-mode-items '(clock))
  '(org-agenda-remove-tags t)
+ '(org-agenda-sorting-strategy
+   '((agenda habit-down time-up priority-down category-keep)
+     (todo todo-state-down priority-down category-keep)
+     (tags priority-down category-keep)
+     (search category-keep)))
  '(org-agenda-start-with-clockreport-mode t)
+ '(org-agenda-tags-column 150)
  '(org-checkbox-hierarchical-statistics nil)
  '(org-clock-history-length 10)
  '(org-clock-into-drawer t)
@@ -78,6 +80,9 @@
  '(org-return-follows-link t)
  '(org-reverse-note-order t)
  '(org-tag-alist '(("work" . 119) ("home" . 104)))
+ '(org-startup-indented t)
+ '(org-tag-alist '(("work" . 119) ("home" . 104)))
+ '(org-tags-column -120)
  '(org-tags-column 120)
  '(org-tags-exclude-from-inheritance '("project"))
  '(org-tags-match-list-sublevels t)
@@ -86,25 +91,28 @@
  '(org-use-speed-commands t)
  '(org-use-tag-inheritance t)
  '(package-selected-packages
-   '(company-anaconda anaconda-mode rainbow-mode elisp-slime-nav rainbow-delimiters company helm-ag helm-descbinds helm-projectile helm zop-to-char zenburn-theme which-key volatile-highlights undo-tree super-save smartrep smartparens projectile operate-on-number move-text magit imenu-anywhere hl-todo guru-mode gitignore-mode gitconfig-mode git-timemachine gist flycheck expand-region exec-path-from-shell editorconfig easy-kill discover-my-major diminish diff-hl crux browse-kill-ring anzu ag ace-window))
+   '(0blayout ace-window ag anaconda-mode anzu auto-complete beacon browse-kill-ring chess color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow company company-anaconda consult consult-company consult-lsp consult-projectile counsel crux csv-mode d-mode diff-hl diminish discover-my-major easy-kill editorconfig elisp-slime-nav evil-visualstar exec-path-from-shell expand-region flatui-dark-theme flx-ido flycheck geiser ggtags gist git-timemachine gitconfig-mode gitignore-mode go-projectile god-mode goto-chg grizzl guru-mode helm helm-ag helm-descbinds helm-git helm-git-files helm-git-grep helm-gtags helm-make helm-org-rifle helm-orgcard helm-projectile helm-rg hl-todo ido-ubiquitous ido-vertical-mode iedit imenu-anywhere ivy js2-mode json-mode key-chord lush-theme magit magit-popup markdown-mode merlin move-text operate-on-number orderless org org-jira org-roam org-roam-bibtex org-roam-timestamps org-roam-ui ov projectile projectile-ripgrep protobuf-mode rainbow-delimiters rainbow-mode rg ripgrep selectrum selectrum-prescient smart-mode-line smart-mode-line-powerline-theme smartparens smartrep smex solarized-theme spaceline super-save swiper transient tuareg undo-tree utop vkill volatile-highlights w3 w3m web-mode which-key yaml-mode zenburn-theme zop-to-char ))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(prelude-clean-whitespace-on-save nil)
  '(prelude-guru nil)
  '(projectile-enable-caching t)
  '(projectile-globally-ignored-files nil)
+ '(projectile-keymap-prefix (kbd "C-c p"))
  '(projectile-known-projects nil t)
  '(projectile-mode-line nil)
  '(recentf-max-menu-items 50)
  '(recentf-max-saved-items 50)
  '(redisplay-dont-pause t t)
+ '(request-curl-options '("-k"))
  '(rm-blacklist
-   '(" hl-p" " EL" " company" " EditorConfig" " Pre" " WK" " ws" " C++" " SP" " Abbrev" "C++/l" " (*)" " Helm" "SP/s" " SP/s" " ARev" " Isearch"))
+   '(" hl-p" " EL" " company" " EditorConfig" " Pre" " WK" " ws" " C++" " SP" " Abbrev" "C++/l" " (*)" " Helm" "SP/s" " SP/s" " ARev" " Isearch" " Anaconda" " Server" " Narrow" " Ind" ))
  '(sml/modified-char "X")
  '(sml/mule-info "")
  '(sml/name-width '(5 . 50))
  '(sml/position-percentage-format "%6p")
  '(sml/replacer-regexp-list nil)
  '(transient-mark-mode 1)
+ '(undo-tree-history-directory-alist '((".*" . "~/tmp/")))
  '(uniquify-buffer-name-style 'post-forward-angle-brackets nil (uniquify))
  '(user-full-name "Eric Johnson")
  '(user-mail-address (getenv "EEJ_EMAIL"))
@@ -134,14 +142,16 @@
  '(whitespace-line-column 220))
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(put 'projectile-project-compilation-cmd 'safe-local-variable 'string-or-null-p)
+(put 'compilation-search-path 'safe-local-variable 'string-or-null-p)
 
-(add-hook 'message-mode-hook '(lambda () "" (auto-fill-mode)))
-(add-hook 'mail-mode-hook '(lambda () "" (auto-fill-mode)))
+(add-hook 'message-mode-hook (lambda () "" (auto-fill-mode)))
+(add-hook 'mail-mode-hook (lambda () "" (auto-fill-mode)))
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
 (when (fboundp 'windmove-default-keybindings)  (windmove-default-keybindings 'meta))
 
-(tool-bar-mode nil)
+(tool-bar-mode -1)
 (recentf-mode t)
 (global-auto-revert-mode t)
 (global-flycheck-mode -1)
@@ -172,20 +182,15 @@
   )
 
 (global-set-key (kbd "C-s") 'isearch-forward)
-(global-set-key (kbd "C-x C-r") 'helm-for-files)
 (global-set-key [f1] 'compile)
 (global-set-key [f2] 'next-error)
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-(define-key helm-map (kbd "C-i")   'helm-execute-persistent-action) ; make TAB work in terminal
-(define-key helm-map (kbd "C-z")   'helm-select-action) ; list actions using C-z
-
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
-;; Why won't my configs work?
-(global-nlinum-mode -1)
 (menu-bar-mode -1)
-(global-display-line-numbers-mode) ;; Requires emacs 26
+
+
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (provide 'emacs-config)
 (custom-set-faces
@@ -194,3 +199,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
