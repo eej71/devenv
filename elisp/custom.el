@@ -136,5 +136,5 @@
  ;; If there is more than one, they won't work right.
  )
 
-(add-to-list 'load-path "/home/ejohnson/devenv/elisp/")
+(add-to-list 'load-path "~/devenv/elisp/")
 (require 'emacs-config)
