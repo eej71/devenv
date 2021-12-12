@@ -356,7 +356,7 @@
 
    `(selectrum-prescient-primary-highlight ((t (:foreground "white" :background "cyan" :bold t))))
    `(selectrum-prescient-secondary-highlight ((t (:foreground "white" :background "cyan" :bold t))))
-   `(selectrum-current-candidate ((t (:foreground "white" :background "cyan" :bold t))))
+   `(selectrum-current-candidate ((t (:foreground "white" :background "cyan" :bold t :underline t))))
 
    `(helm-header
      ((t (:foreground ,spectral-green
