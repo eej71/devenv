@@ -17,7 +17,7 @@
  '(company-tooltip-limit 20)
  '(compilation-skip-threshold 1)
  '(completion-ignore-case t t)
- '(custom-enabled-themes '(spectral zenburn))
+ '(custom-enabled-themes '(spectral))
  '(custom-safe-themes t)
  '(custom-theme-directory "~/devenv/elisp/")
  '(display-line-numbers-grow-only t)
