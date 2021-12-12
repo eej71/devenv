@@ -354,8 +354,8 @@
 ;;;;; git-rebase
    `(git-rebase-hash ((t (:foreground, spectral-orange))))
 
-   `(selectrum-prescient-primary-highlight ((t (:foreground "white" :background "cyan" :bold t))))
-   `(selectrum-prescient-secondary-highlight ((t (:foreground "white" :background "cyan" :bold t))))
+   `(selectrum-prescient-primary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
+   `(selectrum-prescient-secondary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
    `(selectrum-current-candidate ((t (:foreground "white" :background "cyan" :bold t :underline t))))
 
    `(helm-header
