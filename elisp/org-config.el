@@ -10,20 +10,20 @@
                                      ("WAITING" :foreground "black" :background "yellow4")
                                      ("SOMEDAY" :foreground "magenta" :weight bold)
                                      ("CANCELLED" :foreground "forest green" :weight bold)
-                                     ("PROJ" :foreground "white" :background "red3" :weight bold))))
+                                     )))
 
 (setq org-todo-keywords '(
-                          ;; Action sequences where I'm the actor
                           (sequence "TODO" "STARTED" "WAITING" "|" "DONE" "CNCL")
-                          (sequence "NOTE") ; Do I want a DONE state for Notes?
+                          (sequence "NOTE")
                           (sequence "OPS")
                           (sequence "AGENDA" "DONE")))
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook 'turn-on-font-lock)
+(add-hook 'org-mode-hook (lambda () "" (whitespace-mode -1)))
+(add-hook 'org-mode-hook 'org-indent-mode)
 
 (setq org-refile-targets '(
-                           (org-agenda-files . (:tag . "project"))
                            (org-agenda-files . (:todo . "STARTED"))
                            (org-agenda-files . (:todo . "TODO"))
                            (org-agenda-files . (:todo . "OPS"))))
@@ -48,97 +48,69 @@
 (define-key global-map "\C-cr" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 
-(defun eej-find-most-nested-started ()
-  "Locate the nested most started"
-  (save-restriction
-    (org-narrow-to-subtree)
-    (outline-next-heading)
-    (let ((p (point)))
-      (if (re-search-forward "STARTED" nil t)
-      (progn
-        (beginning-of-line)
-        (point))
-    nil))))
+;; I want to find projects that look like this they had action in the past
+;;   - action in the past means - DONE or CNCL
+;;   - there are no further TODOs declared - so the project is stuck
+(defun eej/has-done-cncl ()
+  "Visits all the headlines in a tree looking for a WAITING or a STARTED"
+  (let ((keyword (org-element-property ':todo-keyword (org-element-at-point))))
+    (or (string-equal "DONE" keyword)
+        (string-equal "CNCL" keyword)
+        (and (outline-next-heading) (eej/has-done-cncl)))))
 
-(setq eej-project-list-keywords '("TODO" "DONE" "CNCL" "STARTED" "WAITING"))
-
-(defun eej/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (let ((has-subtask)
-        (subtree-end (save-excursion (org-end-of-subtree t))))
-    (save-excursion
-      (forward-line 1)
-      (while (and (not has-subtask)
-                  (< (point) subtree-end)
-                  (re-search-forward "^\*+ " subtree-end t))
-        (when (member (org-get-todo-state) eej-project-list-keywords)
-      (setq has-subtask t))))
-    has-subtask))
+(defun eej/has-todo-started-waiting ()
+  "Visits all the headlines in a tree looking for a WAITING or a STARTED"
+  (let ((keyword (org-element-property ':todo-keyword (org-element-at-point)))
+        (title (org-element-property ':title (org-element-at-point)))
+        (scheduled (org-element-property ':scheduled (org-element-at-point)))
+        (priority (org-element-property ':priority (org-element-at-point))))
+    (or (and (or (equal priority 65) scheduled) (string-equal "TODO" keyword))
+        (string-equal "STARTED" keyword)
+        (string-equal "WAITING" keyword)
+        (and (outline-next-heading) (eej/has-todo-started-waiting)))))
 
 (defun eej/find-stuck-projects ()
-  "
-Skip trees that are not stuck projects.  Three criteria have to be met.
-  (1) It has to be a TODO item
-  (2) It can't have any subprojects
-  (3) It can't have its own STARTED task"
-  (let* ((number-stars (1+ (org-current-level)))
-     (subtree-end (save-excursion (org-end-of-subtree t)))
-     ;; See if have a STARTED action at this level - result kept in has-next
-     (has-started (save-excursion
-                    (forward-line 1)
-                    (and (< (point) subtree-end)
-                         (re-search-forward (concat "^" (regexp-quote (make-string number-stars ?*)) " \\(STARTED\\)\\|\\(WAITING\\) ")
-                                            subtree-end t))))
-     (has-todo nil)
-     (has-subproject nil))
+  "A project is stuck if a given headline doesn't have any children WAITING or STARTED"
+  (if (not (save-excursion (org-goto-first-child)))
+      (org-end-of-subtree t)
+    (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+           (has-children (save-excursion (org-goto-first-child)))
+           (next-headline (save-excursion (outline-next-heading)))
 
-    ;; See if there are subprojects and todos
-    (save-excursion
-      (while (< (point) subtree-end)
-        (if (re-search-forward (concat "^" (regexp-quote (make-string number-stars ?*)) " TODO ") subtree-end t)
-            (progn
-              (beginning-of-line)
-              (if (and (not has-subproject) (eej/is-project-p))
-                  (setq has-subproject (point))
-                (setq has-todo t))
-          (forward-line 1))
-          (goto-char subtree-end))))
-    (if (and (not has-subproject) (not has-started) (eej/is-project-p) (not has-todo))
-        nil ; a stuck project, has subtasks but no next task
-      (or has-subproject subtree-end))))
+           ;; We don't have to skip our current line because we are a TODO
+           (has-done-cncl (save-excursion
+                            (save-restriction
+                              (narrow-to-region (point) subtree-end)
+                              (eej/has-done-cncl))))
 
-(defun eej/find-project-tasks ()
-  "Find bottom level tasks inside projects."
-  (let ((subtree-end
-         (save-excursion (progn (forward-line 1) (point)))))
-    (if (eej/is-project-p) subtree-end nil)))
+           ;; This has to skip ahead to then search
+           (has-todo-started-waiting (save-excursion
+                                       (save-restriction
+                                         (if (not (org-goto-first-child))
+                                             nil
+                                           (narrow-to-region (point) subtree-end)
+                                           (eej/has-todo-started-waiting))))))
+      (if (and has-done-cncl (not has-todo-started-waiting))
+          nil
+        next-headline))))
 
-(defun eej/skip-projects ()
-  "Skip trees that are projects"
-  (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-    (if (eej/is-project-p) subtree-end nil)))
+;; A bit sloppy as it doesn't look at actual attributes - recursive model above seems better
+(defun eej/find-nested-started ()
+  (let ((heading-end (save-excursion (outline-next-heading) (1- (point))))
+        (has-children (save-excursion (org-goto-first-child)))
+        has-started)
+    (if has-children
+        (let ((end (save-excursion (org-end-of-subtree t))))
+          (save-excursion
+            (outline-next-heading)
+            (setq has-started (re-search-forward "STARTED" end t))
+            (and has-started heading-end))))))
 
-(defun eej/clock-in-to-next (kw)
-  "Switch task from TODO to NEXT when clocking in. Skips remember tasks and tasks with subtasks"
-  (if (and (string-equal kw "TODO")
-           (not (string-equal (buffer-name) "*Remember*")))
-      (let ((subtree-end (save-excursion (org-end-of-subtree t)))
-            (has-subtask nil))
-        (save-excursion
-          (forward-line 1)
-          (while (and (not has-subtask)
-                      (< (point) subtree-end)
-                      (re-search-forward "^\*+ " subtree-end t))
-            (when (member (org-get-todo-state) org-not-done-keywords)
-              (setq has-subtask t))))
-        (when (not has-subtask)
-          "STARTED"))))
-
-(setq org-clock-in-switch-to-state (quote eej/clock-in-to-next))
+(setq org-clock-in-switch-to-state "STARTED")
 
 ;; These don't handle narrowed regions correctly
-(add-hook 'org-create-file-search-functions  '(lambda () (number-to-string (line-number-at-pos))))
-(add-hook 'org-execute-file-search-functions '(lambda (search-string) (goto-line (string-to-number search-string))))
+(add-hook 'org-create-file-search-functions  (lambda () (number-to-string (line-number-at-pos))))
+(add-hook 'org-execute-file-search-functions (lambda (search-string) (goto-line (string-to-number search-string))))
 
 ;; Needed because indented levels in the clock table report (C-a r)
 ;; will display \\emsp and I can't figure out how to make it look
@@ -150,19 +122,34 @@ Skip trees that are not stuck projects.  Three criteria have to be met.
       (dotimes (k (1- level) str)
         (setq str (concat "__" str))))))
 
-(defvar eej/org-headline-cache nil "Stores a cache of the clocktable as computed for the tag")
-(defun clocktime-for-tag (headline tag)
-  "Filters the clocktime for a headline based on a tag"
+(require 'org-jira)
+(defun eej/post-worklog-to-jira ()
+  "Post up time to jira"
+  (interactive)
+  ;; Get the jira ticket number
   (save-excursion
-    (with-current-buffer "projects.org"
-      (if (not eej/org-headline-cache)
-          (setq eej/org-headline-cache (org-clock-get-table-data nil (append (list ':tags tag) (plist-put params ':formula nil)))))
-      (let ((headlines eej/org-headline-cache)
-            (clocktime 0))
-        (if (or (string= headline "*Total time*") (string= headline "ALL *Total time*"))
-            (setq clocktime (nth 1 headlines))
-          (dolist (line (nth 2 headlines))
-            (if (string-match (nth 1 line) headline) (setq clocktime (nth 3 line)))))
-        (org-minutes-to-clocksum-string clocktime)))))
+    (save-restriction
+      (let* ((jira-ticket (or (org-entry-get (car org-clock-history) "JIRA-TICKET" t)
+                              (read-string "JIRA Ticket: ")))
+             (jira-title  (or (org-entry-get (car org-clock-history) "JIRA-TITLE" t) "Unknown"))
+             (task-title  (progn
+                            (org-goto-marker-or-bmk (car org-clock-history))
+                            (org-element-property ':title (org-element-at-point))))
+             (task-time-seconds (and org-clock-start-time (round (- (org-float-time) (org-float-time org-clock-start-time))))))
+        (cond
+         ;; We don't care about less than five minutes
+         ((< task-time-seconds 300) t)
+         ;; No ticket - so can't post
+         ((not jira-ticket) (message "No JIRA Ticket - time lost"))
+         (t (jiralib-add-worklog jira-ticket
+                                 (jiralib-format-datetime)
+                                 task-time-seconds
+                                 (read-string (format "JIRA: [%s:%s] (%dm): " jira-ticket jira-title (/ task-time-seconds 60))
+                                              task-title))))))))
 
+(add-hook 'org-clock-out-hook 'eej/post-worklog-to-jira)
+
+;; I constantly have problems with the tags not being aligned, so for now
+;; we will align the tags everytime we clock out.
+(add-hook 'org-clock-out-hook 'org-align-all-tags)
 (provide 'org-config)
