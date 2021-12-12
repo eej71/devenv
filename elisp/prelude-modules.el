@@ -1,9 +1,8 @@
 ;;; Uncomment the modules you'd like to use and restart Prelude afterwards
 
 ;; Emacs IRC client
-(require 'prelude-helm) ;; Interface for narrowing and search
-(require 'prelude-helm-everywhere) ;; Enable Helm everywhere
 (require 'prelude-company)
+(require 'prelude-selectrum)
 
 ;;; Programming languages support
 (require 'prelude-c)
