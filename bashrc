@@ -26,11 +26,11 @@ case "$EEJ_PROFILE" in
     Home)
         source /usr/share/doc/git/contrib/completion/git-completion.bash
         source /usr/share/doc/git/contrib/completion/git-prompt.sh
-        function ed { TERM=xterm-256color emacsclient -nw $@; }
-	#macos
+        function ed { emacsclient -nw $@; }
+        #macos
         #source /usr/local/Cellar/git/2.10.0/etc/bash_completion.d/git-completion.bash
         #source /usr/local/Cellar/git/2.10.0/etc/bash_completion.d/git-prompt.sh
-        function ed { TERM=screen-256color emacsclient -nw $@; }
+        function ed { emacsclient -nw $@; }
         function xed { emacsclient -n -c $@ 2> /dev/null; }
         function ted { emacsclient -n -c $@ 2> /dev/null; }
         ;;
