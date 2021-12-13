@@ -9,6 +9,7 @@
 (require 'prelude-emacs-lisp)
 (require 'prelude-org) ;; Org-mode helps you keep TODO lists, notes and more
 (require 'prelude-perl)
+(require 'prelude-lsp)
 (require 'prelude-python)
 (require 'prelude-shell)
 (require 'prelude-xml)

@@ -9,9 +9,11 @@
   (setq buffer-display-table (make-display-table))
   (aset buffer-display-table ?\^M []))
 
+(prelude-require-packages '(rainbow-delimiters))
 (defun my-c-mode-common-hook ()
   (remove-dos-eol)
-  (font-lock-mode 2))
+  (font-lock-mode 2)
+  (rainbow-delimiters-mode +1))
 
-(add-hook 'prog-mode-hook 'my-c-mode-common-hook)
+(add-hook 'c++-mode-hook 'my-c-mode-common-hook)
 (provide 'cc-config)
