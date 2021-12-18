@@ -6,7 +6,7 @@
        (spectral/turquoise    "#00Af87")
        (spectral/orange       "#FF951B")
        (spectral/pink         "#FF88FF")
-       (spectral/yellow       "#d7d700")
+       (spectral/yellow       "#d7ff00")
        (spectral/green        "#61CE3C")
        (spectral/light-blue   "#82A6DF")
        (spectral/lightblue-2  "#00ffff")
@@ -14,6 +14,7 @@
        (spectral/dark-blue    "#284050")
        (spectral/light-red    "#FA583F")
        (spectral/limegreen-1  "#87ffaf")
+       (spectral/preprocessor "#FF005F")
        (spectral/salmon    "#d75f5f")
        (spectral-fg+1     "#FFFFEF")
        (spectral-fg       "#DCDCCC")
@@ -69,14 +70,14 @@
    `(fringe                       ((t (:background ,spectral/background))))
    `(buffers-tab                  ((t (:foreground ,spectral/foreground :background ,spectral/background))))
    `(font-lock-builtin-face       ((t (:foreground "Khaki" :weight bold))))
-   `(font-lock-comment-face       ((t (:foreground ,spectral/limegreen-1 :background ,spectral/background+5))))
+   `(font-lock-comment-face       ((t (:foreground ,spectral/limegreen-1 :background ,spectral/background+5 :italic t))))
    `(font-lock-comment-delimiter-face ((t (:foreground ,spectral/limegreen-1 :background ,spectral/background+5 :bold t))))
    `(font-lock-doc-face           ((t (:foreground "SlateGray"))))
    `(font-lock-doc-string-face    ((t (:foreground ,spectral/orange))))
    `(font-lock-string-face        ((t (:foreground ,spectral/green :italic t))))
    `(font-lock-function-name-face ((t (:foreground ,spectral/pink :background ,spectral/background+5))))
    `(font-lock-keyword-face       ((t (:foreground ,spectral/yellow :bold t))))
-   `(font-lock-preprocessor-face  ((t (:foreground ,spectral/salmon :background ,spectral/background+5))))
+   `(font-lock-preprocessor-face  ((t (:foreground ,spectral/preprocessor :background ,spectral/background+5))))
    `(font-lock-constant-face      ((t (:foreground ,spectral/light-blue))))
    `(font-lock-type-face          ((t (:foreground ,spectral/light-blue))))
    `(font-lock-variable-name-face ((t (:foreground ,spectral/lightblue-2))))
@@ -102,8 +103,6 @@
    `(org-level-6                  ((t (:background "black" :foreground ,spectral/foreground))))
    `(org-level-7                  ((t (:background "black" :foreground ,spectral/foreground))))
    `(org-level-8                  ((t (:background "black" :foreground ,spectral/foreground))))
-
-   `(magit-item-highlight         ((t (:inherit region))))
 
    ;; Not reviewed or verified
    `(compilation-column-face ((t (:foreground ,spectral-yellow))))
@@ -416,6 +415,8 @@
 
 ;;;;; magit
 ;;;;;; headings and diffs
+   `(magit-item-highlight   ((t (:inherit region))))
+
    `(magit-section-highlight           ((t (:background ,spectral-bg+05))))
    `(magit-section-heading             ((t (:foreground ,spectral-yellow :weight bold))))
    `(magit-section-heading-selection   ((t (:foreground ,spectral-orange :weight bold))))
@@ -576,17 +577,15 @@
    `(powerline-inactive1 ((t (:background ,spectral-bg+1 :inherit mode-line-inactive))))
    `(powerline-inactive2 ((t (:background ,spectral-bg+3 :inherit mode-line-inactive))))
 
-   `(rainbow-delimiters-depth-1-face ((t (:bold t :background "red" :foreground "white"))))
-   `(rainbow-delimiters-depth-2-face ((t (:underline t :background "yellow"  :foreground "white"))))
-   `(rainbow-delimiters-depth-3-face ((t (:italic t :background "green" :foreground "white"))))
-   `(rainbow-delimiters-depth-4-face ((t (:bold t :background ,spectral/skyblue))))
-   `(rainbow-delimiters-depth-5-face ((t (:underline t :background ,spectral-blue+1))))
-   `(rainbow-delimiters-depth-6-face ((t (:italic t :background ,spectral-yellow-1))))
-   `(rainbow-delimiters-depth-7-face ((t (:bold t :background ,spectral-green+1))))
-   `(rainbow-delimiters-depth-8-face ((t (:bold t :background ,spectral-blue-2))))
-   `(rainbow-delimiters-depth-9-face ((t (:bold t :background ,spectral-orange))))
-   `(rainbow-delimiters-depth-10-face ((t (:bold t :background ,spectral-green))))
-   `(rainbow-delimiters-depth-11-face ((t (:bold t :background ,spectral-blue-5))))
+   `(rainbow-delimiters-depth-1-face ((t (:bold t))))
+   `(rainbow-delimiters-depth-2-face ((t (:bold t :foreground "#d70000" :background "#000000"))))
+   `(rainbow-delimiters-depth-3-face ((t (:bold t :foreground "#ff8700" :background "#000000"))))
+   `(rainbow-delimiters-depth-4-face ((t (:bold t :foreground "#ffff00" :background "#000000"))))
+   `(rainbow-delimiters-depth-5-face ((t (:bold t :foreground "#00ff00" :background "#000000"))))
+   `(rainbow-delimiters-depth-6-face ((t (:bold t :foreground "#00afff" :background "#000000"))))
+   `(rainbow-delimiters-depth-7-face ((t (:bold t :foreground "#4b0082" :background "#000000"))))
+   `(rainbow-delimiters-depth-8-face ((t (:bold t :foreground "#AF00FF" :background "#000000"))))
+   `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground "white" :background "#D70000"))))
 
 ;;;;; re-builder
    `(reb-match-0 ((t (:foreground ,spectral-bg :background ,spectral-magenta))))
@@ -617,8 +616,9 @@
    `(rpm-spec-tag-face ((t (:foreground ,spectral-blue))))
    `(rpm-spec-var-face ((t (:foreground ,spectral-red))))
 
-   `(show-paren-mismatch ((t (:foreground ,spectral-red+1 :background ,spectral-bg+3 :weight bold))))
-   `(show-paren-match ((t (:background ,spectral-bg+3 :weight bold))))
+   `(show-paren-mismatch ((t (:foreground "white" :background "#D70000" :weight bold))))
+   `(show-paren-match ((t (:underline t :inverse-video t :weight bold))))
+   `(show-paren-match-expression ((t (:italic t :bold t))))
 
    '(sml/client ((t (:inherit sml/prefix))))
    '(sml/not-modified ((t nil)))
@@ -641,9 +641,9 @@
    `(sml/charging ((t (:foreground ,spectral-green+4))))
    `(sml/discharging ((t (:foreground ,spectral-red+1))))
 
-;;;;; smartparens
-   `(sp-show-pair-mismatch-face ((t (:foreground ,spectral-red+1 :background ,spectral-bg+3 :weight bold))))
-   `(sp-show-pair-match-face ((t (:background ,spectral-bg+3 :weight bold))))
+;;;;; smartparens -- Doesn't seem used
+   ;;`(sp-show-pair-mismatch-face ((t (:foreground "#ff0000" :background "white" :weight bold))))
+   ;;`(sp-show-pair-match-face ((t (:background "white" :background "#ff0000" :weight bold))))
 
 ;;;;; sml-mode-line
    '(sml-modeline-end-face ((t :inherit default :width condensed)))
