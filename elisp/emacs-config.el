@@ -24,6 +24,7 @@
 (global-flycheck-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
+(global-hl-line-mode -1)
 
 ;; Enables daisy chaining of .dir-locals.el files. Most was copied from here
 ;; http://emacs.stackexchange.com/questions/5527/is-there-a-way-to-daisy-chain-dir-locals-el-files
