@@ -13,7 +13,10 @@
 (defun my-c-mode-common-hook ()
   (remove-dos-eol)
   (font-lock-mode 2)
+  (global-hl-line-mode -1)
+  (highlight-parentheses-mode t)
   (rainbow-delimiters-mode +1))
 
 (add-hook 'c++-mode-hook 'my-c-mode-common-hook)
+(add-hook 'c-mode-hook 'my-c-mode-common-hook)
 (provide 'cc-config)
