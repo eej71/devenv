@@ -86,7 +86,7 @@
    `(gui-element                  ((t (:foreground "black"    :background "#D4D0C8"))))
 
    `(text-cursor                  ((t (:foreground "black" :background "yellow"))))
-   `(region                       ((t (:background ,spectral/dark-blue))))
+   `(region                       ((t (:background ,spectral-bg-1))))
    `(highlight                    ((t (:background "#222222"))))
    `(highline-face                ((t (:background "SeaGreen"))))
    `(hl-line                      ((t (:background "black"))))
@@ -214,9 +214,11 @@
    `(diff-added          ((t (:background "#335533" :foreground ,spectral-green))))
    `(diff-changed        ((t (:background "#555511" :foreground ,spectral-yellow-1))))
    `(diff-removed        ((t (:background "#553333" :foreground ,spectral-red-2))))
-   `(diff-refine-added   ((t (:background "#338833" :foreground ,spectral-green+4))))
-   `(diff-refine-change  ((t (:background "#888811" :foreground ,spectral-yellow))))
-   `(diff-refine-removed ((t (:background "#883333" :foreground ,spectral-red))))
+
+   `(diff-refine-added   ((t (:foreground "white" :background "#00AF00" :italic t :underline t))))
+   `(diff-refine-change  ((t (:foreground "white" :background "#FFFF00" :italic t :underline t))))
+   `(diff-refine-removed ((t (:foreground "white" :background "#AF0000" :italic t :underline t))))
+
    ;; class is for colors
    ;; `(diff-header ((,class (:background ,spectral-bg+2)) (t (:background ,spectral-fg :foreground ,spectral-bg))))
    ;;`(diff-file-header ((,class (:background ,spectral-bg+2 :foreground ,spectral-fg :weight bold)) (t (:background ,spectral-fg :foreground ,spectral-bg :weight bold))))
@@ -331,27 +333,7 @@
    `(ack-file ((t (:foreground ,spectral-blue))))
    `(ack-line ((t (:foreground ,spectral-yellow))))
    `(ack-match ((t (:foreground ,spectral-orange :background ,spectral-bg-1 :weight bold))))
-;;;;; git-annex
-   '(git-annex-dired-annexed-available ((t (:inherit success :weight normal))))
-   '(git-annex-dired-annexed-unavailable ((t (:inherit error :weight normal))))
 
-;;;;; git-commit
-   `(git-commit-comment-action  ((t (:foreground ,spectral-green+1 :weight bold))))
-   `(git-commit-comment-branch  ((t (:foreground ,spectral-blue+1  :weight bold)))) ; obsolete
-   `(git-commit-comment-branch-local  ((t (:foreground ,spectral-blue+1  :weight bold))))
-   `(git-commit-comment-branch-remote ((t (:foreground ,spectral-green  :weight bold))))
-   `(git-commit-comment-heading ((t (:foreground ,spectral-yellow  :weight bold))))
-
-;;;;; git-gutter
-   `(git-gutter:added ((t (:foreground ,spectral-green :weight bold :inverse-video t))))
-   `(git-gutter:deleted ((t (:foreground ,spectral-red :weight bold :inverse-video t))))
-   `(git-gutter:modified ((t (:foreground ,spectral-magenta :weight bold :inverse-video t))))
-   `(git-gutter:unchanged ((t (:foreground ,spectral-fg :weight bold :inverse-video t))))
-
-;;;;; git-gutter-fr
-   `(git-gutter-fr:added ((t (:foreground ,spectral-green  :weight bold))))
-   `(git-gutter-fr:deleted ((t (:foreground ,spectral-red :weight bold))))
-   `(git-gutter-fr:modified ((t (:foreground ,spectral-magenta :weight bold))))
 ;;;;; git-rebase
    `(git-rebase-hash ((t (:foreground, spectral-orange))))
 
@@ -417,42 +399,47 @@
 ;;;;;; headings and diffs
    `(magit-item-highlight   ((t (:inherit region))))
 
-   `(magit-section-highlight           ((t (:background ,spectral-bg+05))))
-   `(magit-section-heading             ((t (:foreground ,spectral-yellow :weight bold))))
+   `(magit-section-highlight           ((t (:background "#000000")))) ;; Not sure if I like the highlight line or not
+   `(magit-section-heading             ((t (:underline t :foreground ,spectral-yellow :weight bold))))
    `(magit-section-heading-selection   ((t (:foreground ,spectral-orange :weight bold))))
 
-   `(magit-diff-added-highlight ((t (:background ,spectral-green))))
-   `(magit-diff-removed-highlight ((t (:background ,spectral-red-3))))
-   `(magit-diff-added ((t (:background ,spectral-green-1))))
-   `(magit-diff-removed ((t (:background ,spectral-red-4))))
+   ;; This is the unchanged text that provides context in a diff - so a grey is good
+   `(magit-diff-context-highlight      ((t (:foreground "grey70"))))
 
-   `(magit-diff-file-heading           ((t (:weight bold))))
-   `(magit-diff-file-heading-highlight ((t (:background ,spectral-bg+05  :weight bold))))
-   `(magit-diff-file-heading-selection ((t (:background ,spectral-bg+05
-                                                        :foreground ,spectral-orange :weight bold))))
-   `(magit-diff-hunk-heading           ((t (:background ,spectral-bg+1))))
-   `(magit-diff-hunk-heading-highlight ((t (:background ,spectral-bg+2))))
-   `(magit-diff-hunk-heading-selection ((t (:background ,spectral-bg+2
-                                                        :foreground ,spectral-orange))))
-   `(magit-diff-lines-heading          ((t (:background ,spectral-orange
-                                                        :foreground ,spectral-bg+2))))
-   `(magit-diff-context-highlight      ((t (:background ,spectral-bg+05
-                                                        :foreground "grey70"))))
-   `(magit-diffstat-added   ((t (:foreground ,spectral-green+4))))
-   `(magit-diffstat-removed ((t (:foreground ,spectral-red))))
+   ;; Faces for when it does have the focus
+   `(magit-diff-added-highlight ((t (:background "#005f00"))))
+   `(magit-diff-removed-highlight ((t (:background "#5f0000"))))
+
+   `(magit-diff-added ((t (:background "#005f00" :foreground "#767676"))))
+   `(magit-diff-removed ((t (:background "#5f0000" :foreground "#767676"))))
+
+   `(magit-diff-file-heading           ((t (:foreground ,spectral/limegreen-1 :bold t))))  ;; filename in the diff?
+   `(magit-diff-file-heading-highlight ((t (:foregorund ,spectral/orange :bold t))))
+   `(magit-diff-file-heading-selection ((t (:foreground ,spectral/salmon :bold t))))
+   `(magit-diff-hunk-heading           ((t (:foreground ,spectral-bg+3 :background ,spectral-bg-1))))
+   `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
+   `(magit-diff-hunk-heading-selection ((t (::background ,spectral-bg+2 :foreground ,spectral-orange))))
+   `(magit-diff-lines-heading          ((t (:background ,spectral-orange :foreground ,spectral-bg+2))))
+
+   `(magit-diffstat-added   ((t (:foreground "green"))))
+   `(magit-diffstat-removed ((t (:foreground "red"))))
+
 ;;;;;; popup
    `(magit-popup-heading             ((t (:foreground ,spectral-yellow  :weight bold))))
    `(magit-popup-key                 ((t (:foreground ,spectral-green-1 :weight bold))))
    `(magit-popup-argument            ((t (:foreground ,spectral-green   :weight bold))))
    `(magit-popup-disabled-argument   ((t (:foreground ,spectral-fg-1    :weight normal))))
    `(magit-popup-option-value        ((t (:foreground ,spectral-blue-2  :weight bold))))
+
 ;;;;;; process
    `(magit-process-ok    ((t (:foreground ,spectral-green  :weight bold))))
    `(magit-process-ng    ((t (:foreground ,spectral-red    :weight bold))))
+
 ;;;;;; log
-   `(magit-log-author    ((t (:foreground ,spectral-orange))))
-   `(magit-log-date      ((t (:foreground ,spectral-fg-1))))
+   `(magit-log-author    ((t (:foreground ,spectral/light-blue))))
+   `(magit-log-date      ((t (:foreground ,spectral-green))))
    `(magit-log-graph     ((t (:foreground ,spectral-fg+1))))
+
 ;;;;;; sequence
    `(magit-sequence-pick ((t (:foreground ,spectral-yellow-2))))
    `(magit-sequence-stop ((t (:foreground ,spectral-green))))
@@ -461,6 +448,7 @@
    `(magit-sequence-drop ((t (:foreground ,spectral-red))))
    `(magit-sequence-done ((t (:foreground ,spectral-fg-1))))
    `(magit-sequence-onto ((t (:foreground ,spectral-fg-1))))
+
 ;;;;;; bisect
    `(magit-bisect-good ((t (:foreground ,spectral-green))))
    `(magit-bisect-skip ((t (:foreground ,spectral-yellow))))
@@ -474,19 +462,21 @@
                                           :weight bold))))
 ;;;;;; references etc
    `(magit-dimmed         ((t (:foreground ,spectral-bg+3))))
-   `(magit-hash           ((t (:foreground ,spectral-bg+3))))
-   `(magit-tag            ((t (:foreground ,spectral-orange :weight bold))))
-   `(magit-branch-remote  ((t (:foreground ,spectral-green  :weight bold))))
-   `(magit-branch-local   ((t (:foreground ,spectral-blue   :weight bold))))
-   `(magit-branch-current ((t (:foreground ,spectral-blue   :weight bold :box t))))
-   `(magit-head           ((t (:foreground ,spectral-blue   :weight bold))))
+   `(magit-hash           ((t (:foreground ,spectral/lightblue-2))))
+
+   `(magit-tag            ((t (:foreground ,spectral-blue+1 :italic t))))
+   `(magit-branch-remote  ((t (:foreground "white" :background ,spectral-red-4 :underline t))))
+   `(magit-branch-current ((t (:foreground "white" :background "#008700" :bold t))))
+   `(magit-branch-local   ((t (:foreground "#00ff87" :underline t ))))
+   `(magit-head           ((t (:foreground ,spectral-green-1 :background "black" :weight bold))))
+
    `(magit-refname        ((t (:background ,spectral-bg+2 :foreground ,spectral-fg :weight bold))))
    `(magit-refname-stash  ((t (:background ,spectral-bg+2 :foreground ,spectral-fg :weight bold))))
    `(magit-refname-wip    ((t (:background ,spectral-bg+2 :foreground ,spectral-fg :weight bold))))
    `(magit-signature-good      ((t (:foreground ,spectral-green))))
    `(magit-signature-bad       ((t (:foreground ,spectral-red))))
    `(magit-signature-untrusted ((t (:foreground ,spectral-yellow))))
-   `(magit-signature-expired   ((t (:foreground ,spectral-orange))))
+   `(magit-signature-expired   ((t (:foreground ,spectral-red))))
    `(magit-signature-revoked   ((t (:foreground ,spectral-magenta))))
    '(magit-signature-error     ((t (:inherit    magit-signature-bad))))
    `(magit-cherry-unmatched    ((t (:foreground ,spectral-cyan))))
@@ -511,23 +501,6 @@
    `(message-header-xheader ((t (:foreground ,spectral-green))))
    `(message-mml ((t (:foreground ,spectral-yellow :weight bold))))
    `(message-separator ((t (:inherit font-lock-comment-face))))
-
-   `(neo-banner-face ((t (:foreground ,spectral-blue+1 :weight bold))))
-   `(neo-header-face ((t (:foreground ,spectral-fg))))
-   `(neo-root-dir-face ((t (:foreground ,spectral-blue+1 :weight bold))))
-   `(neo-dir-link-face ((t (:foreground ,spectral-blue))))
-   `(neo-file-link-face ((t (:foreground ,spectral-fg))))
-   `(neo-expand-btn-face ((t (:foreground ,spectral-blue))))
-   `(neo-vc-default-face ((t (:foreground ,spectral-fg+1))))
-   `(neo-vc-user-face ((t (:foreground ,spectral-red :slant italic))))
-   `(neo-vc-up-to-date-face ((t (:foreground ,spectral-fg))))
-   `(neo-vc-edited-face ((t (:foreground ,spectral-magenta))))
-   `(neo-vc-needs-merge-face ((t (:foreground ,spectral-red+1))))
-   `(neo-vc-unlocked-changes-face ((t (:foreground ,spectral-red :background ,spectral-blue-5))))
-   `(neo-vc-added-face ((t (:foreground ,spectral-green+1))))
-   `(neo-vc-conflict-face ((t (:foreground ,spectral-red+1))))
-   `(neo-vc-missing-face ((t (:foreground ,spectral-red+1))))
-   `(neo-vc-ignored-face ((t (:foreground ,spectral-fg-1))))
 
    ;;; org mode goodies
    `(org-agenda-date-today
@@ -583,8 +556,8 @@
    `(rainbow-delimiters-depth-4-face ((t (:bold t :foreground "#ffff00" :background "#000000"))))
    `(rainbow-delimiters-depth-5-face ((t (:bold t :foreground "#00ff00" :background "#000000"))))
    `(rainbow-delimiters-depth-6-face ((t (:bold t :foreground "#00afff" :background "#000000"))))
-   `(rainbow-delimiters-depth-7-face ((t (:bold t :foreground "#4b0082" :background "#000000"))))
-   `(rainbow-delimiters-depth-8-face ((t (:bold t :foreground "#AF00FF" :background "#000000"))))
+   `(rainbow-delimiters-depth-7-face ((t (:bold t :foreground "#0000ff" :background "#000000"))))
+   `(rainbow-delimiters-depth-8-face ((t (:bold t :foreground "#FF88FF" :background "#000000"))))
    `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground "white" :background "#D70000"))))
 
 ;;;;; re-builder
@@ -619,27 +592,6 @@
    `(show-paren-mismatch ((t (:foreground "white" :background "#D70000" :weight bold))))
    `(show-paren-match ((t (:underline t :inverse-video t :weight bold))))
    `(show-paren-match-expression ((t (:italic t :bold t))))
-
-   '(sml/client ((t (:inherit sml/prefix))))
-   '(sml/not-modified ((t nil)))
-   `(sml/global ((t (:foreground "white" :background "black"))))
-   `(sml/modes ((t (:foreground "#00bfff"))))
-   `(sml/git ((t (:foreground ,spectral/orange))))
-   `(sml/folder ((t (:foreground ,spectral/yellow :slant italic ))))
-   `(sml/filename ((t (:foreground ,spectral/green :weight bold))))
-   `(sml/minor-modes ((t (:foreground ,spectral-fg-1 ))))
-   `(sml/line-number ((t (:foreground ,spectral-blue ))))
-   `(sml/col-number ((t (:foreground ,spectral-blue+1))))
-   `(sml/position-percentage ((t (:foreground ,spectral-blue-1))))
-   `(sml/prefix ((t (:foreground ,spectral-orange))))
-   `(sml/process ((t (:weight bold))))
-   `(sml/sudo ((t  (:foreground ,spectral-red-2 :weight bold))))
-   `(sml/read-only ((t (:foreground ,spectral-red-2))))
-   `(sml/outside-modified ((t (:foreground ,spectral-red))))
-   `(sml/modified ((t (:foreground ,spectral-red))))
-   `(sml/vc-edited ((t (:foreground "#ff3030"))))
-   `(sml/charging ((t (:foreground ,spectral-green+4))))
-   `(sml/discharging ((t (:foreground ,spectral-red+1))))
 
 ;;;;; smartparens -- Doesn't seem used
    ;;`(sp-show-pair-mismatch-face ((t (:foreground "#ff0000" :background "white" :weight bold))))
