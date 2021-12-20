@@ -28,7 +28,10 @@
  '(font-lock-maximum-decoration t)
  '(global-display-line-numbers-mode nil)
  '(gtags-suggested-key-mapping t)
+ '(highlight-parentheses-attributes '((:underline t)))
+ '(highlight-parentheses-colors nil)
  '(inhibit-startup-screen t)
+ '(magit-diff-refine-hunk 'all)
  '(mode-line-format
    '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification sml/pos-id-separator smartrep-mode-line-string
      (vc-mode vc-mode)
@@ -79,7 +82,7 @@
  '(org-use-speed-commands t)
  '(org-use-tag-inheritance t)
  '(package-selected-packages
-   '(vertico 0blayout ace-window ag anaconda-mode anzu auto-complete beacon browse-kill-ring chess color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow company company-anaconda consult consult-company consult-lsp consult-projectile counsel crux csv-mode d-mode diff-hl diminish discover-my-major easy-kill editorconfig elisp-slime-nav evil-visualstar exec-path-from-shell expand-region flatui-dark-theme flx-ido flycheck geiser ggtags gist git-timemachine gitconfig-mode gitignore-mode go-projectile god-mode goto-chg grizzl guru-mode helm helm-ag helm-descbinds helm-git helm-git-files helm-git-grep helm-gtags helm-make helm-org-rifle helm-orgcard helm-projectile helm-rg hl-todo ido-ubiquitous ido-vertical-mode iedit imenu-anywhere ivy js2-mode json-mode key-chord lush-theme magit magit-popup markdown-mode merlin move-text operate-on-number orderless org org-jira org-roam org-roam-bibtex org-roam-timestamps org-roam-ui ov projectile projectile-ripgrep protobuf-mode rainbow-delimiters rainbow-mode rg ripgrep selectrum selectrum-prescient smart-mode-line smart-mode-line-powerline-theme smartparens smartrep smex solarized-theme spaceline super-save swiper transient tuareg undo-tree utop vkill volatile-highlights w3 w3m web-mode which-key yaml-mode zenburn-theme zop-to-char))
+   '(highlight-parentheses vertico 0blayout ace-window ag anaconda-mode anzu auto-complete beacon browse-kill-ring chess color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow company company-anaconda consult consult-company consult-lsp consult-projectile counsel crux csv-mode d-mode diff-hl diminish discover-my-major easy-kill editorconfig elisp-slime-nav evil-visualstar exec-path-from-shell expand-region flatui-dark-theme flx-ido flycheck geiser ggtags gist git-timemachine gitconfig-mode gitignore-mode go-projectile god-mode goto-chg grizzl guru-mode helm helm-ag helm-descbinds helm-git helm-git-files helm-git-grep helm-gtags helm-make helm-org-rifle helm-orgcard helm-projectile helm-rg hl-todo ido-ubiquitous ido-vertical-mode iedit imenu-anywhere ivy js2-mode json-mode key-chord lush-theme magit magit-popup markdown-mode merlin move-text operate-on-number orderless org org-jira org-roam org-roam-bibtex org-roam-timestamps org-roam-ui ov projectile projectile-ripgrep protobuf-mode rainbow-delimiters rainbow-mode rg ripgrep selectrum selectrum-prescient smart-mode-line smart-mode-line-powerline-theme smartparens smartrep smex solarized-theme spaceline super-save swiper transient tuareg undo-tree utop vkill volatile-highlights w3 w3m web-mode which-key yaml-mode zenburn-theme zop-to-char))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(prelude-clean-whitespace-on-save nil)
  '(prelude-guru nil)
@@ -88,6 +91,7 @@
  '(projectile-keymap-prefix (kbd "C-c p"))
  '(projectile-known-projects nil t)
  '(projectile-mode-line nil)
+ '(rainbow-delimiters-max-face-count 8)
  '(recentf-max-menu-items 50)
  '(recentf-max-saved-items 50)
  '(redisplay-dont-pause t t)
@@ -95,6 +99,7 @@
  '(rm-blacklist
    '(" hl-p" " EL" " company" " EditorConfig" " Pre" " WK" " ws" " C++" " SP" " Abbrev" "C++/l" " (*)" " Helm" "SP/s" " SP/s" " ARev" " Isearch" " Anaconda" " Server" " Narrow" " Ind"))
  '(selectrum-extend-current-candidate-highlight t)
+ '(show-paren-style 'expression)
  '(sml/modified-char "X")
  '(sml/mule-info "")
  '(sml/name-width '(5 . 50))
