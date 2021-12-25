@@ -184,18 +184,19 @@
    `(popup-isearch-match ((t (:background ,spectral-bg :foreground ,spectral-fg))))
 
 ;;;;; company-mode
-   `(company-tooltip ((t (:foreground "snow3" :background "midnight blue"))))
-   `(company-tooltip-annotation ((t (:foreground ,spectral-orange :background ,spectral-bg+1))))
-   `(company-tooltip-annotation-selection ((t (:foreground ,spectral-orange :background ,spectral-bg-1))))
-   `(company-tooltip-selection ((t (:foreground ,spectral-fg :background ,spectral-bg-1))))
-   `(company-tooltip-mouse ((t (:background ,spectral-bg-1))))
-   `(company-tooltip-common ((t (:foreground ,spectral-green+2))))
-   `(company-tooltip-common-selection ((t (:foreground ,spectral-green+2))))
-   `(company-scrollbar-fg ((t (:background ,spectral-bg-1))))
-   `(company-scrollbar-bg ((t (:background ,spectral-bg+2))))
-   `(company-preview ((t (:background ,spectral-green+2))))
+   `(company-tooltip ((t (:foreground "black" :background "#005fff"))))
+   `(company-tooltip-annotation ((t (:foreground "black" :background "#005fff"))))
+   `(company-tooltip-annotation-selection ((t (:foreground "white" :background "#005fff" :underline t))))
+   `(company-tooltip-selection ((t (:foreground "white" :background "#005fff" :underline t))))
+   `(company-tooltip-mouse ((t (:background "orange"))))
+   `(company-tooltip-common ((t (:foreground "white"))))
+   `(company-tooltip-common-selection ((t (:foreground "red" :background "#005fff" :underline t))))
+   `(company-scrollbar-fg ((t (:background "white"))))
+   `(company-scrollbar-bg ((t (:background "#005fff"))))
+   `(company-preview ((t (:foreground "white" :background "white"))))
    `(company-preview-common ((t (:foreground ,spectral-green+2 :background ,spectral-bg-1))))
-;;;;; company-quickhelp
+
+ ;;;;; company-quickhelp
    `(company-quickhelp-color-background ,spectral-bg+1)
    `(company-quickhelp-color-foreground ,spectral-fg)
 
@@ -218,15 +219,6 @@
    `(diff-refine-added   ((t (:foreground "white" :background "#00AF00" :italic t :underline t))))
    `(diff-refine-change  ((t (:foreground "white" :background "#FFFF00" :italic t :underline t))))
    `(diff-refine-removed ((t (:foreground "white" :background "#AF0000" :italic t :underline t))))
-
-   ;; class is for colors
-   ;; `(diff-header ((,class (:background ,spectral-bg+2)) (t (:background ,spectral-fg :foreground ,spectral-bg))))
-   ;;`(diff-file-header ((,class (:background ,spectral-bg+2 :foreground ,spectral-fg :weight bold)) (t (:background ,spectral-fg :foreground ,spectral-bg :weight bold))))
-
-;;;;; diff-hl
-   ;;   `(diff-hl-change ((,class (:foreground ,spectral-blue :background ,spectral-blue-2))))
-   ;;`(diff-hl-delete ((,class (:foreground ,spectral-red+1 :background ,spectral-red-1))))
-   ;;`(diff-hl-insert ((,class (:foreground ,spectral-green+1 :background ,spectral-green-1))))
 
    `(diredp-display-msg ((t (:foreground ,spectral-blue))))
    `(diredp-compressed-file-suffix ((t (:foreground ,spectral-orange))))

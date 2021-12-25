@@ -31,6 +31,7 @@
  '(highlight-parentheses-attributes '((:underline t)))
  '(highlight-parentheses-colors nil)
  '(inhibit-startup-screen t)
+ '(linum-format "%4d ")
  '(magit-diff-refine-hunk 'all)
  '(mode-line-format
    '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification sml/pos-id-separator smartrep-mode-line-string
