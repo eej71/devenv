@@ -147,7 +147,7 @@
 
    '(mode-line ((t (:background "#353535" :box (:line-width 2 :color "#009845" :style released-button)))))
    '(mode-line-inactive ((t (:background "#1f1f1f" :foreground "#707070" :box (:line-width -1 :color "#080808" :style released-button)))))
-   ;; `(region ((,class (:background ,spectral-bg-1)) (t :inverse-video t)))
+   
    `(secondary-selection ((t (:background ,spectral-bg+2))))
    `(trailing-whitespace ((t (:background ,spectral-red))))
    `(vertical-border ((t (:foreground ,spectral-fg))))
@@ -196,9 +196,9 @@
    `(company-preview ((t (:foreground "white" :background "white"))))
    `(company-preview-common ((t (:foreground ,spectral-green+2 :background ,spectral-bg-1))))
 
- ;;;;; company-quickhelp
-   `(company-quickhelp-color-background ,spectral-bg+1)
-   `(company-quickhelp-color-foreground ,spectral-fg)
+;;;;; company-quickhelp
+   ;;`(company-quickhelp-color-background ,spectral-bg+1)
+   ;;`(company-quickhelp-color-foreground ,spectral-fg)
 
 ;;;;; context-coloring
    `(context-coloring-level-0-face ((t :foreground ,spectral-fg)))
