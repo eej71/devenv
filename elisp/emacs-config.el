@@ -14,6 +14,8 @@
 
 (add-hook 'message-mode-hook (lambda () "" (auto-fill-mode)))
 (add-hook 'mail-mode-hook (lambda () "" (auto-fill-mode)))
+(add-hook 'git-commit-mode-hook (lambda () "" (whitespace-mode -1)))
+
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
 (when (fboundp 'windmove-default-keybindings)  (windmove-default-keybindings 'meta))
