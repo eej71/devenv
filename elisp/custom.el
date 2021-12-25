@@ -15,6 +15,7 @@
  '(company-quickhelp-color-foreground "#4F4F4F")
  '(company-show-quick-access t)
  '(company-tooltip-limit 20)
+ '(company-tooltip-minimum-width 30)
  '(compilation-skip-threshold 1)
  '(completion-ignore-case t t)
  '(custom-enabled-themes '(spectral))
