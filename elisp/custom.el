@@ -16,6 +16,13 @@
  '(company-show-quick-access t)
  '(company-tooltip-limit 20)
  '(company-tooltip-minimum-width 30)
+ '(compilation-mode-line-errors
+   '(" ["
+     (:propertize
+      (:eval
+       (int-to-string compilation-num-errors-found))
+      face compilation-error help-echo "Number of errors so far")
+     "]") t)
  '(compilation-skip-threshold 1)
  '(completion-ignore-case t t)
  '(custom-enabled-themes '(spectral))
