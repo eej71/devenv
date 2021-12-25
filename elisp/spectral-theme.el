@@ -86,7 +86,7 @@
    `(gui-element                  ((t (:foreground "black"    :background "#D4D0C8"))))
 
    `(text-cursor                  ((t (:foreground "black" :background "yellow"))))
-   `(region                       ((t (:background ,spectral-bg-1))))
+   `(region                       ((t (:inverse-video t))))
    `(highlight                    ((t (:background "#222222"))))
    `(highline-face                ((t (:background "SeaGreen"))))
    `(hl-line                      ((t (:background "black"))))
