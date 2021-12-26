@@ -336,54 +336,6 @@
    ;;`(selectrum-prescient-primary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
    ;;`(selectrum-prescient-secondary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
    `(selectrum-current-candidate ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1 :bold t))))
-   `(helm-header
-     ((t (:foreground ,spectral-green
-                      :background ,spectral-bg
-                      :underline nil
-                      :box nil))))
-   `(helm-source-header
-     ((t (:foreground "white"
-                      :background "dark blue"
-                      :underline t
-                      :weight bold
-                      ))))
-   `(helm-selection ((t (:foreground "yellow" :background "grey10" :bold t))))
-   `(helm-selection-line ((t (:background "white"))))
-   `(helm-visible-mark ((t (:foreground ,spectral-bg :background ,spectral-yellow-2))))
-   `(helm-candidate-number ((t (:foreground ,spectral-green+4 :background ,spectral-bg-1))))
-   `(helm-separator ((t (:foreground "red" :background ,spectral-bg))))
-   `(helm-time-zone-current ((t (:foreground ,spectral-green+2 :background ,spectral-bg))))
-   `(helm-time-zone-home ((t (:foreground ,spectral-red :background ,spectral-bg))))
-   `(helm-bookmark-addressbook ((t (:foreground ,spectral-orange :background ,spectral-bg))))
-   `(helm-bookmark-directory ((t (:foreground nil :background nil :inherit helm-ff-directory))))
-   `(helm-bookmark-file ((t (:foreground nil :background nil :inherit helm-ff-file))))
-   `(helm-bookmark-gnus ((t (:foreground ,spectral-magenta :background ,spectral-bg))))
-   `(helm-bookmark-info ((t (:foreground ,spectral-green+2 :background ,spectral-bg))))
-   `(helm-bookmark-man ((t (:foreground ,spectral-yellow :background ,spectral-bg))))
-   `(helm-bookmark-w3m ((t (:foreground ,spectral-magenta :background ,spectral-bg))))
-   `(helm-buffer-not-saved ((t (:foreground ,spectral-red :background ,spectral-bg))))
-   `(helm-buffer-process ((t (:foreground ,spectral-cyan :background ,spectral-bg))))
-   `(helm-buffer-saved-out ((t (:foreground ,spectral-fg :background ,spectral-bg))))
-   `(helm-buffer-size ((t (:foreground ,spectral-fg-1 :background ,spectral-bg))))
-   `(helm-ff-directory ((t (:foreground ,spectral-cyan :background ,spectral-bg :weight bold))))
-   `(helm-ff-file ((t (:foreground "white" :background "black" :weight normal))))
-   `(helm-ff-executable ((t (:foreground ,spectral-green+2 :background ,spectral-bg :weight normal))))
-   `(helm-ff-invalid-symlink ((t (:foreground "red" :background "black" :weight bold))))
-   `(helm-ff-symlink ((t (:foreground "white" :background "black" :weight normal))))
-   `(helm-ff-prefix ((t (:foreground ,spectral-bg :background ,spectral-yellow :weight normal))))
-   `(helm-grep-cmd-line ((t (:foreground ,spectral-cyan :background ,spectral-bg))))
-   `(helm-grep-file ((t (:foreground ,spectral-fg :background ,spectral-bg))))
-   `(helm-grep-finish ((t (:foreground ,spectral-green+2 :background ,spectral-bg))))
-   `(helm-grep-lineno ((t (:foreground ,spectral-fg-1 :background ,spectral-bg))))
-   `(helm-grep-match ((t (:foreground nil :background nil :inherit helm-match))))
-   `(helm-grep-running ((t (:foreground ,spectral-red :background ,spectral-bg))))
-   `(helm-match ((t (:foreground "SkyBlue1" :background "black" :weight bold))))
-   `(helm-moccur-buffer ((t (:foreground ,spectral-cyan :background ,spectral-bg))))
-   `(helm-mu-contacts-address-face ((t (:foreground ,spectral-fg-1 :background ,spectral-bg))))
-   `(helm-mu-contacts-name-face ((t (:foreground ,spectral-fg :background ,spectral-bg))))
-;;;;; helm-swoop
-   `(helm-swoop-target-line-face ((t (:foreground ,spectral-fg :background ,spectral-bg+1))))
-   `(helm-swoop-target-word-face ((t (:foreground ,spectral-yellow :background ,spectral-bg+2 :weight bold))))
 
 ;;;;; lispy
    `(lispy-command-name-face ((t (:background ,spectral-bg-05 :inherit font-lock-function-name-face))))
