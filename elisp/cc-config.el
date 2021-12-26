@@ -15,7 +15,6 @@
   (font-lock-mode 2)
   (global-hl-line-mode -1)
   (display-line-numbers-mode t)
-  ;;(global-linum-mode t)
   (smartparens-strict-mode t)
   (highlight-parentheses-mode t)
   (rainbow-delimiters-mode +1))
@@ -23,4 +22,5 @@
 (ace-window-display-mode t)
 (add-hook 'c++-mode-hook 'my-c-mode-common-hook)
 (add-hook 'c-mode-hook 'my-c-mode-common-hook)
+(add-hook 'prog-mode-hook 'my-c-mode-common-hook)
 (provide 'cc-config)

@@ -133,17 +133,22 @@
    `(hi-red-b   ((t (:foreground ,spectral-red     :weight     bold))))
 
    `(Info-quoted ((t (:inherit font-lock-constant-face))))
+
 ;;;;; isearch
-   `(isearch ((t (:foreground ,spectral/light-red :bold t :underline t :italic t))))
-   `(isearch-fail ((t (:foreground ,spectral-fg :background ,spectral-red-4))))
-   `(lazy-highlight ((t (:foreground ,spectral-yellow-2))))
+   `(isearch ((t (:foreground "#87ffff" :background "black" :bold t :underline t :italic t))))
+   `(isearch-fail ((t (:foreground "#3a3a3a" :background "black"))))
+   `(lazy-highlight ((t (:foreground "#3a3a3a" :background "black"))))
+
+   `(linum ((t (:foreground "#444444" :background "#000000" :underline nil))))
+   `(line-number ((t (:foreground "#444444" :background "#000000" :underline nil))))
+   `(line-number-current-line ((t (:foreground "white" :background "#000000" :underline nil))))
 
    `(menu ((t (:foreground ,spectral-fg :background ,spectral-bg))))
    `(minibuffer-prompt ((t (:foreground ,spectral-yellow))))
 
    '(mode-line ((t (:background "#353535" :box (:line-width 2 :color "#009845" :style released-button)))))
    '(mode-line-inactive ((t (:background "#1f1f1f" :foreground "#707070" :box (:line-width -1 :color "#080808" :style released-button)))))
-   
+
    `(secondary-selection ((t (:background ,spectral-bg+2))))
    `(trailing-whitespace ((t (:background ,spectral-red))))
    `(vertical-border ((t (:foreground ,spectral-fg))))
@@ -180,17 +185,20 @@
    `(popup-isearch-match ((t (:background ,spectral-bg :foreground ,spectral-fg))))
 
 ;;;;; company-mode
-   `(company-tooltip ((t (:foreground "black" :background "#005fff"))))
-   `(company-tooltip-annotation ((t (:foreground "black" :background "#005fff"))))
-   `(company-tooltip-annotation-selection ((t (:foreground "white" :background "#005fff" :underline t))))
-   `(company-tooltip-selection ((t (:foreground "white" :background "#005fff" :underline t))))
-   `(company-tooltip-mouse ((t (:background "orange"))))
-   `(company-tooltip-common ((t (:foreground "white"))))
-   `(company-tooltip-common-selection ((t (:foreground "red" :background "#005fff" :underline t))))
+   `(company-echo-common ((t (:foreground "black" :background "#005fd7"))))
+   `(company-tooltip ((t (:foreground "black" :background "#005fd7"))))
+   `(company-tooltip-annotation ((t (:foreground "black" :background "#005fd7"))))
+   `(company-tooltip-annotation-selection ((t (:foreground "white" :background "#005fd7" :underline t))))
+   `(company-tooltip-selection ((t (:foreground "white" :background "#005fd7" :underline t))))
+   ;;`(company-tooltip-mouse ((t (:background "orange"))))
+   `(company-tooltip-search ((t (:foreground "white" :background "#005FD7"))))
+   `(company-tooltip-search-selection ((t (:foreground "white" :background "#005FD7"))))
+   `(company-tooltip-common ((t (:foreground "black" :italic t :bold t))))
+   `(company-tooltip-common-selection ((t (:foreground "white" :background "#005fd7" :underline t))))
    `(company-scrollbar-fg ((t (:background "white"))))
-   `(company-scrollbar-bg ((t (:background "#005fff"))))
+   `(company-scrollbar-bg ((t (:background "#005fd7"))))
    `(company-preview ((t (:foreground "white" :background "white"))))
-   `(company-preview-common ((t (:foreground ,spectral-green+2 :background ,spectral-bg-1))))
+   `(company-preview-common ((t (:foreground "red" :background "yellow"))))
 
 ;;;;; company-quickhelp
    ;;`(company-quickhelp-color-background ,spectral-bg+1)
@@ -212,9 +220,9 @@
    `(diff-changed        ((t (:background "#555511" :foreground ,spectral-yellow-1))))
    `(diff-removed        ((t (:background "#553333" :foreground ,spectral-red-2))))
 
-   `(diff-refine-added   ((t (:foreground "white" :background "#00AF00" :italic t :underline t))))
-   `(diff-refine-change  ((t (:foreground "white" :background "#FFFF00" :italic t :underline t))))
-   `(diff-refine-removed ((t (:foreground "white" :background "#AF0000" :italic t :underline t))))
+   `(diff-refine-added   ((t (:foreground "white" :background "#00AF00" :italic t :bold t))))
+   `(diff-refine-change  ((t (:foreground "white" :background "#FFFF00" :italic t :bold t))))
+   `(diff-refine-removed ((t (:foreground "white" :background "#AF0000" :italic t :bold t))))
 
    `(diredp-display-msg ((t (:foreground ,spectral-blue))))
    `(diredp-compressed-file-suffix ((t (:foreground ,spectral-orange))))
@@ -328,7 +336,6 @@
    ;;`(selectrum-prescient-primary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
    ;;`(selectrum-prescient-secondary-highlight ((t (:foreground "black" :background "cyan" :bold t))))
    `(selectrum-current-candidate ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1 :bold t))))
-
    `(helm-header
      ((t (:foreground ,spectral-green
                       :background ,spectral-bg
@@ -388,26 +395,32 @@
    `(magit-item-highlight   ((t (:inherit region))))
 
    `(magit-section-highlight           ((t (:background "#000000")))) ;; Not sure if I like the highlight line or not
-   `(magit-section-heading             ((t (:underline t :foreground ,spectral-yellow :weight bold))))
-   `(magit-section-heading-selection   ((t (:foreground ,spectral-orange :weight bold))))
+   `(magit-section-heading             ((t (:underline t :bold t))))
+   `(magit-section-heading-selection   ((t (:foreground ,spectral-orange :bold t))))
 
    ;; This is the unchanged text that provides context in a diff - so a grey is good
-   `(magit-diff-context-highlight      ((t (:foreground "grey70"))))
+   `(magit-diff-context-highlight      ((t (:foreground "#404040"))))
+   `(magit-diff-context ((t (:foreground "#202020"))))
 
    ;; Faces for when it does have the focus
-   `(magit-diff-added-highlight ((t (:background "#005f00"))))
-   `(magit-diff-removed-highlight ((t (:background "#5f0000"))))
+   `(magit-diff-added-highlight ((t (:background "#005f00" :foreground "#d0d0d0"))))
+   `(magit-diff-removed-highlight ((t (:background "#5f0000" :foreground "#d0d0d0"))))
 
    `(magit-diff-added ((t (:background "#005f00" :foreground "#767676"))))
    `(magit-diff-removed ((t (:background "#5f0000" :foreground "#767676"))))
 
    `(magit-diff-file-heading           ((t (:foreground ,spectral/limegreen-1 :bold t))))  ;; filename in the diff?
-   `(magit-diff-file-heading-highlight ((t (:foregorund ,spectral/orange :bold t))))
-   `(magit-diff-file-heading-selection ((t (:foreground ,spectral/salmon :bold t))))
+   `(magit-diff-file-heading-highlight ((t (:foregorund ,spectral/orange :backround "black" :bold t))))
+   `(magit-diff-file-heading-selection ((t (:foreground ,spectral/salmon :background "black" :bold t))))
+
    `(magit-diff-hunk-heading           ((t (:foreground ,spectral-bg+3 :background ,spectral-bg-1))))
    `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
-   `(magit-diff-hunk-heading-selection ((t (::background ,spectral-bg+2 :foreground ,spectral-orange))))
-   `(magit-diff-lines-heading          ((t (:background ,spectral-orange :foreground ,spectral-bg+2))))
+   `(magit-diff-hunk-heading-selection ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
+
+   ;; When selecting lines in a diff hunk, this adjusts the diff hunk context line @@ ab, cd @@
+   `(magit-diff-lines-heading          ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
+
+   `(magit-diff-hunk-region           ((t (:inverse-video t))))
 
    `(magit-diffstat-added   ((t (:foreground "green"))))
    `(magit-diffstat-removed ((t (:foreground "red"))))
