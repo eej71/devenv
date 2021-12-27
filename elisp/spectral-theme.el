@@ -190,10 +190,9 @@
    `(company-tooltip-annotation ((t (:foreground "black" :background "#005fd7"))))
    `(company-tooltip-annotation-selection ((t (:foreground "white" :background "#005fd7" :underline t))))
    `(company-tooltip-selection ((t (:foreground "white" :background "#005fd7" :underline t))))
-   ;;`(company-tooltip-mouse ((t (:background "orange"))))
    `(company-tooltip-search ((t (:foreground "white" :background "#005FD7"))))
    `(company-tooltip-search-selection ((t (:foreground "white" :background "#005FD7"))))
-   `(company-tooltip-common ((t (:foreground "black" :italic t :bold t))))
+   `(company-tooltip-common ((t (:foreground "black" :background "#005fd7"))))
    `(company-tooltip-common-selection ((t (:foreground "white" :background "#005fd7" :underline t))))
    `(company-scrollbar-fg ((t (:background "white"))))
    `(company-scrollbar-bg ((t (:background "#005fd7"))))
@@ -418,7 +417,7 @@
    `(magit-hash           ((t (:foreground ,spectral/lightblue-2))))
 
    `(magit-tag            ((t (:foreground ,spectral-blue+1 :italic t))))
-   `(magit-branch-remote  ((t (:foreground "white" :background ,spectral-red-4 :underline t))))
+   `(magit-branch-remote  ((t (:foreground "#808080" :background :underline t))))
    `(magit-branch-current ((t (:foreground "white" :background "#008700" :bold t))))
    `(magit-branch-local   ((t (:foreground "#00ff87" :underline t ))))
    `(magit-head           ((t (:foreground ,spectral-green-1 :background "black" :weight bold))))
@@ -592,6 +591,7 @@
    `(web-mode-symbol-face ((t (:inherit font-lock-constant-face))))
    `(web-mode-warning-face ((t (:inherit font-lock-warning-face))))
    `(web-mode-whitespaces-face ((t (:background ,spectral-red))))
+
 ;;;;; whitespace-mode
    `(whitespace-space ((t (:background ,spectral-bg+1 :foreground ,spectral-bg+1))))
    `(whitespace-hspace ((t (:background ,spectral-bg+1 :foreground ,spectral-bg+1))))
