@@ -10,3 +10,4 @@
 (require 'prelude-python)
 (require 'prelude-shell)
 (require 'prelude-xml)
+;;(require 'prelude-github)
