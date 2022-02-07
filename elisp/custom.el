@@ -82,9 +82,7 @@
  '(org-return-follows-link t)
  '(org-reverse-note-order t)
  '(org-startup-indented t)
- '(org-tag-alist '(("work" . 119) ("home" . 104)))
  '(org-tags-column 120)
- '(org-tags-exclude-from-inheritance '("project"))
  '(org-tags-match-list-sublevels t)
  '(org-time-clocksum-format
    '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))

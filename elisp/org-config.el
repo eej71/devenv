@@ -6,17 +6,13 @@
                                      ("STARTED" :foreground "white" :background "green4" :weight bold)
                                      ("DONE" :foreground "white" :background "blue3" :weight bold)
                                      ("NOTE" :foreground "yellow" :background "blue3" :weight bold)
-                                     ("OPS" :foreground "yellow3" :background "grey30" :weight bold)
-                                     ("WAITING" :foreground "black" :background "yellow4")
-                                     ("SOMEDAY" :foreground "magenta" :weight bold)
-                                     ("CANCELLED" :foreground "forest green" :weight bold)
-                                     )))
+                                     ("NEXT" :foreground "brightyellow" :background "black" :weight bold)
+                                     ("WAITING" :foreground "#d75f00" :background "black"))))
 
 (setq org-todo-keywords '(
-                          (sequence "TODO" "STARTED" "WAITING" "|" "DONE" "CNCL")
+                          (sequence "TODO" "STARTED" "NEXT" "WAITING" "|" "DONE" "CNCL")
                           (sequence "NOTE")
-                          (sequence "OPS")
-                          (sequence "AGENDA" "DONE")))
+                          ))
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook 'turn-on-font-lock)
@@ -25,8 +21,10 @@
 
 (setq org-refile-targets '(
                            (org-agenda-files . (:todo . "STARTED"))
+                           (org-agenda-files . (:todo . "NEXT"))
+                           (org-agenda-files . (:tag . "refile"))
                            (org-agenda-files . (:todo . "TODO"))
-                           (org-agenda-files . (:todo . "OPS"))))
+                           ))
 
 (setq org-agenda-prefix-format
       '((agenda . "  %-12:c%?-12t% s")
@@ -45,66 +43,28 @@
 (define-key org-mode-map [(control x) left] 'org-metaleft)
 (define-key org-mode-map [(control x) right] 'org-metaright)
 (define-key global-map "\C-cc" 'org-capture)
-(define-key global-map "\C-cr" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 
-;; I want to find projects that look like this they had action in the past
-;;   - action in the past means - DONE or CNCL
-;;   - there are no further TODOs declared - so the project is stuck
-(defun eej/has-done-cncl ()
-  "Visits all the headlines in a tree looking for a WAITING or a STARTED"
-  (let ((keyword (org-element-property ':todo-keyword (org-element-at-point))))
-    (or (string-equal "DONE" keyword)
-        (string-equal "CNCL" keyword)
-        (and (outline-next-heading) (eej/has-done-cncl)))))
-
-(defun eej/has-todo-started-waiting ()
-  "Visits all the headlines in a tree looking for a WAITING or a STARTED"
-  (let ((keyword (org-element-property ':todo-keyword (org-element-at-point)))
-        (title (org-element-property ':title (org-element-at-point)))
-        (scheduled (org-element-property ':scheduled (org-element-at-point)))
-        (priority (org-element-property ':priority (org-element-at-point))))
-    (or (and (or (equal priority 65) scheduled) (string-equal "TODO" keyword))
-        (string-equal "STARTED" keyword)
-        (string-equal "WAITING" keyword)
-        (and (outline-next-heading) (eej/has-todo-started-waiting)))))
-
+;; Can a DONE or CNCL still be scheduled? Or is that "impossible"?
 (defun eej/find-stuck-projects ()
-  "A project is stuck if a given headline doesn't have any children WAITING or STARTED"
-  (if (not (save-excursion (org-goto-first-child)))
-      (org-end-of-subtree t)
-    (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-           (has-children (save-excursion (org-goto-first-child)))
-           (next-headline (save-excursion (outline-next-heading)))
+  ;; A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO
+  (let ((at-least-one-action (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
+        (at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done)))
+        (at-least-one-scheduled (save-excursion (org-agenda-skip-subtree-if 'scheduled))))
+    (if (and at-least-one-done (not at-least-one-action) (not at-least-one-scheduled))
+        nil
+      (or (outline-next-heading) (org-end-of-subtree t)))))
 
-           ;; We don't have to skip our current line because we are a TODO
-           (has-done-cncl (save-excursion
-                            (save-restriction
-                              (narrow-to-region (point) subtree-end)
-                              (eej/has-done-cncl))))
-
-           ;; This has to skip ahead to then search
-           (has-todo-started-waiting (save-excursion
-                                       (save-restriction
-                                         (if (not (org-goto-first-child))
-                                             nil
-                                           (narrow-to-region (point) subtree-end)
-                                           (eej/has-todo-started-waiting))))))
-      (if (and has-done-cncl (not has-todo-started-waiting))
-          nil
-        next-headline))))
-
-;; A bit sloppy as it doesn't look at actual attributes - recursive model above seems better
 (defun eej/find-nested-started ()
-  (let ((heading-end (save-excursion (outline-next-heading) (1- (point))))
-        (has-children (save-excursion (org-goto-first-child)))
-        has-started)
-    (if has-children
-        (let ((end (save-excursion (org-end-of-subtree t))))
-          (save-excursion
-            (outline-next-heading)
-            (setq has-started (re-search-forward "STARTED" end t))
-            (and has-started heading-end))))))
+  ;; A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO
+  (if (not (org-goto-first-child))
+      nil
+    (let ((end (save-excursion (org-end-of-subtree t))))
+      (if (re-search-forward "STARTED" end t)
+          (progn (beginning-of-line) (point))
+        (or (org-agenda-skip-subtree-if 'scheduled)
+            (org-agenda-skip-subtree-if 'todo '("WAITING"))
+            )))))
 
 (setq org-clock-in-switch-to-state "STARTED")
 
@@ -148,6 +108,16 @@
                                               task-title))))))))
 
 (add-hook 'org-clock-out-hook 'eej/post-worklog-to-jira)
+
+(defun eej/recompute-clock-sum ()
+  "Recomputes the clock sum time for the projects buffer"
+  (save-window-excursion
+    ;; Is there a better way to find this buffer? Seems... clumsy
+    (switch-to-buffer "projects.org<org>")
+    (goto-char 1)
+    (org-clock-sum (org-read-date nil nil "-3w"))))
+
+(add-hook 'org-clock-out-hook 'eej/recompute-clock-sum)
 
 ;; I constantly have problems with the tags not being aligned, so for now
 ;; we will align the tags everytime we clock out.
