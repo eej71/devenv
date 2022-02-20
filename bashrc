@@ -67,6 +67,7 @@ export HISTFILESIZE=100000
 export PROMPT_DIRTRIM=4
 export PROMPT_COMMAND="history -a ; history -c ; history -r; $PROMPT_COMMAND"
 
+export PATH=~/tmux/:$PATH
 export PATH
 export TERM=xterm-256color
 
