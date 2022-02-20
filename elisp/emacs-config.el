@@ -18,7 +18,8 @@
 
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
-;;(when (fboundp 'windmove-default-keybindings)  (windmove-default-keybindings 'meta))
+(require 'windmove)
+(windmove-default-keybindings)
 
 (tool-bar-mode -1)
 (recentf-mode t)

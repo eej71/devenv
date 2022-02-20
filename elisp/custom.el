@@ -141,7 +141,7 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks nil)
- '(visible-bell nill)
+ '(visible-bell nil)
  '(whitespace-line-column 220)
  '(windmove-wrap-around t))
 (custom-set-faces
