@@ -65,7 +65,8 @@
       (or (outline-next-heading) (org-end-of-subtree t)))))
 
 (defun eej/find-nested-started ()
-  ;; A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO
+  ;; A project has at least one DONE task and no
+  ;; child STARTED|WAITING|NEXT or any scheduled TODO
   (if (not (org-goto-first-child))
       nil
     (let ((end (save-excursion (org-end-of-subtree t))))
@@ -122,7 +123,7 @@
   "Recomputes the clock sum time for the projects buffer"
   (save-window-excursion
     ;; Is there a better way to find this buffer? Seems... clumsy
-    (switch-to-buffer "projects.org<org>")
+    (switch-to-buffer "projects.org")
     (goto-char 1)
     (org-clock-sum (org-read-date nil nil "-3w"))))
 
