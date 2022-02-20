@@ -19,6 +19,15 @@
 (add-hook 'org-mode-hook (lambda () "" (whitespace-mode -1)))
 (add-hook 'org-mode-hook 'org-indent-mode)
 
+;; Prelude foists windmove onto everything which is nice except for
+;; org mode, so this moves that aside in org mode, but org mode has a
+;; way to pass along the keys which is nice.
+(add-hook 'org-mode-hook (lambda () (windmove-default-keybindings 'super)))
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+
 (setq org-refile-targets '(
                            (org-agenda-files . (:todo . "STARTED"))
                            (org-agenda-files . (:todo . "NEXT"))
