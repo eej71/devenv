@@ -19,15 +19,6 @@
 (add-hook 'org-mode-hook (lambda () "" (whitespace-mode -1)))
 (add-hook 'org-mode-hook 'org-indent-mode)
 
-;; Prelude foists windmove onto everything which is nice except for
-;; org mode, so this moves that aside in org mode, but org mode has a
-;; way to pass along the keys which is nice.
-(add-hook 'prelude-org-mode-hook (lambda () (progn (windmove-mode -1) (message "disabled windmove in an org file"))))
-(add-hook 'org-shiftup-final-hook 'windmove-up)
-(add-hook 'org-shiftleft-final-hook 'windmove-left)
-(add-hook 'org-shiftdown-final-hook 'windmove-down)
-(add-hook 'org-shiftright-final-hook 'windmove-right)
-
 (setq org-refile-targets '(
                            (org-agenda-files . (:todo . "STARTED"))
                            (org-agenda-files . (:todo . "NEXT"))
@@ -128,6 +119,30 @@
     (org-clock-sum (org-read-date nil nil "-3w"))))
 
 (add-hook 'org-clock-out-hook 'eej/recompute-clock-sum)
+
+
+;; Prelude foists windmove onto everything which is nice except for
+;; org mode, so we make a special minor keymode map which will be
+;; added to org mode files which will then nuke the windmove
+;; mapping. But, we still fallback to windmove thanks to the magic of
+;; orgmode hooks.
+(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for eej-org-mode-map")
+(define-minor-mode eej-org-mode
+  "A minor mode to bring the shift arrows keys with windmove mode active"
+  :init-value nil
+  :keymap eej-org-mode-map)
+
+(define-key eej-org-mode-map (kbd "S-<down>") #'org-shiftdown)
+(define-key eej-org-mode-map (kbd "S-<left>") #'org-shiftleft)
+(define-key eej-org-mode-map (kbd "S-<right>") #'org-shiftright)
+(define-key eej-org-mode-map (kbd "S-<up>") #'org-shiftup)
+
+(add-hook 'org-mode-hook 'eej-org-mode)
+
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
 
 ;; I constantly have problems with the tags not being aligned, so for now
 ;; we will align the tags everytime we clock out.
