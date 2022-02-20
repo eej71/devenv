@@ -54,6 +54,7 @@
 (global-set-key (kbd "C-s") 'isearch-forward)
 (global-set-key [f1] 'compile)
 (global-set-key [f2] 'next-error)
+;;(global-set-key [f7] 'set-mark-command)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (menu-bar-mode -1)
