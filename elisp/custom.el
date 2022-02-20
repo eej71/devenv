@@ -68,6 +68,7 @@
  '(org-clock-out-remove-zero-time-clocks t)
  '(org-clock-persist t)
  '(org-clock-persist-file "~/org/org-clock-save.el")
+ '(org-clock-sound t)
  '(org-columns-default-format "%100ITEM %TODO %TAGS")
  '(org-deadline-warning-days 3)
  '(org-default-notes-file (concat org-directory "/notes.org"))
@@ -103,6 +104,7 @@
  '(recentf-max-saved-items 50)
  '(redisplay-dont-pause t t)
  '(request-curl-options '("-k"))
+ '(ring-bell-function nil)
  '(rm-blacklist
    '(" hl-p" " EL" " company" " EditorConfig" " Pre" " WK" " ws" " C++" " SP" " Abbrev" "C++/l" " (*)" " Helm" "SP/s" " SP/s" " ARev" " Isearch" " Anaconda" " Server" " Narrow" " Ind"))
  '(selectrum-extend-current-candidate-highlight t)
@@ -139,8 +141,9 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks nil)
- '(visible-bell t)
- '(whitespace-line-column 220))
+ '(visible-bell nill)
+ '(whitespace-line-column 220)
+ '(windmove-wrap-around t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
