@@ -18,7 +18,7 @@
 
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
-(when (fboundp 'windmove-default-keybindings)  (windmove-default-keybindings 'meta))
+;;(when (fboundp 'windmove-default-keybindings)  (windmove-default-keybindings 'meta))
 
 (tool-bar-mode -1)
 (recentf-mode t)
@@ -54,7 +54,7 @@
 (global-set-key (kbd "C-s") 'isearch-forward)
 (global-set-key [f1] 'compile)
 (global-set-key [f2] 'next-error)
-;;(global-set-key [f7] 'set-mark-command)
+(global-set-key [f7] 'set-mark-command)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (menu-bar-mode -1)
