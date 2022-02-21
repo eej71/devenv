@@ -60,6 +60,7 @@
      (search category-keep)))
  '(org-agenda-start-with-clockreport-mode t)
  '(org-agenda-tags-column 150)
+ '(org-babel-load-languages '((emacs-lisp . t) (sql . t)))
  '(org-checkbox-hierarchical-statistics nil)
  '(org-clock-history-length 10)
  '(org-clock-into-drawer t)
@@ -90,7 +91,7 @@
  '(org-use-speed-commands t)
  '(org-use-tag-inheritance t)
  '(package-selected-packages
-   '(org-journal org-super-agenda highlight-parentheses vertico 0blayout ace-window ag anaconda-mode anzu auto-complete beacon browse-kill-ring chess color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow company company-anaconda consult consult-company consult-lsp consult-projectile counsel crux csv-mode d-mode diff-hl diminish discover-my-major easy-kill editorconfig elisp-slime-nav evil-visualstar exec-path-from-shell expand-region flatui-dark-theme flx-ido flycheck geiser ggtags gist git-timemachine gitconfig-mode gitignore-mode go-projectile god-mode goto-chg grizzl guru-mode helm helm-ag helm-descbinds helm-git helm-git-files helm-git-grep helm-gtags helm-make helm-org-rifle helm-orgcard helm-projectile helm-rg hl-todo ido-ubiquitous ido-vertical-mode iedit imenu-anywhere ivy js2-mode json-mode key-chord lush-theme magit magit-popup markdown-mode merlin move-text operate-on-number orderless org org-jira org-roam org-roam-bibtex org-roam-timestamps org-roam-ui ov projectile projectile-ripgrep protobuf-mode rainbow-delimiters rainbow-mode rg ripgrep selectrum selectrum-prescient smart-mode-line smart-mode-line-powerline-theme smartparens smartrep smex solarized-theme spaceline super-save swiper transient tuareg undo-tree utop vkill volatile-highlights w3 w3m web-mode which-key yaml-mode zenburn-theme zop-to-char))
+   '(use-package use-package-chords use-package-el-get use-package-ensure-system-package use-package-hydra ob-sql-mode org-journal org-super-agenda highlight-parentheses vertico 0blayout ace-window ag anaconda-mode anzu auto-complete beacon browse-kill-ring chess color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow company company-anaconda consult consult-company consult-lsp consult-projectile counsel crux csv-mode d-mode diff-hl diminish discover-my-major easy-kill editorconfig elisp-slime-nav evil-visualstar exec-path-from-shell expand-region flatui-dark-theme flx-ido flycheck geiser ggtags gist git-timemachine gitconfig-mode gitignore-mode go-projectile god-mode goto-chg grizzl guru-mode helm helm-ag helm-descbinds helm-git helm-git-files helm-git-grep helm-gtags helm-make helm-org-rifle helm-orgcard helm-projectile helm-rg hl-todo ido-ubiquitous ido-vertical-mode iedit imenu-anywhere ivy js2-mode json-mode key-chord lush-theme magit magit-popup markdown-mode merlin move-text operate-on-number orderless org org-jira org-roam org-roam-bibtex org-roam-timestamps org-roam-ui ov projectile projectile-ripgrep protobuf-mode rainbow-delimiters rainbow-mode rg ripgrep selectrum selectrum-prescient smart-mode-line smart-mode-line-powerline-theme smartparens smartrep smex solarized-theme spaceline super-save swiper transient tuareg undo-tree utop vkill volatile-highlights w3 w3m web-mode which-key yaml-mode zenburn-theme zop-to-char))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(prelude-clean-whitespace-on-save nil)
  '(prelude-guru nil)
