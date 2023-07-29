@@ -496,6 +496,8 @@
    `(org-habit-ready-future-face ((t :background ,spectral-green-1)))
    `(org-habit-alert-future-face ((t :background ,spectral-yellow-2 :foreground ,spectral-bg)))
    `(org-habit-overdue-future-face ((t :background ,spectral-red-4)))
+   `(org-super-agenda-header ((t :inherit org-agenda-structure :underline t)))
+   `(org-agenda-dimmed-todo-face ((t :foreground "#5e5e5e" :italic t)))
 
    `(powerline-active1 ((t (:background ,spectral-bg-05 :inherit mode-line))))
    `(powerline-active2 ((t (:background ,spectral-bg+2 :inherit mode-line))))
