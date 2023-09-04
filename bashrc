@@ -58,6 +58,10 @@ export TERM=xterm-256color
 export LD_LIBRARY_PATH
 export EDITOR='emacsclient -nw'
 export VISUAL='emacsclient -nw'
+
+# This is required for tree-sitter
+LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
 export HISTCONTROL=erasedups
 export HISTIGNORE="&:ls:[bf]g:exit"
 export HISTSIZE=100000
