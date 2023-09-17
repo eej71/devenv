@@ -1,1 +1,4 @@
-set enable-bracketed-paste off
+set enable-bracketed-paste on
+set mark-symlinked-directories on
+
+

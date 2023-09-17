@@ -17,7 +17,7 @@
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook 'turn-on-font-lock)
 (add-hook 'org-mode-hook (lambda () "" (whitespace-mode -1)))
-(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook (lambda () "" (org-indent-mode t)))
 
 (setq org-refile-targets '(
                            (org-agenda-files . (:todo . "STARTED"))
@@ -45,27 +45,64 @@
 (define-key global-map "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 
-;; Can a DONE or CNCL still be scheduled? Or is that "impossible"?
+
+;; Determine if this is a todo category task (vs. done). Useful for org-map-entries.
+(defun eej/is-todo-scheduled ()
+  (let ((props (org-element-at-point)))
+    (and (org-element-property ':scheduled props)
+         (equal 'todo (org-element-property ':todo-type props))
+         (point))))
+
+;; Project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled todo
 (defun eej/find-stuck-projects ()
-  ;; A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO
-  (let ((at-least-one-action (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
-        (at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done)))
-        (at-least-one-scheduled (save-excursion (org-agenda-skip-subtree-if 'scheduled))))
-    (if (and at-least-one-done (not at-least-one-action) (not at-least-one-scheduled))
+  (let ((at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done))))
+    (if (and at-least-one-done ;; This test is first because it frequently short ciruits the whole thing
+
+             ;; at-least-one-action
+             (not (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
+
+             ;; at-least-one-scheduled todo (not scheduled done)
+             (not (remove nil (org-map-entries #'eej/is-todo-scheduled t 'tree))))
         nil
       (or (outline-next-heading) (org-end-of-subtree t)))))
 
+;; Find the nested most started headlines, but still include scheduled items
 (defun eej/find-nested-started ()
-  ;; A project has at least one DONE task and no
-  ;; child STARTED|WAITING|NEXT or any scheduled TODO
-  (if (not (org-goto-first-child))
-      nil
-    (let ((end (save-excursion (org-end-of-subtree t))))
-      (if (re-search-forward "STARTED" end t)
-          (progn (beginning-of-line) (point))
-        (or (org-agenda-skip-subtree-if 'scheduled)
-            (org-agenda-skip-subtree-if 'todo '("WAITING"))
-            )))))
+
+  ;; First, we need to see if we have a child
+  (let ((first-child (save-excursion (if (org-goto-first-child)
+                                         (point)
+                                       nil))))
+    ;; If no children, then return nil because this headline is a keeper
+    (if (not first-child) nil
+      (let* (
+             ;; Locate the end of this subtree
+             (end (save-excursion (org-end-of-subtree t)))
+
+             ;; Find the next scheduled child
+             (scheduled-child (save-excursion
+                                (goto-char first-child)
+                                (car (remove nil (org-map-entries #'eej/is-todo-scheduled t 'tree)))))
+
+             ;; Next started child in this tree
+             (next-started (save-excursion
+                             (goto-char first-child)
+                             (if (re-search-forward "* STARTED" end t)
+                                 (progn
+                                   (beginning-of-line)
+                                   (point))
+                               nil)))
+
+             ;; And of course locate a waiting task
+             (next-waiting (save-excursion (org-agenda-skip-subtree-if 'todo '("WAITING")))))
+
+        ;; If there's a scheduled child or a next started - visit the closer one
+        (if (and next-started scheduled-child)
+            (min next-started scheduled-child)
+
+          ;; If not both, then either or if neither, then the end
+          (or next-started scheduled-child (if next-waiting end nil)))
+        ))))
 
 (setq org-clock-in-switch-to-state "STARTED")
 
@@ -83,7 +120,10 @@
       (dotimes (k (1- level) str)
         (setq str (concat "__" str))))))
 
+(require 'org-duration)
+(add-to-list 'load-path "~/.emacs.d/elpa/org-jira-20230413.441/" )
 (require 'org-jira)
+
 (defun eej/post-worklog-to-jira ()
   "Post up time to jira"
   (interactive)
@@ -138,6 +178,8 @@
 (define-key eej-org-mode-map (kbd "S-<up>") #'org-shiftup)
 
 (add-hook 'org-mode-hook 'eej-org-mode)
+;;(add-hook 'org-super-agenda-mode-hook 'eej-org-mode)
+;;(add-hook 'org-agenda-mode-hook 'eej-org-mode)
 
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
