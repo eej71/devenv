@@ -1,3 +1,12 @@
-*.elc
-local-config.el
+auto-save-list/
+bookmarks
+eln-cache/
+elpa/
+history
+projects
+recentf
+straight/
+tramp
+transient/
+tree-sitter/
 cc-mode/
