@@ -540,6 +540,7 @@
 
 ;; TODO: We can remove this once windows terminal program fixes their C-spc bug
 (global-set-key [f7] 'set-mark-command)
+(global-set-key (kbd "C-x z") 'ff-get-other-file)
 
 (straight-use-package 'marginalia)
 (use-package marginalia
@@ -713,5 +714,3 @@
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
 
-;; Improve the loading mechanism here - kind of dumb
-(require 'toggle-source "~/.emacs.d/toggle-source.el")
