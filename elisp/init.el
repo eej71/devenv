@@ -406,7 +406,9 @@
  '(request-curl-options '("-k"))
  '(ring-bell-function nil)
  '(safe-local-variable-values
-   '((eej-modeline-project-branch-face . eej-modeline-project-branch-face-2)))
+   '((flycheck-disabled-checkers emacs-lisp-checkdoc)
+     (eej-modeline-project-branch-face .
+                                       eej-modeline-project-branch-face-2)))
  '(show-paren-style 'expression)
  '(show-paren-when-point-in-periphery t)
  '(show-paren-when-point-inside-paren t)
@@ -676,7 +678,40 @@
     (switch-to-buffer "projects.org")
     (goto-char 1)
     (org-clock-sum (org-read-date nil nil "-3w"))))
+
+;; Enables daisy chaining of .dir-locals.el files. Most was copied from here
+;; http://emacs.stackexchange.com/questions/5527/is-there-a-way-to-daisy-chain-dir-locals-el-files
+(defvar walk-dir-locals-upward nil
+    "If non-nil, evaluate .dir-locals.el files starting in the
+  current directory and going up. Otherwise they will be
+  evaluated from the top down to the current directory.")
+
+(defadvice hack-dir-local-variables (around walk-dir-locals-file activate)
+  (let* ((dir-locals-list (list dir-locals-file))
+         (walk-dir-locals-file (car dir-locals-list)))
+    (while (not (equal (concat "/" dir-locals-file) (expand-file-name walk-dir-locals-file)))
+      (progn
+        (setq walk-dir-locals-file (concat "../" walk-dir-locals-file))
+        (if (file-readable-p walk-dir-locals-file)
+            (add-to-list 'dir-locals-list walk-dir-locals-file
+                         walk-dir-locals-upward))
+        ))
+    (dolist (file dir-locals-list)
+      (let ((dir-locals-file (expand-file-name file)))
+        ad-do-it
+        ))))
+
+;; Perhaps of use for some work files
+(defun remove-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
 (put 'narrow-to-region 'disabled nil)
 
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
+
+;; Improve the loading mechanism here - kind of dumb
+(require 'toggle-source "~/.emacs.d/toggle-source.el")
