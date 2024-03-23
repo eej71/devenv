@@ -377,7 +377,7 @@
    `(eej-modeline-project-branch-face-9 ((t (:foreground ,spectral-azure-04))))
    `(eej-modeline-buffer-identification-face ((t :foreground ,spectral-background-00 :background ,spectral-foreground-00 :bold t)))
 
-   `(eej-modeline-org-task-active-face ((t :foreground ,spectral-foreground-00 :italic t)))
+   `(eej-modeline-org-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-green-09 :italic t)))
    `(eej-modeline-org-no-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-red-08)))
 
    ;; Not reviewed or verified
@@ -477,8 +477,8 @@
    `(minibuffer-prompt ((t (:foreground ,spectral-yellow))))
 
    ;; This is still used - fold it in better...
-   '(mode-line ((t (:background "#3C3C3C"))))
-   '(mode-line-inactive ((t (:background "#040404" :foreground "#2A2A2A"))))
+   `(mode-line ((t (:background ,spectral-background-09 ))))
+   `(mode-line-inactive ((t (:foreground ,spectral-foreground-22 :background ,spectral-background-03))))
 
    `(secondary-selection ((t (:background ,spectral-bg+2))))
    `(trailing-whitespace ((t (:background ,spectral-red))))
@@ -740,6 +740,7 @@
    ;;; org mode goodies
    `(org-agenda-date-today
      ((t (:foreground ,spectral-fg+1 :slant italic :weight bold))) t)
+   `(org-agenda-clocking ((t (:background, spectral-springgreen-11))))
    `(org-agenda-structure
      ((t (:inherit font-lock-comment-face))))
    `(org-archived ((t (:foreground ,spectral-fg :weight bold))))

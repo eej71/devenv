@@ -1,0 +1,16 @@
+directory: /mnt/tower/flac
+library: ~/library.db
+import:
+  copy: no
+  write: no
+  default_action: asis
+  log: import.log
+
+plugins: mbcollection
+
+musicbrainz:
+  user: ejohnson8192
+  pass: z!bKi2Gxk!k*KBm
+
+match:
+  ignored: missing_tracks unmatched_tracks

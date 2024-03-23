@@ -1,0 +1,86 @@
+[core]
+	editor = emacsclient -nw
+	whitespace = cr-at-eol
+	autocrlf = false
+	pager = less -x2 -R
+	packedGitWindowSize = 16m
+	packedGitLimit = 128m
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+
+[color "diff"]
+       meta = yellow ul reverse
+       frag = magenta bold
+       old = white red bold
+       new = white green bold
+
+[diff]
+    tool = meld
+renameLimit = 80000
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+
+[user]
+	name = Eric Johnson
+	email = johnson.eric@gmail.com
+
+[branch "master"]
+	rebase = true
+
+[branch "*"]
+	mergeoptions = ignore-all-space
+	rebase = true
+
+[push]
+	default = current
+
+[alias]
+	dfw = diff --ignore-space-change
+	gtags = !.git/hooks/gtags
+	setatus = status
+	checkuot = checkout
+	chekcout = checkout
+	steatus = status
+        cehckout = checkout
+
+[gc]
+	auto = 0
+
+[config "status"]
+	changed = red reverse
+
+[color "status"]
+	changed = white red bold
+	untracked = white red bold
+
+[pack]
+	threads = 1
+	deltaCacheSize = 1
+	windowMemory = 512m
+
+[rerere]
+	enabled = true
+
+[status]
+	submoduleSummary = true
+
+[lfs]
+	fetchexclude = *
+
+[merge]
+	renamelimit = 2600
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[include]
+        path = ~/workspace_git/devenv/work/gitconfig
