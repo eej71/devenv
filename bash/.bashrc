@@ -79,5 +79,4 @@ export TERM=xterm-256color
 ## \033[48;5;XYZm is a background color
 ## \033[38;5;XYZm is a foreground color
 PS1='\[\033[48;5;19m\]\[\033[38;5;255m\]\[$(tput smul)\]\w\[$(tput rmul)\]$(__git_ps1) >\[\e[0m\] '
-ulimit -c 0
 export QT_GRAPHICSSYSTEM=native

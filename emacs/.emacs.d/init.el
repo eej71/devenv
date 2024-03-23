@@ -83,7 +83,7 @@
 
         org-babel-load-languages '((emacs-lisp . t) (sql . t))
         org-checkbox-hierarchical-statistics nil
-        org-clock-history-length 10
+        org-clock-history-length 25
         org-clock-in-switch-to-state "STARTED"
         org-clock-into-drawer t
         org-clock-mode-line-total 'today
@@ -133,8 +133,8 @@
   (add-hook 'org-mode-hook (lambda () "" (org-indent-mode t)))
   (add-hook 'org-mode-hook #'eej-org-mode)
   (add-hook 'org-mode-hook (lambda () "" (whitespace-mode -1)))
-  (add-hook 'org-clock-out-hook (lambda () "" (org-align-all-tags))) 
-  (add-hook 'org-clock-out #'eej/recompute-clock-sum)
+  (add-hook 'org-clock-out-hook (lambda () "" (org-align-all-tags)))
+  (add-hook 'org-clock-out-hook #'eej/recompute-clock-sum)
 
   (add-hook 'org-shiftup-final-hook #'windmove-up)
   (add-hook 'org-shiftleft-final-hook #'windmove-left)
@@ -162,10 +162,16 @@
 (use-package org-jira
   ;; It's necessary to place everything in :config otherwise org jira is sad
   :config
-  (add-hook 'org-clock-out #'eej/post-worklog-to-jira))
+  (add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira))
 
 (straight-use-package 'org-super-agenda)
 (use-package org-super-agenda)
+
+(defun eej-indent-style ()
+  "Override the built in indentation with my own choices."
+  `(;; custom rules
+    ((n-p-gp nil nil "namespace_definition") grand-parent 0)
+    ,@(alist-get 'gnu (c-ts-mode--indent-styles 'cpp))))
 
 (use-package treesit
   :straight nil
@@ -190,8 +196,8 @@
   ;; TODO: Bring this back once we are running emacs as a daemon again
   ;;(mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
   :custom
-  (major-mode-remap-alist '((c++-mode . c++-ts-mode)))
-
+  (major-mode-remap-alist '((c++-mode . c++-ts-mode) (c-mode . c-ts-mode) (c-or-c++-mode . c-or-c++-ts-mode)))
+  (c-ts-mode-indent-style #'eej-indent-style)
   ;; Setting this to 3 or 4 triggers an error from treesit parser - may fix itself with futures sha1s
   (treesit-font-lock-level 2))
 
@@ -237,22 +243,30 @@
   :custom
   (windmove-wrap-around t))
 
+(defun eej/is-buffer-read-only ()
+  "Set the buffer to read only if its a file not managed by git."
+  (if (and buffer-file-name
+           (not (project-current nil (file-truename default-directory))))
+      (read-only-mode t)))
+
 (straight-use-package 'magit)
 (use-package magit
   :bind
   ("C-c g" . magit-file-dispatch)
   :hook
-  (find-file . (lambda () ""
-                 (if (not (project-current))
-                     (read-only-mode t))))
+  (find-file . eej/is-buffer-read-only)
+
   :custom
   (magit-diff-refine-hunk 'all))
 
 (straight-use-package 'project)
 (use-package project
   ;; TODO: Describe-key seems broken for this - is that describe-key being broken or me being broken?
-  ;; :bind-keymap ("C-c p" . project-prefix-map) ;; Already mapped as C-x p
-  )
+  ;;:bind-keymap ("f" . project-prefix-map) ;; Already mapped as C-x p
+  :config
+  (setq project-switch-commands '((consult-project-extra-find "Find file") (project-find-regexp "Find regexp")
+                                  (project-find-dir "Find directory") (project-vc-dir "VC-Dir")
+                                  (project-eshell "Eshell"))))
 
 (use-package git-commit
   :hook
@@ -321,6 +335,9 @@
 
   :config
   (setq consult-narrow-key "<")
+  (setq consult-ripgrep-args "rg --null --color=never --max-columns=1000 --path-separator /   --smart-case --no-heading --with-filename --line-number --no-search-zip")
+
+  (advice-add #'project-find-regexp :override #'consult-ripgrep)
 
   ;; Improves the usability of the register window...
   (setq register-preview-delay 0.5
@@ -332,6 +349,9 @@
 (use-package consult-project-extra
   :straight t
   :bind
+  ;; TODO: The problem with this setup is that this wrecks project-switch-buffer keymap - no way to pick a file
+  ;; 1) Try declaring this in the bind-keymap portion of the project loading
+  ;; 2) Try a bind-keymap thing here instead of just stuffing this into that key sequence
   (("C-x p f" . consult-project-extra-find)
    ("C-x p o" . consult-project-extra-find-other-window)))
 
@@ -354,9 +374,9 @@
   (setq
    ack-and-a-half-arguments "--ignore-dir=release --ignore-dir=debug"))
 
-;; Does this still make sense? Still needed?
-(straight-use-package 'uniquify-files)
-(use-package uniquify-files)
+;; TODO: Purge uniquify if its not needed
+;;(straight-use-package 'uniquify-files)
+;;(use-package uniquify-files)
 ;;:custom (uniquify-buffer-name-style '(post-forward-angle-brackets nil (uniquify))))
 
 (custom-set-variables
@@ -402,11 +422,22 @@
      (vc-mode vc-mode) mode-line-modes mode-line-misc-info
      mode-line-end-spaces))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(project-vc-ignores
+   '("Testing/TestModels/TMS74GridTests/refdata/s74output_correct/correct.Miax_Pearl.tar.gz"
+     "engine/Testing/TestModels/TMS74GridTests/refdata/s74output_correct/correct.Miax_Pearl.tar.gz"))
  '(redisplay-dont-pause t t)
  '(request-curl-options '("-k"))
  '(ring-bell-function nil)
+ '(safe-local-variable-directories
+   '("/home/STRIKETECH/ejohnson/workspace_git/GTS51/"
+     "/home/STRIKETECH/ejohnson/workspace_git/engine/"
+     "/home/STRIKETECH/ejohnson/workspace_git/ui/"))
  '(safe-local-variable-values
-   '((flycheck-disabled-checkers emacs-lisp-checkdoc)
+   '((eej-modeline-project-branch-face .
+                                       eej-modeline-project-branch-face-4)
+     (eej-modeline-project-branch-face .
+                                       eej-modeline-project-branch-face-1)
+     (flycheck-disabled-checkers emacs-lisp-checkdoc)
      (eej-modeline-project-branch-face .
                                        eej-modeline-project-branch-face-2)))
  '(show-paren-style 'expression)
@@ -437,12 +468,15 @@
  ;; If there is more than one, they won't work right.
  )
 
+;;
+;; Eglot is just too much trouble. Can't make it parse compiler_commands.json and nothing works.
 ;; Other packages to bring in - eldoc, flymake, xref and imenu
-(use-package eglot
-  :custom
-  (eglot-inlay-hints-mode 0)
-  :hook
-  (c++-ts-mode . eglot-ensure))
+;;(use-package eglot
+;;  :custom
+;;  (eglot-inlay-hints-mode 0)
+;;  :hook
+;;  ;;(c++-ts-mode . eglot-ensure)
+;;  )
 
 ;; debug this function with debug to see why M-t is not doing this corfu-popupinfo-toggle
 (use-package corfu
@@ -604,9 +638,9 @@
 ;;(keymap-set vertico-map "C-q" #'vertico-quick-exit)
 
 ;; Can this be moved into the org specific configs?
-(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for eej-org-mode-map")
+(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for eej-org-mode-map.")
 (define-minor-mode eej-org-mode
-  "A minor mode to bring the shift arrows keys with windmove mode active"
+  "A minor mode to bring the shift arrows keys with windmove mode active."
   :init-value nil
   :keymap eej-org-mode-map)
 
@@ -618,7 +652,7 @@
 
 ;;; CODE:
 (defun eej/find-stuck-projects ()
-  "A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO"
+  "A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
   (let ((at-least-one-action (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
         (at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done)))
         (at-least-one-scheduled (save-excursion (org-agenda-skip-subtree-if 'scheduled))))
@@ -626,30 +660,47 @@
         nil
       (or (outline-next-heading) (org-end-of-subtree t)))))
 
+;; org-element-map - could be good...
+;; org-map-entries is a little better - easier to work with
+;; org-entry-get - nope - not it
+;; org-element-at-point - this gets a list
+
+(defun eej/is-todo-scheduled ()
+  "Is this an incomplete todo with a scheduled date."
+  (let* ((element (org-element-at-point))
+         (todo-type (org-element-property :todo-type element))
+         (scheduled (org-element-property :scheduled element)))
+    (if (and (eq todo-type 'todo) scheduled)
+        (point)
+      nil)))
+
 (defun eej/find-nested-started ()
-  "A project has at least one DONE task and no"
-  ;; child STARTED|WAITING|NEXT or any scheduled TODO
+  "A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."  
   (if (not (org-goto-first-child))
       nil
     (let ((end (save-excursion (org-end-of-subtree t))))
       (if (re-search-forward "STARTED" end t)
           (progn (beginning-of-line) (point))
-        (or (org-agenda-skip-subtree-if 'scheduled)
-            (org-agenda-skip-subtree-if 'todo '("WAITING"))
-            )))))
+        (or
+         (org-agenda-skip-subtree-if 'todo '("WAITING"))
+         ;; If org-agenda-skip-subtree-if allowed for this...
+         ;; (org-agenda-skip-subtree-if 'scheduled 'todo '("DONE"))
+         (-some #'identity (remove nil (org-map-entries #'eej/is-todo-scheduled t 'tree)))
+         )))))
 
 ;; Needed because indented levels in the clock table report (C-a r)
 ;; will display \\emsp and I can't figure out how to make it look
 ;; nice. So this is what it will be. Borrowed from this thread.
 ;; http://lists.gnu.org/archive/html/emacs-orgmode/2014-08/msg00974.html
 (defun org-clocktable-indent-string (level)
+  "An attempt to improve the formatting of the clocktable for a given LEVEL."
   (if (= level 1) ""
     (let ((str " "))
       (dotimes (k (1- level) str)
         (setq str (concat "__" str))))))
 
 (defun eej/post-worklog-to-jira ()
-  "Post up time to jira"
+  "Post up time to jira."
   (interactive)
   ;; Get the jira ticket number
   (save-excursion
@@ -673,34 +724,12 @@
                                               task-title))))))))
 
 (defun eej/recompute-clock-sum ()
-  "Recomputes the clock sum time for the projects buffer"
+  "Recomputes the clock sum time for the projects buffer."
   (save-window-excursion
     ;; Is there a better way to find this buffer? Seems... clumsy
     (switch-to-buffer "projects.org")
     (goto-char 1)
     (org-clock-sum (org-read-date nil nil "-3w"))))
-
-;; Enables daisy chaining of .dir-locals.el files. Most was copied from here
-;; http://emacs.stackexchange.com/questions/5527/is-there-a-way-to-daisy-chain-dir-locals-el-files
-(defvar walk-dir-locals-upward nil
-    "If non-nil, evaluate .dir-locals.el files starting in the
-  current directory and going up. Otherwise they will be
-  evaluated from the top down to the current directory.")
-
-(defadvice hack-dir-local-variables (around walk-dir-locals-file activate)
-  (let* ((dir-locals-list (list dir-locals-file))
-         (walk-dir-locals-file (car dir-locals-list)))
-    (while (not (equal (concat "/" dir-locals-file) (expand-file-name walk-dir-locals-file)))
-      (progn
-        (setq walk-dir-locals-file (concat "../" walk-dir-locals-file))
-        (if (file-readable-p walk-dir-locals-file)
-            (add-to-list 'dir-locals-list walk-dir-locals-file
-                         walk-dir-locals-upward))
-        ))
-    (dolist (file dir-locals-list)
-      (let ((dir-locals-file (expand-file-name file)))
-        ad-do-it
-        ))))
 
 ;; Perhaps of use for some work files
 (defun remove-dos-eol ()
@@ -713,4 +742,6 @@
 
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
+(require 'local-config "~/.emacs.d/local-config.el")
 
+;;(add-to-list 'eglot-server-programs '(c++-ts-mode . ("clangd" "--log=verbose --path-mappings=Vulcan/=engine/Vulcan/")))

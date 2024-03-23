@@ -81,9 +81,10 @@
 
 (defun eej-modeline-project-name ()
   "Return name of the project as is."
-  (if (project-current)
-      (file-name-nondirectory (directory-file-name (project-root (project-current))))
-    "-" ))
+  (let ((this-project (project-current nil (file-truename default-directory))))
+    (if this-project
+        (file-name-nondirectory (directory-file-name (project-root this-project)))
+    "-" )))
 
 (defun eej-modeline-git-name ()
   "Return the current branch name - assumes git."
@@ -95,7 +96,7 @@
 
 (defun eej-modeline--project-branch (active)
   "Return the text and face for the project-branch based on ACTIVE."
-  (if (and buffer-file-name (project-current nil default-directory))
+  (if (and buffer-file-name (project-current nil (file-truename default-directory)))
       (let ((project-name (eej-modeline-project-name)))        
         (let ((retval (format "{%s:%s}" project-name (eej-modeline-git-name))))
           (if active
@@ -105,20 +106,19 @@
 
 (defvar-local eej-modeline-project-branch-active '(:eval (eej-modeline--project-branch t)))
 (defvar-local eej-modeline-project-branch-inactive '(:eval (eej-modeline--project-branch nil)))
-  
 
 (defun eej-modeline-format-filename ()
   "Return the current filename relative to the project root."
-  (if (and buffer-file-name (project-current nil default-directory))
-      (file-relative-name buffer-file-name (project-root (project-current nil default-directory)))
-    (buffer-name)))
+  (let ((true-buffer-file-name (and buffer-file-name (file-truename buffer-file-name)))
+        (the-project (project-current nil (file-truename default-directory))))
+    (if (and true-buffer-file-name the-project)
+        (file-relative-name true-buffer-file-name (project-root the-project))
+      (buffer-name))))
 
 (defun eej-modeline--buffer-identification (active)
   "Return the buffer id based on ACTIVE."
-  (if active
-      (propertize (eej-modeline-format-filename)
-                  'face 'eej-modeline-buffer-identification-face)
-    (eej-modeline-format-filename)))
+  (propertize (eej-modeline-format-filename)
+              'face 'eej-modeline-buffer-identification-face))
 
 (defvar-local eej-modeline-buffer-identification-active '(:eval (eej-modeline--buffer-identification t)))
 (defvar-local eej-modeline-buffer-identification-inactive '(:eval (eej-modeline--buffer-identification nil)))
