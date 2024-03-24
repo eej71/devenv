@@ -3,3 +3,6 @@ work/
 
 # Excluding for now since oauth tokens were here
 config/.config/gh/hosts.yml
+
+# Local customization files
+emacs/.emacs.d/local-config.el
