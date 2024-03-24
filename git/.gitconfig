@@ -83,4 +83,4 @@ renameLimit = 80000
 	required = true
 
 [include]
-        path = ~/workspace_git/devenv/work/gitconfig
+        path = ~/devenv/local/gitconfig

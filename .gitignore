@@ -1,5 +1,5 @@
 org-clock-save.el
-work/
+local/
 
 # Excluding for now since oauth tokens were here
 config/.config/gh/hosts.yml
