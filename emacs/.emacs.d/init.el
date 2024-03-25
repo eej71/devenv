@@ -111,12 +111,12 @@
         org-todo-keywords '((sequence "TODO" "STARTED" "NEXT" "WAITING" "|" "DONE" "CNCL")
                             (sequence "NOTE"))
 
-        org-todo-keyword-faces '(("TODO" :background "red3" :foreground "white" :weight bold)
-                                 ("STARTED" :foreground "white" :background "green4" :weight bold)
-                                 ("DONE" :foreground "white" :background "blue3" :weight bold)
-                                 ("NOTE" :foreground "yellow" :background "blue3" :weight bold)
-                                 ("NEXT" :foreground "brightyellow" :background "black" :weight bold)
-                                 ("WAITING" :foreground "#d75f00" :background "black"))
+        org-todo-keyword-faces '(("TODO" . org-todo-todo)
+                                 ("STARTED" . org-todo-started)
+                                 ("DONE" . org-todo-done)
+                                 ("NOTE" . org-todo-note)
+                                 ("NEXT" . org-todo-next)
+                                 ("WAITING" . org-todo-waiting))
 
         org-use-speed-commands t
         org-use-tag-inheritance t

@@ -276,6 +276,13 @@
        (spectral-rose-11 "#550013")
        (spectral-rose-12 "#380008"))
 
+  (defface org-todo-todo nil "The org mode face for TODO.")
+  (defface org-todo-started nil "The org mode face for STARTED.")
+  (defface org-todo-done nil "The org mode face for DONE.")
+  (defface org-todo-note nil "The org mode face for NOTE.")
+  (defface org-todo-next nil "The org mode face for NEXT.")
+  (defface org-todo-waiting nil "The org mode face for WAITING.")
+
   ;; interesting color combos
   ;; This one has this weird oakland athletics green and yellow thing - could be good for isearch match
   ;;`(highlight                    ((t (:foreground ,spectral-chartreuse-08 :background "yellow"))))
@@ -761,7 +768,16 @@
    `(org-table ((t (:foreground ,spectral-green+2))))
    `(org-tag ((t (:weight bold :weight bold))))
    `(org-time-grid ((t (:foreground ,spectral-orange))))
+
    `(org-todo ((t (:weight bold :foreground ,spectral-red :weight bold))))
+
+   `(org-todo-todo ((t (:foreground ,spectral/foreground :background ,spectral-red-09 :weight bold))))
+   `(org-todo-started ((t (:foreground ,spectral/foreground :background ,spectral-green-04 :weight bold))))
+   `(org-todo-done ((t (:foreground ,spectral/foreground :background ,spectral-azure-09 :weight bold))))
+   `(org-todo-note ((t (:foreground ,spectral/foreground :background ,spectral-azure-09 :weight bold))))
+   `(org-todo-next ((t (:foreground ,spectral/foreground :background ,spectral-yellow-00b :weight bold))))
+   `(org-todo-waiting ((t (:foreground ,spectral/foreground :background ,spectral-orange ))))
+
    `(org-upcoming-deadline ((t (:inherit font-lock-keyword-face))))
    `(org-warning ((t (:weight bold :foreground ,spectral-red :weight bold :underline nil))))
    `(org-column ((t (:background ,spectral-bg-1))))
