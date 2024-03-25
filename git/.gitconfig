@@ -19,16 +19,18 @@
        new = white green bold
 
 [diff]
-    tool = meld
-renameLimit = 80000
+       tool = meld
+       renameLimit = 80000
+
 [difftool]
-    prompt = false
+       prompt = false
+
 [difftool "meld"]
-    cmd = meld "$LOCAL" "$REMOTE"
+       cmd = meld "$LOCAL" "$REMOTE"
 
 [user]
-	name = Eric Johnson
-	email = johnson.eric@gmail.com
+       name = Eric Johnson
+       email = johnson.eric@gmail.com
 
 [branch "master"]
 	rebase = true
@@ -84,3 +86,12 @@ renameLimit = 80000
 
 [include]
         path = ~/devenv/local/gitconfig
+
+[help]
+        autocorrect = 10
+
+[credential]
+	helper = manager-core
+
+[merge]
+	conflictstyle = diff3
