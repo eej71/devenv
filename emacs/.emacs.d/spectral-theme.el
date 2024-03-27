@@ -168,6 +168,7 @@
        (spectral-chartreuse-11 "#052f00")
        (spectral-chartreuse-12 "#021d00")
 
+       (spectral-green-tictac-green "#00ff87") ;; Reminds me of green tictacs
        (spectral-green-00 "#73fa7f")
        (spectral-green-01 "#9dff9d")
        (spectral-green-02 "#00f500")
@@ -757,7 +758,8 @@
    `(org-deadline-announce ((t (:foreground ,spectral-red-1))))
    `(org-done ((t (:weight bold :weight bold :foreground ,spectral-green+3))))
    `(org-formula ((t (:foreground ,spectral-yellow-2))))
-   `(org-headline-done ((t (:foreground ,spectral-green+3))))
+   `(org-headline-todo ((t :(:foreground ,spectral-foreground-00 :bold t))))
+   `(org-headline-done ((t (:foreground ,spectral-foreground-12))))
    `(org-hide ((t (:foreground ,spectral-bg-1))))
    `(org-link ((t (:foreground ,spectral-yellow-2 :underline t))))
    `(org-scheduled ((t (:foreground ,spectral-green+4))))
@@ -771,12 +773,12 @@
 
    `(org-todo ((t (:weight bold :foreground ,spectral-red :weight bold))))
 
-   `(org-todo-todo ((t (:foreground ,spectral/foreground :background ,spectral-red-09 :weight bold))))
-   `(org-todo-started ((t (:foreground ,spectral/foreground :background ,spectral-green-04 :weight bold))))
-   `(org-todo-done ((t (:foreground ,spectral/foreground :background ,spectral-azure-09 :weight bold))))
-   `(org-todo-note ((t (:foreground ,spectral/foreground :background ,spectral-azure-09 :weight bold))))
-   `(org-todo-next ((t (:foreground ,spectral/foreground :background ,spectral-yellow-00b :weight bold))))
-   `(org-todo-waiting ((t (:foreground ,spectral/foreground :background ,spectral-orange ))))
+   `(org-todo-todo ((t (:foreground ,spectral/foreground :background ,spectral-red-08 :weight bold))))
+   `(org-todo-started ((t (:foreground ,spectral/foreground :background ,spectral-green-08 :weight bold))))
+   `(org-todo-done ((t (:foreground ,spectral/foreground :background ,spectral-blue-09))))
+   `(org-todo-note ((t (:foreground ,spectral-chartreuse-02 :underline t))))
+   `(org-todo-next ((t (:foreground ,spectral-yellow-00b :weight bold))))
+   `(org-todo-waiting ((t (:foreground ,spectral-orange-05 ))))
 
    `(org-upcoming-deadline ((t (:inherit font-lock-keyword-face))))
    `(org-warning ((t (:weight bold :foreground ,spectral-red :weight bold :underline nil))))
@@ -797,7 +799,7 @@
    `(org-habit-alert-future-face ((t :background ,spectral-yellow-2 :foreground ,spectral-bg)))
    `(org-habit-overdue-future-face ((t :background ,spectral-red-4)))
    `(org-super-agenda-header ((t :inherit org-agenda-structure :underline t)))
-   `(org-agenda-dimmed-todo-face ((t :foreground "#5e5e5e" :italic t)))
+   `(org-agenda-dimmed-todo-face ((t :foreground ,spectral-foreground-20 :italic t)))
 
    ;; For fun? https://colordesigner.io/gradient-generator and https://huey.design/
    ;; huey.design - starting 255, 0, 0, scaling mode: lightness
