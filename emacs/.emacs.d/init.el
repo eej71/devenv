@@ -655,7 +655,7 @@
   "A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
   (let ((at-least-one-action (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
         (at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done)))
-        (at-least-one-scheduled (save-excursion (org-agenda-skip-subtree-if 'scheduled))))
+        (at-least-one-scheduled (save-excursion (-some #'identity (remove nil (org-map-entries #'eej/is-todo-scheduled t 'tree))))))
     (if (and at-least-one-done (not at-least-one-action) (not at-least-one-scheduled))
         nil
       (or (outline-next-heading) (org-end-of-subtree t)))))
