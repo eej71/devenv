@@ -310,14 +310,14 @@
    ;; Strings and the filenames for includes...
    ;; TODO: Can treesit parser separate out preprocessor filenames? Probably!
    `(font-lock-string-face            ((t (:foreground ,spectral-green-03 :background ,spectral-background-00 :italic t))))
-   `(font-lock-preprocessor-face      ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-12))))
+   `(font-lock-preprocessor-face      ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
 
    ;; keywords: for, auto, switch, goto, return, default, break:
    ;; magenta09 has been good, azure-09 is ok, orange is ugly,
    ;; rose-06 is very bright.. maybe metter for lock-variable? or type-face?
 
    ;; violet-06-violet-09 are nice and sharp
-   `(font-lock-keyword-face       ((t (:foreground ,spectral-yellow-00b :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
+   `(font-lock-keyword-face       ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
 
    ;; function names
    `(font-lock-function-name-face ((t (:foreground ,spectral-violet-04 :background ,spectral-background-03 ))))
@@ -802,14 +802,14 @@
 
    ;; For fun? https://colordesigner.io/gradient-generator and https://huey.design/
    ;; huey.design - starting 255, 0, 0, scaling mode: lightness
-   `(rainbow-delimiters-depth-1-face ((t ( :foreground "#ffffff" :background "#000000" :bold t))))
-   `(rainbow-delimiters-depth-2-face ((t ( :foreground ,spectral-red-02 :background "#000000" :bold t))))
-   `(rainbow-delimiters-depth-3-face ((t ( :foreground ,spectral-yellow-02 :background "#000000" :bold t))))
-   `(rainbow-delimiters-depth-4-face ((t ( :foreground ,spectral-green-02 :background "#000000" :bold t))))
-   `(rainbow-delimiters-depth-5-face ((t ( :foreground ,spectral-cyan-02 :background "#000000" :bold t))))
-   `(rainbow-delimiters-depth-6-face ((t ( :foreground ,spectral-blue-02 :background "#000000" :bold t))))
-   `(rainbow-delimiters-depth-7-face ((t ( :foreground ,spectral-magenta-02 :background "#000000" :bold t))))
-   `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground "white" :background "#D70000"))))
+   `(rainbow-delimiters-depth-1-face ((t ( :foreground ,spectral-azure-02 :background ,spectral-azure-12 :bold t))))
+   `(rainbow-delimiters-depth-2-face ((t ( :foreground ,spectral-red-02 :background ,spectral-red-12 ))))
+   `(rainbow-delimiters-depth-3-face ((t ( :foreground ,spectral-yellow-00 :background ,spectral-yellow-12 :bold t))))
+   `(rainbow-delimiters-depth-4-face ((t ( :foreground ,spectral-green-02 :background ,spectral-green-12 ))))
+   `(rainbow-delimiters-depth-5-face ((t ( :foreground ,spectral-blue-04 :background ,spectral-blue-12 :bold t))))
+   `(rainbow-delimiters-depth-6-face ((t ( :foreground ,spectral-magenta-03 :background ,spectral-magenta-12 ))))
+   `(rainbow-delimiters-depth-7-face ((t ( :foreground ,spectral-orange-02 :background ,spectral-orange-08 :bold t))))
+   `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground ,spectral-red-03 :background ,spectral-red-12))))
 
 ;;;;; re-builder
    `(reb-match-0 ((t (:foreground ,spectral-bg :background ,spectral-magenta))))
@@ -840,9 +840,9 @@
    `(rpm-spec-tag-face ((t (:foreground ,spectral-blue))))
    `(rpm-spec-var-face ((t (:foreground ,spectral-red))))
 
-   `(show-paren-mismatch ((t (:foreground "white" :background "#D70000" :weight bold))))
-   `(show-paren-match ((t (:underline t :foreground "black" :background "white"))))
-   `(show-paren-match-expression ((t (:background ,spectral-background-02))))
+   `(show-paren-mismatch ((t (:foreground ,spectral-red-03 :background ,spectral-red-09 :weight bold))))
+   `(show-paren-match ((t (:underline t :foreground "black" :background ,spectral-yellow-03))))
+   `(show-paren-match-expression ((t (:background ,spectral-background-06 :italic t ))))
 
    `(speedbar-button-face ((t (:foreground ,spectral-green+2))))
    `(speedbar-directory-face ((t (:foreground ,spectral-cyan))))
