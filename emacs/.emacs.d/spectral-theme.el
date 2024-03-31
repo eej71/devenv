@@ -654,9 +654,9 @@
    `(magit-diff-file-heading-highlight ((t (:foregorund ,spectral/orange :backround "black" :bold t))))
    `(magit-diff-file-heading-selection ((t (:foreground ,spectral/salmon :background "black" :bold t))))
 
-   `(magit-diff-hunk-heading           ((t (:foreground ,spectral-bg+3 :background ,spectral-bg-1))))
-   `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
-   `(magit-diff-hunk-heading-selection ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
+   `(magit-diff-hunk-heading           ((t (:foreground ,spectral-bg+3 :background ,spectral-bg-1 :strike-through t))))
+   `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1 :strike-through t))))
+   `(magit-diff-hunk-heading-selection ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1 :strike-through t))))
 
    ;; When selecting lines in a diff hunk, this adjusts the diff hunk context line @@ ab, cd @@
    `(magit-diff-lines-heading          ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
@@ -708,9 +708,9 @@
 
    `(magit-tag            ((t (:foreground ,spectral-blue+1 :italic t))))
    ;; TODO: Make this background unique?
-   `(magit-branch-remote  ((t (:foreground "#808080" :background "#008700" :underline t))))
+   `(magit-branch-remote  ((t (:foreground ,spectral-background-00  :background ,spectral-green-04))))
    `(magit-branch-current ((t (:foreground "white" :background "#008700" :bold t))))
-   `(magit-branch-local   ((t (:foreground "#00ff87" :underline t ))))
+   `(magit-branch-local   ((t (:foreground ,spectral-green-tictac-green :underline t ))))
    `(magit-head           ((t (:foreground ,spectral-green-1 :background "black" :weight bold))))
 
    `(magit-refname        ((t (:background ,spectral-bg+2 :foreground ,spectral-fg :weight bold))))
@@ -749,8 +749,7 @@
    `(org-agenda-date-today
      ((t (:foreground ,spectral-fg+1 :slant italic :weight bold))) t)
    `(org-agenda-clocking ((t (:background, spectral-springgreen-11))))
-   `(org-agenda-structure
-     ((t (:inherit font-lock-comment-face))))
+   `(org-agenda-structure ((t (:foreground ,spectral-yellow-00b :underline t))))
    `(org-archived ((t (:foreground ,spectral-fg :weight bold))))
    `(org-checkbox ((t (:background ,spectral-bg+2 :foreground ,spectral-fg+1
                                    :box (:line-width 1 :style released-button)))))
