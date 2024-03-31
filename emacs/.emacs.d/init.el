@@ -660,11 +660,6 @@
         nil
       (or (outline-next-heading) (org-end-of-subtree t)))))
 
-;; org-element-map - could be good...
-;; org-map-entries is a little better - easier to work with
-;; org-entry-get - nope - not it
-;; org-element-at-point - this gets a list
-
 (defun eej/is-todo-scheduled ()
   "Is this an incomplete todo with a scheduled date."
   (let* ((element (org-element-at-point))
@@ -729,7 +724,8 @@
     ;; Is there a better way to find this buffer? Seems... clumsy
     (switch-to-buffer "projects.org")
     (goto-char 1)
-    (org-clock-sum (org-read-date nil nil "-3w"))))
+    (org-clock-sum (org-read-date nil nil "-21d") (org-read-date nil nil "now"))
+    (message "Recomputed clocks for projects.org")))
 
 ;; Perhaps of use for some work files
 (defun remove-dos-eol ()
