@@ -199,7 +199,7 @@
   (major-mode-remap-alist '((c++-mode . c++-ts-mode) (c-mode . c-ts-mode) (c-or-c++-mode . c-or-c++-ts-mode)))
   (c-ts-mode-indent-style #'eej-indent-style)
   ;; Setting this to 3 or 4 triggers an error from treesit parser - may fix itself with futures sha1s
-  (treesit-font-lock-level 2))
+  (treesit-font-lock-level 4))
 
 (use-package spectral-theme
   :straight nil
@@ -554,6 +554,8 @@
                  ;; TODO:  Need to figure out how make whitespace mode useful
                  (whitespace-mode t)
                  (electric-pair-local-mode t)
+                 (setq setblink-matching-delay 0)
+                 (setq highlight-parentheses-delay 0.0)
                  (highlight-parentheses-mode t)))
   (c-initialization .  (lambda () "" (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
   :config
