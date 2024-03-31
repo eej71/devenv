@@ -317,7 +317,7 @@
    ;; rose-06 is very bright.. maybe metter for lock-variable? or type-face?
 
    ;; violet-06-violet-09 are nice and sharp
-   `(font-lock-keyword-face       ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
+   `(font-lock-keyword-face       ((t (:foreground ,spectral-orange-02 :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
 
    ;; function names
    `(font-lock-function-name-face ((t (:foreground ,spectral-violet-04 :background ,spectral-background-03 ))))
@@ -746,8 +746,7 @@
    `(message-separator ((t (:inherit font-lock-comment-face))))
 
    ;;; org mode goodies
-   `(org-agenda-date-today
-     ((t (:foreground ,spectral-fg+1 :slant italic :weight bold))) t)
+   `(org-agenda-date-today ((t (:foreground ,spectral-fg+1 :slant italic :weight bold))) t)
    `(org-agenda-clocking ((t (:background, spectral-springgreen-11))))
    `(org-agenda-structure ((t (:foreground ,spectral-yellow-00b :underline t))))
    `(org-archived ((t (:foreground ,spectral-fg :weight bold))))
@@ -766,13 +765,15 @@
    `(org-scheduled-today ((t (:foreground ,spectral-blue+1))))
    `(org-sexp-date ((t (:foreground ,spectral-blue+1 :underline t))))
    `(org-special-keyword ((t (:inherit font-lock-comment-face))))
-   `(org-table ((t (:foreground ,spectral-green+2))))
+   `(org-table ((t (:foreground ,spectral-azure-03 ))))
+   `(org-table-row ((t (:foreground ,spectral-azure-08 ))))
+   `(org-table-header ((t (:foreground ,spectral-azure-10 ))))
    `(org-tag ((t (:weight bold :weight bold))))
    `(org-time-grid ((t (:foreground ,spectral-orange))))
 
    `(org-todo ((t (:weight bold :foreground ,spectral-red :weight bold))))
 
-   `(org-todo-todo ((t (:foreground ,spectral/foreground :background ,spectral-red-08 :weight bold))))
+   `(org-todo-todo ((t (:foreground ,spectral/foreground :background ,spectral-red-09 :weight bold))))
    `(org-todo-started ((t (:foreground ,spectral/foreground :background ,spectral-green-08 :weight bold))))
    `(org-todo-done ((t (:foreground ,spectral/foreground :background ,spectral-blue-09))))
    `(org-todo-note ((t (:foreground ,spectral-chartreuse-02 :underline t))))
@@ -804,9 +805,9 @@
    ;; huey.design - starting 255, 0, 0, scaling mode: lightness
    `(rainbow-delimiters-depth-1-face ((t ( :foreground ,spectral-azure-02 :background ,spectral-azure-12 :bold t))))
    `(rainbow-delimiters-depth-2-face ((t ( :foreground ,spectral-red-02 :background ,spectral-red-12 ))))
-   `(rainbow-delimiters-depth-3-face ((t ( :foreground ,spectral-yellow-00 :background ,spectral-yellow-12 :bold t))))
+   `(rainbow-delimiters-depth-3-face ((t ( :foreground ,spectral-yellow-00 :background ,spectral-yellow-10 :bold t))))
    `(rainbow-delimiters-depth-4-face ((t ( :foreground ,spectral-green-02 :background ,spectral-green-12 ))))
-   `(rainbow-delimiters-depth-5-face ((t ( :foreground ,spectral-blue-04 :background ,spectral-blue-12 :bold t))))
+   `(rainbow-delimiters-depth-5-face ((t ( :foreground ,spectral-blue-03 :background ,spectral-blue-10 :bold t :overline t))))
    `(rainbow-delimiters-depth-6-face ((t ( :foreground ,spectral-magenta-03 :background ,spectral-magenta-12 ))))
    `(rainbow-delimiters-depth-7-face ((t ( :foreground ,spectral-orange-02 :background ,spectral-orange-08 :bold t))))
    `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground ,spectral-red-03 :background ,spectral-red-12))))
