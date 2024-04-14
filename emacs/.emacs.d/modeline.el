@@ -232,12 +232,12 @@
 
 (setq eej-modeline-format-inactive
       '("%e" ;; out of memory condition, which is never used
-        eej-modeline-kbd-macro-inactive
-        eej-modeline-narrow-inactive
+        eej-modeline-kbd-macro-active
+        eej-modeline-narrow-active
         
-        eej-buffer-pos-inactive
-        eej-buffer-read-state-inactive
-        eej-modeline-project-branch-inactive
+        eej-buffer-pos-active
+        eej-buffer-read-state-active
+        eej-modeline-project-branch-active
 
         " "
         eej-modeline-buffer-identification-inactive
