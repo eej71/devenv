@@ -297,7 +297,7 @@
   (defun eej/modify-modeline-face ()
     "Modifies the modeline face for the git project name based on a hash value."
     (let ((hash (eej/project-hash-value)))
-    (face-remap-add-relative 'eej-modeline-project-branch-face-1
+    (face-remap-add-relative 'eej-modeline-project-branch-face
                              `(:foreground ,(eej/create-color-name hash 0)
                                :background ,(eej/create-color-name (/ hash 7) 8)))))
 
@@ -400,15 +400,7 @@
    `(eej-modeline-saved-face ((t (:foreground ,spectral-green-01))))
    `(eej-modeline-modified-face ((t (:foreground ,spectral-red-06))))
 
-   `(eej-modeline-project-branch-face-1 ((t (:foreground ,spectral-magenta-04))))
-   `(eej-modeline-project-branch-face-2 ((t (:foreground ,spectral-orange-04))))
-   `(eej-modeline-project-branch-face-3 ((t (:foreground ,spectral-red-04))))
-   `(eej-modeline-project-branch-face-4 ((t (:foreground ,spectral-yellow-04))))
-   `(eej-modeline-project-branch-face-5 ((t (:foreground ,spectral-chartreuse-04))))
-   `(eej-modeline-project-branch-face-6 ((t (:foreground ,spectral-green-04))))
-   `(eej-modeline-project-branch-face-7 ((t (:foreground ,spectral-springgreen-04))))
-   `(eej-modeline-project-branch-face-8 ((t (:foreground ,spectral-cyan-04))))
-   `(eej-modeline-project-branch-face-9 ((t (:foreground ,spectral-azure-04))))
+   `(eej-modeline-project-branch-face ((t (:foreground ,spectral-magenta-04))))
    `(eej-modeline-buffer-identification-face ((t :foreground ,spectral-background-00 :background ,spectral-foreground-00 :bold t)))
 
    `(eej-modeline-org-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-green-09 :italic t)))
@@ -868,8 +860,10 @@
    `(rpm-spec-var-face ((t (:foreground ,spectral-red))))
 
    `(show-paren-mismatch ((t (:foreground ,spectral-red-03 :background ,spectral-red-09 :weight bold))))
-   `(show-paren-match ((t (:underline t :foreground "black" :background ,spectral-yellow-03))))
-   `(show-paren-match-expression ((t (:background ,spectral-background-04 :italic t ))))
+   `(show-paren-match ((t (:underline t :inverse-video t))))
+   ;; Disabled the match expression piece - which is controlled by show-paren-style
+   ;; because its just too noisy and it takes away from the parenthesis highlights
+   `(show-paren-match-expression ((t (:background ,spectral-background-04))))
 
    `(speedbar-button-face ((t (:foreground ,spectral-green+2))))
    `(speedbar-directory-face ((t (:foreground ,spectral-cyan))))

@@ -287,12 +287,6 @@
 (straight-use-package 'smartparens)
 (use-package smartparens)
 
-(straight-use-package 'highlight-parentheses)
-(use-package highlight-parentheses
-  :custom
-  (highlight-parentheses-attributes '((:underline t)))
-  (highlight-parentheses-colors nil))
-
 (straight-use-package 'github)
 (use-package github)
 
@@ -433,14 +427,8 @@
      "/home/STRIKETECH/ejohnson/workspace_git/engine/"
      "/home/STRIKETECH/ejohnson/workspace_git/ui/"))
  '(safe-local-variable-values
-   '((eej-modeline-project-branch-face .
-                                       eej-modeline-project-branch-face-4)
-     (eej-modeline-project-branch-face .
-                                       eej-modeline-project-branch-face-1)
-     (flycheck-disabled-checkers emacs-lisp-checkdoc)
-     (eej-modeline-project-branch-face .
-                                       eej-modeline-project-branch-face-2)))
- '(show-paren-style 'expression)
+   '((flycheck-disabled-checkers emacs-lisp-checkdoc)))
+ '(show-paren-style 'parenthesis)
  '(show-paren-when-point-in-periphery t)
  '(show-paren-when-point-inside-paren t)
  '(transient-mark-mode 1)
@@ -546,10 +534,7 @@
   ;; TODO:  Need to figure out how make whitespace mode useful
   (whitespace-mode t)
   (setq fill-column 120)
-  (electric-pair-local-mode t)
-  (setq setblink-matching-delay 0)
-  (setq highlight-parentheses-delay 0.0)
-  (highlight-parentheses-mode t))
+  (electric-pair-local-mode t))
 
 ;; A few more useful configurations...
 (use-package emacs
