@@ -37,15 +37,7 @@
   "Face used to highlight when the file is saved."
   :group 'eej-modeline-faces)
 
-(defface eej-modeline-project-branch-face-1 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-2 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-3 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-4 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-5 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-6 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-7 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-8 nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-project-branch-face-9 nil "Face for project:branch."  :group 'eej-modeline-faces)
+(defface eej-modeline-project-branch-face nil "Face for project:branch."  :group 'eej-modeline-faces)
 (defface eej-modeline-buffer-identification-face nil "Face for the filename in the modeline." :group 'eej-modeline-faces)
 
 (defface eej-modeline-org-task-active-face nil "Face for the org task when this is active." :group 'eej-modeline-faces)
@@ -77,7 +69,7 @@
 
 (defvar-local eej-modeline-narrow-active '(:eval (eej-modeline--narrow t)) "Mode line to indicate narrow range.")
 (defvar-local eej-modeline-narrow-inactive '(:eval (eej-modeline--narrow nil)) "Mode line to indicate narrow range.")
-(defvar-local eej-modeline-project-branch-face 'eej-modeline-project-branch-face-1 "Default face to use for project in modeline.")
+(defvar-local eej-modeline-project-branch-face 'eej-modeline-project-branch-face "Default face to use for project in modeline.")
 
 (defun eej-modeline-project-name ()
   "Return name of the project as is."
