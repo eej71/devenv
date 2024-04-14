@@ -681,7 +681,7 @@
    `(magit-diff-file-heading-selection ((t (:foreground ,spectral/salmon :background "black" :bold t))))
 
    `(magit-diff-hunk-heading           ((t (:foreground ,spectral-bg+3 :background ,spectral-bg-1 ))))
-   `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1)))
+   `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
    `(magit-diff-hunk-heading-selection ((t (:foreground ,spectral/skyblue :background ,spectral-bg-1))))
 
    ;; When selecting lines in a diff hunk, this adjusts the diff hunk context line @@ ab, cd @@
@@ -924,7 +924,7 @@
    `(whitespace-space-after-tab ((t (:background ,spectral-yellow :foreground ,spectral-red))))
    `(which-func ((t (:foreground "#eea0ee"))))
    `(underline                    ((nil (:underline nil)))))
-  ))
+  )
 
 (provide-theme 'spectral)
 
