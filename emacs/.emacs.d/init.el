@@ -196,9 +196,8 @@
   ;; TODO: Bring this back once we are running emacs as a daemon again
   ;;(mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
   :custom
-  (major-mode-remap-alist '((c++-mode . c++-ts-mode) (c-mode . c-ts-mode) (c-or-c++-mode . c-or-c++-ts-mode)))
+  (major-mode-remap-alist '((c++-mode . c++-ts-mode) (c-mode . c-ts-mode) (c-or-c++-mode . c++-ts-mode)))
   (c-ts-mode-indent-style #'eej-indent-style)
-  ;; Setting this to 3 or 4 triggers an error from treesit parser - may fix itself with futures sha1s
   (treesit-font-lock-level 4))
 
 (use-package spectral-theme
@@ -253,6 +252,7 @@
 (use-package magit
   :bind
   ("C-c g" . magit-file-dispatch)
+
   :hook
   (find-file . eej/is-buffer-read-only)
 
@@ -536,27 +536,33 @@
   (define-key eej-flymake-map (kbd "r") 'clang-format-region)
   (define-key eej-flymake-map (kbd "b") 'clang-format-buffer))
 
+(defun eej/prog-mode-setup ()
+  "Perform all the required setup for a prog mode."
+  (setq-default indent-tabs-mode nil)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M [])
+  ;;(global-hl-line-mode nil)
+  (display-line-numbers-mode t)
+  ;; TODO:  Need to figure out how make whitespace mode useful
+  (whitespace-mode t)
+  (setq fill-column 120)
+  (electric-pair-local-mode t)
+  (setq setblink-matching-delay 0)
+  (setq highlight-parentheses-delay 0.0)
+  (highlight-parentheses-mode t))
+
 ;; A few more useful configurations...
 (use-package emacs
   :init
   ;; TAB cycle if there are only few candidates
   (setq completion-cycle-threshold 3)
+  (setq fill-column 120)
   (put 'downcase-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
   (put 'compilation-search-path 'safe-local-variable 'string-or-null-p)
   :hook
-  (prog-mode . (lambda () ""
-                 (setq-default indent-tabs-mode nil)
-                 (setq buffer-display-table (make-display-table))
-                 (aset buffer-display-table ?\^M [])
-                 ;;(global-hl-line-mode nil)
-                 (display-line-numbers-mode t)
-                 ;; TODO:  Need to figure out how make whitespace mode useful
-                 (whitespace-mode t)
-                 (electric-pair-local-mode t)
-                 (setq setblink-matching-delay 0)
-                 (setq highlight-parentheses-delay 0.0)
-                 (highlight-parentheses-mode t)))
+  (prog-mode . eej/prog-mode-setup)
+
   (c-initialization .  (lambda () "" (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
   :config
   (tool-bar-mode -1)
@@ -729,7 +735,7 @@
     (org-clock-sum (org-read-date nil nil "-21d") (org-read-date nil nil "now"))
     (message "Recomputed clocks for projects.org")))
 
-;; Perhaps of use for some work files
+;; TODO: Is this still needed? Is there built in machinery for this?
 (defun remove-dos-eol ()
   "Do not show ^M in files containing mixed UNIX and DOS line endings."
   (interactive)
