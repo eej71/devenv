@@ -303,12 +303,12 @@
 
   (add-hook 'find-file-hook #'eej/modify-modeline-face)
 
-  (defface org-todo-todo nil "The org mode face for TODO.")
-  (defface org-todo-started nil "The org mode face for STARTED.")
-  (defface org-todo-done nil "The org mode face for DONE.")
-  (defface org-todo-note nil "The org mode face for NOTE.")
-  (defface org-todo-next nil "The org mode face for NEXT.")
-  (defface org-todo-waiting nil "The org mode face for WAITING.")
+  (defface org-todo-todo nil "The org mode face for TODO." :group 'eej-modeline-face)
+  (defface org-todo-started nil "The org mode face for STARTED."  :group 'eej-modeline-face)
+  (defface org-todo-done nil "The org mode face for DONE."  :group 'eej-modeline-face)
+  (defface org-todo-note nil "The org mode face for NOTE."  :group 'eej-modeline-face)
+  (defface org-todo-next nil "The org mode face for NEXT."  :group 'eej-modeline-face)
+  (defface org-todo-waiting nil "The org mode face for WAITING."  :group 'eej-modeline-face)
 
   ;; interesting color combos
   ;; This one has this weird oakland athletics green and yellow thing - could be good for isearch match
@@ -924,7 +924,8 @@
    `(whitespace-space-after-tab ((t (:background ,spectral-yellow :foreground ,spectral-red))))
    `(which-func ((t (:foreground "#eea0ee"))))
    `(underline                    ((nil (:underline nil)))))
-  )
+  ))
 
 (provide-theme 'spectral)
+
 ;;; spectral-theme.el ends here
