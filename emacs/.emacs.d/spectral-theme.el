@@ -126,6 +126,7 @@
 (defconst spectral-blue-10 "#0000c0")
 (defconst spectral-blue-11 "#00008f")
 (defconst spectral-blue-12 "#000061")
+(defconst spectral-blue-13 "#000020")
 
 (defconst spectral-violet-01 "#f3e3ff")
 (defconst spectral-violet-02 "#e7c7ff")
@@ -335,7 +336,7 @@
 
    ;; Strings and the filenames for includes...
    ;; TODO: Can treesit parser separate out preprocessor filenames? Probably!
-   `(font-lock-string-face            ((t (:foreground ,spectral-green-03 :background ,spectral-background-00 :italic t))))
+   `(font-lock-string-face            ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
    `(font-lock-preprocessor-face      ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
 
    ;; keywords: for, auto, switch, goto, return, default, break:
@@ -343,15 +344,16 @@
    ;; rose-06 is very bright.. maybe metter for lock-variable? or type-face?
 
    ;; violet-06-violet-09 are nice and sharp
-   `(font-lock-keyword-face       ((t (:foreground ,spectral-orange-02 :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
+   `(font-lock-keyword-face       ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
 
    ;; function names
-   `(font-lock-function-name-face ((t (:foreground ,spectral-violet-04 :background ,spectral-background-03 ))))
+   ;;   `(font-lock-function-name-face ((t (:foreground ,spectral-chartreuse-01 :background ,spectral-background-00 :bold t ))))
+   ;;`(font-lock-function-name-face ((t (:foreground ,spectral-magenta-03 :background ,spectral-background-00 :bold t ))))
+   `(font-lock-function-name-face ((t (:foreground ,spectral-rose-04 :background ,spectral-background-00 :bold t ))))
+   `(font-lock-variable-name-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-10 :bold t))))
+   `(font-lock-type-face          ((t (:foreground ,spectral-foreground-14 :italic t))))
 
-   `(font-lock-type-face          ((t (:foreground ,spectral-azure-03 :background ,spectral-background-00 :italic t)))) ;; better!
-   `(font-lock-variable-name-face ((t (:foreground ,spectral-azure-00 :background ,spectral-background-00 :bold t)))) ;; decent
-
-   `(font-lock-constant-face      ((t (:foreground ,spectral-cyan-05)))) ;; Appears in elisp code - such as provide
+   `(font-lock-constant-face      ((t (:foreground ,spectral-rose-02 :background ,spectral-rose-12 :italic t))))
 
    ;; Unsure how this is used
    `(font-lock-negation-char-face ((t (:foreground ,spectral/foreground :background ,spectral-magenta-09))))
@@ -503,8 +505,8 @@
    `(minibuffer-prompt ((t (:foreground ,spectral-yellow))))
 
    ;; This is still used - fold it in better...
-   `(mode-line ((t (:background ,spectral-background-09 ))))
-   `(mode-line-inactive ((t (:foreground ,spectral-foreground-22 :background ,spectral-background-03))))
+   `(mode-line ((t (:background ,spectral-background-09))))
+   `(mode-line-inactive ((t (:foreground ,spectral-foreground-20 :background ,spectral-background-03))))
 
    `(secondary-selection ((t (:background ,spectral-bg+2))))
    `(trailing-whitespace ((t (:background ,spectral-red))))
