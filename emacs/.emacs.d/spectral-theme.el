@@ -328,32 +328,25 @@
    ;; property keywords in elisp, unused otherwise - maybe ease up on the foreground color?
    `(font-lock-builtin-face           ((t (:foreground ,spectral-foreground-10 :background ,spectral-violet-12 :italic t))))
 
-   ;; Comments - background a bit too strong - more background flavors... maybe 32 shades instead
-   `(font-lock-comment-delimiter-face ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02))))
+   ;; Faces related to commenting all get the same basic style
+   `(font-lock-comment-delimiter-face ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :bold t))))
    `(font-lock-comment-face           ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
    `(font-lock-doc-face               ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
    `(font-lock-doc-string-face        ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
-
-   ;; Strings and the filenames for includes...
-   ;; TODO: Can treesit parser separate out preprocessor filenames? Probably!
    `(font-lock-string-face            ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
+
    `(font-lock-preprocessor-face      ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
+   `(font-lock-constant-face          ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
+   `(font-lock-keyword-face           ((t (:foreground ,spectral-yellow-01 :background ,spectral-blue-10 :underline t))))
+   `(font-lock-type-face              ((t (:foreground ,spectral-foreground-15 :italic t))))
+   `(font-lock-variable-name-face     ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-06 :bold t))))
 
-   ;; keywords: for, auto, switch, goto, return, default, break:
-   ;; magenta09 has been good, azure-09 is ok, orange is ugly,
-   ;; rose-06 is very bright.. maybe metter for lock-variable? or type-face?
+   ;; These two should be the same
+   `(font-lock-variable-use-face      ((t (:foreground ,spectral-orange-01 :background ,spectral-background-00 :italic t))))
+   `(font-lock-property-use-face      ((t (:foreground ,spectral-orange-01 :background ,spectral-background-00 :italic t))))
 
-   ;; violet-06-violet-09 are nice and sharp
-   `(font-lock-keyword-face       ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-00 :italic t)))) ;; good - but maybe too much greyness
-
-   ;; function names
-   ;;   `(font-lock-function-name-face ((t (:foreground ,spectral-chartreuse-01 :background ,spectral-background-00 :bold t ))))
-   ;;`(font-lock-function-name-face ((t (:foreground ,spectral-magenta-03 :background ,spectral-background-00 :bold t ))))
-   `(font-lock-function-name-face ((t (:foreground ,spectral-rose-04 :background ,spectral-background-00 :bold t ))))
-   `(font-lock-variable-name-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-10 :bold t))))
-   `(font-lock-type-face          ((t (:foreground ,spectral-foreground-14 :italic t))))
-
-   `(font-lock-constant-face      ((t (:foreground ,spectral-rose-02 :background ,spectral-rose-12 :italic t))))
+   `(font-lock-function-name-face     ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-04))))
+   `(font-lock-function-call-face     ((t (:foreground ,spectral-magenta-03 :italic t :bold nil))))
 
    ;; Unsure how this is used
    `(font-lock-negation-char-face ((t (:foreground ,spectral/foreground :background ,spectral-magenta-09))))
