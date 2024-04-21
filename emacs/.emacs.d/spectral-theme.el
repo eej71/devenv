@@ -346,7 +346,7 @@
    `(font-lock-string-face               ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
    `(font-lock-preprocessor-face         ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
    `(font-lock-constant-face             ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
-   `(font-lock-keyword-face              ((t (:foreground ,spectral-cyan-02 :background ,spectral-cyan-12 :underline t))))
+   `(font-lock-keyword-face              ((t (:foreground ,spectral-cyan-02 :background ,spectral-blue-11 :underline t))))
    `(font-lock-type-face                 ((t (:foreground ,spectral-foreground-15 :italic t))))
    `(font-lock-variable-name-face        ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-06 :bold t))))
 
@@ -722,7 +722,7 @@
 
    ;;; org mode goodies
    `(org-agenda-date-today ((t (:foreground ,spectral-fg+1 :slant italic :weight bold))) t)
-   `(org-agenda-clocking ((t (:foreground ,spectral-background-00 :background, spectral-springgreen-02))))
+   `(org-agenda-clocking ((t (:foreground ,spectral-springgreen-02 :background, spectral-springgreen-10))))
    `(org-agenda-structure ((t (:foreground ,spectral-yellow-00b :underline t))))
    `(org-archived ((t (:foreground ,spectral-fg :weight bold))))
    `(org-checkbox ((t (:background ,spectral-bg+2 :foreground ,spectral-fg+1
