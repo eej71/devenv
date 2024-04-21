@@ -1,5 +1,13 @@
 ;; -*- lexical-binding: t -*-
+;;; package --- Summary
+;;; Commentary:
+;;; Spectral theme for a colorful experience
+;; Local Variables:
+;; byte-compile-warnings: (not free-vars)
+;; End:
 
+
+;;; Code:
 (deftheme spectral)
 
 (defconst spectral-red-01 "#ffe2e2")
@@ -298,9 +306,9 @@
   (defun eej/modify-modeline-face ()
     "Modifies the modeline face for the git project name based on a hash value."
     (let ((hash (eej/project-hash-value)))
-    (face-remap-add-relative 'eej-modeline-project-branch-face
-                             `(:foreground ,(eej/create-color-name hash 0)
-                               :background ,(eej/create-color-name (/ hash 7) 8)))))
+      (face-remap-add-relative 'eej-modeline-project-branch-face
+                               `(:foreground ,(eej/create-color-name hash 0)
+                                             :background ,(eej/create-color-name (/ hash 7) 8)))))
 
   (add-hook 'find-file-hook #'eej/modify-modeline-face)
 
@@ -310,10 +318,6 @@
   (defface org-todo-note nil "The org mode face for NOTE."  :group 'eej-modeline-face)
   (defface org-todo-next nil "The org mode face for NEXT."  :group 'eej-modeline-face)
   (defface org-todo-waiting nil "The org mode face for WAITING."  :group 'eej-modeline-face)
-
-  ;; interesting color combos
-  ;; This one has this weird oakland athletics green and yellow thing - could be good for isearch match
-  ;;`(highlight                    ((t (:foreground ,spectral-chartreuse-08 :background "yellow"))))
        
   ;; where is the face
   (custom-theme-set-faces
@@ -325,50 +329,55 @@
    `(fringe                       ((t (:background ,spectral/background))))
    `(buffers-tab                  ((t (:foreground ,spectral/foreground :background ,spectral/background))))
 
-   ;; property keywords in elisp, unused otherwise - maybe ease up on the foreground color?
-   `(font-lock-builtin-face           ((t (:foreground ,spectral-foreground-10 :background ,spectral-violet-12 :italic t))))
-
-   ;; Faces related to commenting all get the same basic style
-   `(font-lock-comment-delimiter-face ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :bold t))))
-   `(font-lock-comment-face           ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
-   `(font-lock-doc-face               ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
-   `(font-lock-doc-string-face        ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
-   `(font-lock-string-face            ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
-
-   `(font-lock-preprocessor-face      ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
-   `(font-lock-constant-face          ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
-   `(font-lock-keyword-face           ((t (:foreground ,spectral-yellow-01 :background ,spectral-blue-10 :underline t))))
-   `(font-lock-type-face              ((t (:foreground ,spectral-foreground-15 :italic t))))
-   `(font-lock-variable-name-face     ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-06 :bold t))))
-
-   ;; These two should be the same
-   `(font-lock-variable-use-face      ((t (:foreground ,spectral-orange-01 :background ,spectral-background-00 :italic t))))
-   `(font-lock-property-use-face      ((t (:foreground ,spectral-orange-01 :background ,spectral-background-00 :italic t))))
-
-   `(font-lock-function-name-face     ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-04))))
-   `(font-lock-function-call-face     ((t (:foreground ,spectral-magenta-03 :italic t :bold nil))))
-
-   ;; Unsure how this is used
-   `(font-lock-negation-char-face ((t (:foreground ,spectral/foreground :background ,spectral-magenta-09))))
-
-   ;; When is this one used? elisp-mode uses this for autoload in a comment, why?
-   `(font-lock-warning-face       ((t (:foreground ,spectral-foreground-00 :background ,spectral-rose-06))))
-
    `(text-cursor                  ((t (:foreground "black" :background "yellow"))))
    `(region                       ((t (:inverse-video t))))
+
+   `(italic                       ((t (nil))))
+   `(left-margin                  ((t (nil))))
+   `(toolbar                      ((t (nil))))
+   `(menu                         ((t (:foreground ,spectral-fg :background ,spectral-bg))))
+   `(highlight                    ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-08 :italic t :bold t :extend t))))
+
+   ;; Faces related to commenting all get the same basic style
+   `(font-lock-comment-delimiter-face    ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :bold t))))
+   `(font-lock-comment-face              ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
+   `(font-lock-doc-face                  ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
+   `(font-lock-doc-string-face           ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
+   `(font-lock-string-face               ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
+   `(font-lock-preprocessor-face         ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
+   `(font-lock-constant-face             ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
+   `(font-lock-keyword-face              ((t (:foreground ,spectral-cyan-02 :background ,spectral-cyan-12 :underline t))))
+   `(font-lock-type-face                 ((t (:foreground ,spectral-foreground-15 :italic t))))
+   `(font-lock-variable-name-face        ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-06 :bold t))))
+
+   ;; These two should be the same
+   `(font-lock-variable-use-face         ((t (:foreground ,spectral-orange-01 :background ,spectral-background-00 :italic t))))
+   `(font-lock-property-use-face         ((t (:inherit font-lock-variable-use-face))))
+   `(font-lock-function-name-face        ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-04))))
+   `(font-lock-function-call-face        ((t (:foreground ,spectral-magenta-03 :italic t :bold nil))))
+
+   ;; When is this one used? elisp-mode uses this for autoload in a comment, why?
+   `(font-lock-warning-face              ((t (:foreground ,spectral-foreground-00 :background ,spectral-rose-06))))
+   `(font-lock-negation-char-face        ((t (:foreground ,spectral-yellow :weight bold))))
+   `(font-lock-regexp-grouping-construct ((t (:foreground ,spectral-yellow :weight bold))))
+   `(font-lock-regexp-grouping-backslash ((t (:foreground ,spectral-green :weight bold))))
+
+   ;; property keywords in elisp, unused otherwise - maybe ease up on the foreground color?
+   `(font-lock-builtin-face              ((t (:foreground ,spectral-foreground-10 :background ,spectral-violet-12 :italic t))))
 
    ;; These faces are still pretty ugly
    `(completions-highlight        ((t (:foreground ,spectral-magenta-01 :background ,spectral-rose-07))))
 
    ;; Portion of text typed in minibuffer completion - orderless faces after a space is typed
-   `(completions-common-part      ((t (:foreground ,spectral-background-03 :background ,spectral-azure-00 :italic t))))
+   `(completions-common-part      ((t (:foreground ,spectral-rose-06 :bold t :underline t))))
+   `(completions-annotations      ((t (:foreground ,spectral-fg-1))))
+
    `(orderless-match-face-0       ((t (:inherit completions-common-part))))
    `(orderless-match-face-1       ((t (:inherit completions-common-part))))
    `(orderless-match-face-2       ((t (:inherit completions-common-part))))
    `(orderless-match-face-3       ((t (:inherit completions-common-part))))
 
    ;; The selection line in the vertico buffer
-   `(highlight                    ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-08 :italic t :bold t :extend t))))
 
    ;; I think this face is used for the actual match portion of the text that's been typed in
    `(vertico-current              ((t (:inherit highlight))))
@@ -376,11 +385,6 @@
    `(vertico-multiline            ((t (:inherit shadow))))
    `(vertico-group-title          ((t (:foreground ,spectral-yellow-00 :italic t :bold t))))
    `(vertico-group-separator      ((t (:strike-through t :foreground ,spectral-foreground-00))))
-
-   ;; Just things to inherit from
-   `(italic                       ((t (nil))))
-   `(left-margin                  ((t (nil))))
-   `(toolbar                      ((t (nil))))
 
    ;; This captures the headline levels of org mode
    `(org-level-1                  ((t (:background "black" :foreground ,spectral/foreground))))
@@ -392,12 +396,11 @@
    `(org-level-7                  ((t (:background "black" :foreground ,spectral/foreground))))
    `(org-level-8                  ((t (:background "black" :foreground ,spectral/foreground))))
 
+   ;; Rename these to spectral
    `(eej-modeline-saved-face ((t (:foreground ,spectral-green-01))))
    `(eej-modeline-modified-face ((t (:foreground ,spectral-red-06))))
-
    `(eej-modeline-project-branch-face ((t (:foreground ,spectral-magenta-04))))
    `(eej-modeline-buffer-identification-face ((t :foreground ,spectral-background-00 :background ,spectral-foreground-00 :bold t)))
-
    `(eej-modeline-org-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-green-09 :italic t)))
    `(eej-modeline-org-no-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-red-08)))
 
@@ -414,7 +417,6 @@
    `(compilation-mode-line-run ((t (:foreground ,spectral-yellow :weight bold))))
 
    ;;
-   `(completions-annotations ((t (:foreground ,spectral-fg-1))))
    `(grep-context-face ((t (:foreground ,spectral-fg))))
    `(grep-error-face ((t (:foreground ,spectral-red-1 :weight bold :underline t))))
    `(grep-hit-face ((t (:foreground ,spectral-blue))))
@@ -486,15 +488,15 @@
    ;;
 
    ;; isearch faces
-   `(isearch ((t (:foreground ,spectral-orange-03 :background ,spectral-orange-09 :bold t :italic t :underline t))))
-   `(isearch-fail ((t (:foreground ,spectral-red-03 :background ,spectral-red-09))))
-   `(lazy-highlight ((t (:foreground ,spectral-orange-09 :background ,spectral-background-00)))) ;; All the other matches
+   `(isearch         ((t (:background ,spectral-rose-06 :foreground ,spectral-background-00 :underline t :bold t))))
+   `(lazy-highlight  ((t (:foreground ,spectral-rose-06 :background ,spectral-background-00))))
+   `(isearch-fail    ((t (:foreground ,spectral-red-03 :background ,spectral-red-09 :bold t))))
+
 
    `(linum ((t (:foreground ,spectral-foreground-10 :background ,spectral/background ))))
-   `(line-number ((t (:foreground ,spectral-foreground-24 :background ,spectral/background))))
-   `(line-number-current-line ((t (:foreground ,spectral/foreground :background ,spectral/background :underline t))))
+   `(line-number ((t (:foreground ,spectral-foreground-26 :background ,spectral-background-01))))
+   `(line-number-current-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-01 :underline t :bold t))))
 
-   `(menu ((t (:foreground ,spectral-fg :background ,spectral-bg))))
    `(minibuffer-prompt ((t (:foreground ,spectral-yellow))))
 
    ;; This is still used - fold it in better...
@@ -506,10 +508,8 @@
    `(vertical-border ((t (:foreground ,spectral-fg))))
 
 ;;;;; font lock
-   `(font-lock-negation-char-face ((t (:foreground ,spectral-yellow :weight bold))))
-   `(font-lock-regexp-grouping-construct ((t (:foreground ,spectral-yellow :weight bold))))
-   `(font-lock-regexp-grouping-backslash ((t (:foreground ,spectral-green :weight bold))))
    `(c-annotation-face ((t (:inherit font-lock-constant-face))))
+
 ;;;;; man
    '(Man-overstrike ((t (:inherit font-lock-keyword-face))))
    '(Man-underline  ((t (:inherit (font-lock-string-face underline)))))
@@ -594,47 +594,9 @@
                                      :weight bold))))
    `(w3m-lnum-minibuffer-prompt ((t (:foreground ,spectral-yellow))))
 
-   `(flycheck-error
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-red-1) :inherit unspecified))
-      (t (:foreground ,spectral-red-1 :weight bold :underline t))))
-   `(flycheck-warning
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-yellow) :inherit unspecified))
-      (t (:foreground ,spectral-yellow :weight bold :underline t))))
-   `(flycheck-info
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-cyan) :inherit unspecified))
-      (t (:foreground ,spectral-cyan :weight bold :underline t))))
-   `(flycheck-fringe-error ((t (:foreground ,spectral-red-1 :weight bold))))
-   `(flycheck-fringe-warning ((t (:foreground ,spectral-yellow :weight bold))))
-   `(flycheck-fringe-info ((t (:foreground ,spectral-cyan :weight bold))))
-
-   `(flymake-errline
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-red)
-                   :inherit unspecified :foreground unspecified :background unspecified))
-      (t (:foreground ,spectral-red-1 :weight bold :underline t))))
-   `(flymake-warnline
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-orange)
-                   :inherit unspecified :foreground unspecified :background unspecified))
-      (t (:foreground ,spectral-orange :weight bold :underline t))))
-   `(flymake-infoline
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-green)
-                   :inherit unspecified :foreground unspecified :background unspecified))
-      (t (:foreground ,spectral-green-1 :weight bold :underline t))))
-
-;;;;; flyspell
-   `(flyspell-duplicate
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-orange) :inherit unspecified))
-      (t (:foreground ,spectral-orange :weight bold :underline t))))
-   `(flyspell-incorrect
-     ((((supports :underline (:style wave)))
-       (:underline (:style wave :color ,spectral-red) :inherit unspecified))
-      (t (:foreground ,spectral-red-1 :weight bold :underline t))))
+   `(flymake-error    ((t (:foreground ,spectral-red-03 :background ,spectral-red-10 :underline t :bold t))))
+   `(flymake-warning  ((t (:foreground ,spectral-orange-06 :underline t))))
+   `(flymake-infoline ((t (:foreground ,spectral-blue-03 :bacgrkound ,spectral-blue-10))))
 
    `(ack-separator ((t (:foreground ,spectral-fg))))
    `(ack-file ((t (:foreground ,spectral-blue))))
@@ -900,21 +862,20 @@
    `(web-mode-warning-face ((t (:inherit font-lock-warning-face))))
    `(web-mode-whitespaces-face ((t (:background ,spectral-red))))
 
-;;;;; whitespace-mode
-   `(whitespace-space ((t (:background ,spectral-bg+1 :foreground ,spectral-bg+1))))
-   `(whitespace-hspace ((t (:background ,spectral-bg+1 :foreground ,spectral-bg+1))))
-   `(whitespace-tab ((t (:background ,spectral-red-1))))
-   `(whitespace-newline ((t (:foreground ,spectral-bg+1))))
-   `(whitespace-trailing ((t (:background ,spectral-red))))
-   `(whitespace-line ((t (:background ,spectral-bg :foreground ,spectral-magenta))))
-   `(whitespace-space-before-tab ((t (:background ,spectral-orange :foreground ,spectral-orange))))
-   `(whitespace-indentation ((t (:background ,spectral-yellow :foreground ,spectral-red))))
-   `(whitespace-empty ((t (:background ,spectral-yellow))))
-   `(whitespace-space-after-tab ((t (:background ,spectral-yellow :foreground ,spectral-red))))
+   `(whitespace-empty            ((t (:foreground ,spectral-foreground-22 :background ,spectral-background-01 :strike-through t))))
+   `(whitespace-indentation      ((t (:inherit whitespace-empty))))
+   `(whitespace-space            ((t (:inherit whitespace-empty))))
+   `(whitespace-hspace           ((t (:inherit whitespace-empty))))
+   `(whitespace-tab              ((t (:inherit whitespace-empty))))
+   `(whitespace-newline          ((t (:inherit whitespace-empty))))
+   `(whitespace-trailing         ((t (:inherit whitespace-empty))))
+   `(whitespace-line             ((t (:inherit whitespace-empty))))
+   `(whitespace-space-before-tab ((t (:inherit whitespace-empty))))
+   `(whitespace-space-after-tab  ((t (:inherit whitespace-empty))))
+
    `(which-func ((t (:foreground "#eea0ee"))))
-   `(underline                    ((nil (:underline nil)))))
+   `(underline  ((nil (:underline nil)))))
   )
 
 (provide-theme 'spectral)
-
 ;;; spectral-theme.el ends here

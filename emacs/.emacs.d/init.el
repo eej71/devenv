@@ -10,10 +10,10 @@
 ;; sudo yum install -y librsvg2-devel.x86_64
 
 ;; Make sure that this emacs has the required features
-(mapcar (lambda (x) (if (string-search x system-configuration-options)
-                        t
-                      (error (concat "Emacs not built with " x))))
-        '("--with-native-compilation" "--with-json" "--with-tree-sitter" "--with-x" "--with-rsvg"))
+(mapc (lambda (x) (if (string-search x system-configuration-options)
+                      t
+                    (error (concat "Emacs not built with " x))))
+      '("--with-native-compilation" "--with-json" "--with-tree-sitter" "--with-x" "--with-rsvg"))
 
 ;; TODO: which vertico modes to enable
 ;; TODO: Add hooks to c-ts-base-mode-hook - probably should be prog-mode
@@ -381,14 +381,11 @@
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
-   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3"
-    "#DCDCCC"])
+   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
  '(backup-directory-alist (list '(".*" . "~/tmp/")))
- '(beacon-color "#cc6666")
  '(compilation-mode-line-errors
    '(" ["
-     (:propertize (:eval (int-to-string compilation-num-errors-found))
-                  face compilation-error help-echo
+     (:propertize (:eval (int-to-string compilation-num-errors-found)) face compilation-error help-echo
                   "Number of errors so far")
      "]") t)
  '(compilation-skip-threshold 1)
@@ -397,8 +394,7 @@
  '(custom-safe-themes
    '("841f05044422544925a592e810c73b6e44d41fb9f40d86960dc79a3fd2ce4803"
      "fbcba8deb199e323f26cf4244ceadfc54c5914a473490456707c109701e14909"
-     "9932992fd74b289a1ceda66b9a34c882e11a3189e25cc7398710f03ab8f0144f"
-     default))
+     "9932992fd74b289a1ceda66b9a34c882e11a3189e25cc7398710f03ab8f0144f" default))
  '(custom-theme-directory "~/devenv/elisp/")
  '(display-line-numbers-grow-only t)
  '(display-line-numbers-width 3)
@@ -411,23 +407,13 @@
  '(inhibit-startup-screen t)
  '(linum-format "%4d ")
  '(mode-line-format
-   '(" " mode-line-position mode-line-modified
-     mode-line-frame-identification mode-line-buffer-identification
-     (vc-mode vc-mode) mode-line-modes mode-line-misc-info
-     mode-line-end-spaces))
+   '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification
+     (vc-mode vc-mode) mode-line-modes mode-line-misc-info mode-line-end-spaces))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
- '(project-vc-ignores
-   '("Testing/TestModels/TMS74GridTests/refdata/s74output_correct/correct.Miax_Pearl.tar.gz"
-     "engine/Testing/TestModels/TMS74GridTests/refdata/s74output_correct/correct.Miax_Pearl.tar.gz"))
  '(redisplay-dont-pause t t)
  '(request-curl-options '("-k"))
  '(ring-bell-function nil)
- '(safe-local-variable-directories
-   '("/home/STRIKETECH/ejohnson/workspace_git/GTS51/"
-     "/home/STRIKETECH/ejohnson/workspace_git/engine/"
-     "/home/STRIKETECH/ejohnson/workspace_git/ui/"))
- '(safe-local-variable-values
-   '((flycheck-disabled-checkers emacs-lisp-checkdoc)))
+ '(safe-local-variable-values '((flycheck-disabled-checkers emacs-lisp-checkdoc)))
  '(show-paren-style 'parenthesis)
  '(show-paren-when-point-in-periphery t)
  '(show-paren-when-point-inside-paren t)
@@ -437,18 +423,15 @@
  '(user-mail-address (getenv "EEJ_EMAIL"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
-   '((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F")
-     (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F")
-     (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F")
-     (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3")
-     (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3")
-     (340 . "#94BFF3") (360 . "#DC8CC3")))
+   '((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF")
+     (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF")
+     (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks nil)
  '(visible-bell nil)
  '(warning-suppress-log-types '((corfu-doc)))
  '(whitespace-line-column 220)
- '(whitespace-style '(face tabs lines-char indentation::space)))
+ '(whitespace-style '(face tabs lines-char indentation::space trailing)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -529,9 +512,7 @@
   (setq-default indent-tabs-mode nil)
   (setq buffer-display-table (make-display-table))
   (aset buffer-display-table ?\^M [])
-  ;;(global-hl-line-mode nil)
   (display-line-numbers-mode t)
-  ;; TODO:  Need to figure out how make whitespace mode useful
   (whitespace-mode t)
   (setq fill-column 120)
   (electric-pair-local-mode t))
@@ -732,5 +713,3 @@
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
 (require 'local-config "~/.emacs.d/local-config.el")
-
-;;(add-to-list 'eglot-server-programs '(c++-ts-mode . ("clangd" "--log=verbose --path-mappings=Vulcan/=engine/Vulcan/")))
