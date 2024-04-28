@@ -9,11 +9,17 @@
 ;; sudo yum install -y jansson-devel.x86_64
 ;; sudo yum install -y librsvg2-devel.x86_64
 
-;; Make sure that this emacs has the required features
-(mapc (lambda (x) (if (string-search x system-configuration-options)
-                      t
-                    (error (concat "Emacs not built with " x))))
-      '("--with-native-compilation" "--with-json" "--with-tree-sitter" "--with-x" "--with-rsvg"))
+
+;; Make sure we have a sufficiently built emacs
+(defun spectral-emacs-config-check (feature)
+  "Check Emacs config to see if FEATURE is present."
+  (if (string-search feature system-configuration-options)
+      t
+    (error (concat "Emacs not built with " x))))
+(defconst spectral-emacs-requires-configs
+  '("--with-native-compilation" "--with-json" "--with-tree-sitter" "--with-x" "--with-rsvg")
+  "These are the minimum features that spectral requires of Emacs.")
+(mapc #'spectral-emacs-config-check spectral-emacs-requires-configs)
 
 ;; TODO: which vertico modes to enable
 ;; TODO: Add hooks to c-ts-base-mode-hook - probably should be prog-mode
@@ -55,6 +61,13 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
+
+(defun spectral-org-setup ()
+  "Initialize our org mode buffers."
+  (turn-on-font-lock)
+  (org-indent-mode t)
+  (whitespace-mode -1)
+  (eej-org-mode))
 
 (straight-use-package 'org)
 ;; TODO: consult-org-heading or consult-org-agenda
@@ -129,12 +142,8 @@
         org-checkbox-hierarchical-statistics nil)
   (org-clock-persistence-insinuate)
 
-  (add-hook 'org-mode-hook #'turn-on-font-lock)
-  (add-hook 'org-mode-hook (lambda () "" (org-indent-mode t)))
-  (add-hook 'org-mode-hook #'eej-org-mode)
-  (add-hook 'org-mode-hook (lambda () "" (whitespace-mode -1)))
-  (add-hook 'org-clock-out-hook (lambda () "" (org-align-all-tags)))
-  (add-hook 'org-clock-out-hook #'eej/recompute-clock-sum)
+  (add-hook 'org-mode-hook #'spectral-org-mode)
+  (add-hook 'org-clock-out-hook #'spectral-recompute-clock-sum)
 
   (add-hook 'org-shiftup-final-hook #'windmove-up)
   (add-hook 'org-shiftleft-final-hook #'windmove-left)
@@ -225,9 +234,22 @@
   (vertico-mode t)
   (vertico-indexed-mode)
   :custom
+  (vertico-resize t)
   (vertico-cycle t)
   (vertico-count 15)
   (vertico-indexed-start 1))
+
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package savehist
   :straight nil
@@ -268,9 +290,13 @@
                                   (project-find-dir "Find directory") (project-vc-dir "VC-Dir")
                                   (project-eshell "Eshell"))))
 
+(defun spectral-git-commit-setup ()
+  "Modifications to the git commit buffer."
+  (whitespace-mode -1))
+
 (use-package git-commit
   :hook
-  (git-commit-mode . (lambda () "" (whitespace-mode -1))))
+  (git-commit-mode . #'spectral-git-commit-setup)
 
 (straight-use-package 'rainbow-delimiters)
 (use-package rainbow-delimiters
@@ -493,9 +519,6 @@
   (corfu-doc-terminal-mode +1))
 
 (use-package flymake
-  :hook
-  ;; This hook is acting funny. It doesn't always apply for elisp buffers
-  (prog-mode . (lambda () "Enables flymake mode for all programming modes" (flymake-mode +1)))
   :init
   ;; Create a useful prefix command to navigate flymake commands
   (define-prefix-command 'eej-flymake-map)
@@ -515,6 +538,8 @@
   (display-line-numbers-mode t)
   (whitespace-mode t)
   (setq fill-column 120)
+  (setq-default nxml-slash-auto-complete-flag t)
+  (flymake-mode +1)
   (electric-pair-local-mode t))
 
 ;; A few more useful configurations...
@@ -528,7 +553,7 @@
   (put 'compilation-search-path 'safe-local-variable 'string-or-null-p)
   :hook
   (prog-mode . eej/prog-mode-setup)
-
+  (nxml-mode . eej/prog-mode-setup)
   (c-initialization .  (lambda () "" (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
   :config
   (tool-bar-mode -1)
@@ -600,11 +625,14 @@
 (straight-use-package 'yaml-mode)
 (use-package yaml-mode)
 
-;; This provides colors to rgb color parameters
+;; Colorizes rgb names
 (straight-use-package 'rainbow-mode)
+(defun spectral-enable-colorized-words ()
+  "Colorizes strings with the right color."
+  (rainbow-mode t))
 (use-package rainbow-mode
   :config
-  (add-hook 'emacs-lisp-mode-hook (lambda () (rainbow-mode t))))
+  (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-wods))
 
 ;; Not sure what these are for or if we need them
 ;; `vertico-previous'.
@@ -692,21 +720,15 @@
                                  (read-string (format "JIRA: [%s:%s] (%dm): " jira-ticket jira-title (/ task-time-seconds 60))
                                               task-title))))))))
 
-(defun eej/recompute-clock-sum ()
+(defun spectral-recompute-clock-sum ()
   "Recomputes the clock sum time for the projects buffer."
+  (org-align-all-tags))
   (save-window-excursion
     ;; Is there a better way to find this buffer? Seems... clumsy
     (switch-to-buffer "projects.org")
     (goto-char 1)
     (org-clock-sum (org-read-date nil nil "-21d") (org-read-date nil nil "now"))
     (message "Recomputed clocks for projects.org")))
-
-;; TODO: Is this still needed? Is there built in machinery for this?
-(defun remove-dos-eol ()
-  "Do not show ^M in files containing mixed UNIX and DOS line endings."
-  (interactive)
-  (setq buffer-display-table (make-display-table))
-  (aset buffer-display-table ?\^M []))
 
 (put 'narrow-to-region 'disabled nil)
 
