@@ -21,85 +21,85 @@
 
 ;; Should check how tramp filenames come out
 ;;; Faces to work on
-;;; eej-modeline-indicator-kdb-macro
+;;; spectral-modeline-indicator-kdb-macro
 ;;
 ;; Strategy in here to really dim modeline for inactive windows https://emacs.stackexchange.com/questions/3518/how-should-i-dim-the-header-line-of-inactive-windows
 
 ;;; NEXT: Come up with a variable via dir-locals
 
-(defgroup eej-modeline nil "Custom modeline that looks nice." :group 'mode-line)
+(defgroup spectral-modeline nil "Custom modeline that looks nice." :group 'mode-line)
 
-(defgroup eej-modeline-faces nil
+(defgroup spectral-modeline-faces nil
   "Faces for my eej modeline."
-  :group 'eej-modeline)
+  :group 'spectral-modeline)
 
-(defface eej-modeline-saved-face nil
+(defface spectral-modeline-saved-face nil
   "Face used to highlight when the file is saved."
-  :group 'eej-modeline-faces)
+  :group 'spectral-modeline-faces)
 
-(defface eej-modeline-project-branch-face nil "Face for project:branch."  :group 'eej-modeline-faces)
-(defface eej-modeline-buffer-identification-face nil "Face for the filename in the modeline." :group 'eej-modeline-faces)
+(defface spectral-modeline-project-branch-face nil "Face for project:branch."  :group 'spectral-modeline-faces)
+(defface spectral-modeline-buffer-identification-face nil "Face for the filename in the modeline." :group 'spectral-modeline-faces)
 
-(defface eej-modeline-org-task-active-face nil "Face for the org task when this is active." :group 'eej-modeline-faces)
-(defface eej-modeline-org-task-inactive-face nil "Face for the org task when this is inactive." :group 'eej-modeline-faces)
+(defface spectral-modeline-org-task-active-face nil "Face for the org task when this is active." :group 'spectral-modeline-faces)
+(defface spectral-modeline-org-task-inactive-face nil "Face for the org task when this is inactive." :group 'spectral-modeline-faces)
 
-(defface eej-modeline-org-no-task-active-face nil "Face for when there is no clocked in task for the active buffer." :group 'eej-modeline-faces)
-(defface eej-modeline-org-no-task-inactive-face nil "Face for when there is no clocked in task for the inactive buffer." :group 'eej-modeline-faces)
-(defface eej-modeline-inactive-face nil "Face for the inactive buffer's modeline." :group 'eej-modeline-faces)
+(defface spectral-modeline-org-no-task-active-face nil "Face for when there is no clocked in task for the active buffer." :group 'spectral-modeline-faces)
+(defface spectral-modeline-org-no-task-inactive-face nil "Face for when there is no clocked in task for the inactive buffer." :group 'spectral-modeline-faces)
+(defface spectral-modeline-inactive-face nil "Face for the inactive buffer's modeline." :group 'spectral-modeline-faces)
 
-(defface eej-modeline-modified-face nil
+(defface spectral-modeline-modified-face nil
   "Face for modeline modified."
-  :group 'eej-modeline-faces)
+  :group 'spectral-modeline-faces)
 
-(defun eej-modeline--kbd-macro (active)
+(defun spectral-modeline--kbd-macro (active)
   "Return the kbd macro indicator - choose face based on ACTIVE."
       (when (and (mode-line-window-selected-p) defining-kbd-macro)
-        (propertize " Macro " 'face 'eej-modeline-kbd-macro-face)))
+        (propertize " Macro " 'face 'spectral-modeline-kbd-macro-face)))
 
-(defvar-local eej-modeline-kbd-macro-active  '(:eval (eej-modeline--kbd-macro t)) "Mode line to indicate when defining-kdb-macro.")
-(defvar-local eej-modeline-kbd-macro-inactive '(:eval (eej-modeline--kbd-macro nil))  "Mode line to indicate when defining-kdb-macro.")
+(defvar-local spectral-modeline-kbd-macro-active  '(:eval (spectral-modeline--kbd-macro t)) "Mode line to indicate when defining-kdb-macro.")
+(defvar-local spectral-modeline-kbd-macro-inactive '(:eval (spectral-modeline--kbd-macro nil))  "Mode line to indicate when defining-kdb-macro.")
 
 
-(defun eej-modeline--narrow (active)
+(defun spectral-modeline--narrow (active)
   "Return the narrow indicator - choose face based on ACTIVE."
   (when (and (mode-line-window-selected-p)
              (buffer-narrowed-p)
              (not (derived-mode-p 'Info-mode 'help-mode 'special-mode 'message-mode)))
-    (propertize " Narrow " 'face 'eej-modeline-narrow-face)))
+    (propertize " Narrow " 'face 'spectral-modeline-narrow-face)))
 
-(defvar-local eej-modeline-narrow-active '(:eval (eej-modeline--narrow t)) "Mode line to indicate narrow range.")
-(defvar-local eej-modeline-narrow-inactive '(:eval (eej-modeline--narrow nil)) "Mode line to indicate narrow range.")
-(defvar-local eej-modeline-project-branch-face 'eej-modeline-project-branch-face "Default face to use for project in modeline.")
+(defvar-local spectral-modeline-narrow-active '(:eval (spectral-modeline--narrow t)) "Mode line to indicate narrow range.")
+(defvar-local spectral-modeline-narrow-inactive '(:eval (spectral-modeline--narrow nil)) "Mode line to indicate narrow range.")
+(defvar-local spectral-modeline-project-branch-face 'spectral-modeline-project-branch-face "Default face to use for project in modeline.")
 
-(defun eej-modeline-project-name ()
+(defun spectral-modeline-project-name ()
   "Return name of the project as is."
   (let ((this-project (project-current nil (file-truename default-directory))))
     (if this-project
         (file-name-nondirectory (directory-file-name (project-root this-project)))
     "-" )))
 
-(defun eej-modeline-git-name ()
+(defun spectral-modeline-git-name ()
   "Return the current branch name - assumes git."
   (vc-git--symbolic-ref (buffer-file-name)))
 
-(defun eej-modeline--compute-project-branch-face (project)
+(defun spectral-modeline--compute-project-branch-face (project)
   "Return the face for this particular `PROJECT` branch."
-  eej-modeline-project-branch-face)
+  spectral-modeline-project-branch-face)
 
-(defun eej-modeline--project-branch (active)
+(defun spectral-modeline--project-branch (active)
   "Return the text and face for the project-branch based on ACTIVE."
   (if (and buffer-file-name (project-current nil (file-truename default-directory)))
-      (let ((project-name (eej-modeline-project-name)))        
-        (let ((retval (format "{%s:%s}" project-name (eej-modeline-git-name))))
+      (let ((project-name (spectral-modeline-project-name)))
+        (let ((retval (format "{%s:%s}" project-name (spectral-modeline-git-name))))
           (if active
-              (propertize retval 'face (eej-modeline--compute-project-branch-face project-name))
+              (propertize retval 'face (spectral-modeline--compute-project-branch-face project-name))
             retval)))
     nil))
 
-(defvar-local eej-modeline-project-branch-active '(:eval (eej-modeline--project-branch t)))
-(defvar-local eej-modeline-project-branch-inactive '(:eval (eej-modeline--project-branch nil)))
+(defvar-local spectral-modeline-project-branch-active '(:eval (spectral-modeline--project-branch t)))
+(defvar-local spectral-modeline-project-branch-inactive '(:eval (spectral-modeline--project-branch nil)))
 
-(defun eej-modeline-format-filename ()
+(defun spectral-modeline-format-filename ()
   "Return the current filename relative to the project root."
   (let ((true-buffer-file-name (and buffer-file-name (file-truename buffer-file-name)))
         (the-project (project-current nil (file-truename default-directory))))
@@ -107,13 +107,13 @@
         (file-relative-name true-buffer-file-name (project-root the-project))
       (buffer-name))))
 
-(defun eej-modeline--buffer-identification (active)
+(defun spectral-modeline--buffer-identification (active)
   "Return the buffer id based on ACTIVE."
-  (propertize (eej-modeline-format-filename)
-              'face 'eej-modeline-buffer-identification-face))
+  (propertize (spectral-modeline-format-filename)
+              'face 'spectral-modeline-buffer-identification-face))
 
-(defvar-local eej-modeline-buffer-identification-active '(:eval (eej-modeline--buffer-identification t)))
-(defvar-local eej-modeline-buffer-identification-inactive '(:eval (eej-modeline--buffer-identification nil)))
+(defvar-local spectral-modeline-buffer-identification-active '(:eval (spectral-modeline--buffer-identification t)))
+(defvar-local spectral-modeline-buffer-identification-inactive '(:eval (spectral-modeline--buffer-identification nil)))
 
 ;; TODO: you could perhaps format - on your own - (org-duration-from-minutes (org-clock-get-clocked-time)) and org-clock-heading or org-clock-current-task
 ;; lets you fixed up the face...
@@ -124,15 +124,15 @@
       (propertize (format "[%s] %s" (org-duration-from-minutes (org-clock-get-clocked-time)) org-clock-heading)
                   'face
                   (if active
-                      'eej-modeline-org-task-active-face
-                    'eej-modeline-org-task-inactive-face))
+                      'spectral-modeline-org-task-active-face
+                    'spectral-modeline-org-task-inactive-face))
 
     ;; Propertize this separately from the others
     (propertize "No current org clock"
                 'face
                 (if active
-                    'eej-modeline-org-no-task-active-face
-                  'eej-modeline-org-no-task-inactive-face))))
+                    'spectral-modeline-org-no-task-active-face
+                  'spectral-modeline-org-no-task-inactive-face))))
 
 (defvar-local eej-org-task-active '(:eval (eej-org--task t)))
 (defvar-local eej-org-task-inactive '(:eval (eej-org--task nil)))
@@ -143,10 +143,10 @@
         (propertize "%3p"
                     'face
                     (if (not active)
-                        'eej-modeline-inactive-face
+                        'spectral-modeline-inactive-face
                       (if (and buffer-file-name (buffer-modified-p))
-                          'eej-modeline-modified-face
-                        'eej-modeline-saved-face)))))
+                          'spectral-modeline-modified-face
+                        'spectral-modeline-saved-face)))))
   
 (defvar-local eej-buffer-pos-active '(:eval (eej-buffer--pos t)))
 (defvar-local eej-buffer-pos-inactive '(:eval (eej-buffer--pos nil)))
@@ -174,11 +174,11 @@
 (defvar-local eej-flymake-state-inactive '(:eval (eej-buffer--flymake-state nil)))
 
 ;; TODO: Just visit the elements in mode-line-format and figure it out?
-(dolist (construct '(eej-modeline-kbd-macro-active
-                     eej-modeline-kbd-macro-inactive
+(dolist (construct '(spectral-modeline-kbd-macro-active
+                     spectral-modeline-kbd-macro-inactive
 
-                     eej-modeline-narrow-active
-                     eej-modeline-narrow-inactive
+                     spectral-modeline-narrow-active
+                     spectral-modeline-narrow-inactive
 
                      eej-buffer-pos-active
                      eej-buffer-pos-inactive
@@ -186,11 +186,11 @@
                      eej-buffer-read-state-active
                      eej-buffer-read-state-inactive
 
-                     eej-modeline-project-branch-active
-                     eej-modeline-project-branch-inactive
+                     spectral-modeline-project-branch-active
+                     spectral-modeline-project-branch-inactive
 
-                     eej-modeline-buffer-identification-active
-                     eej-modeline-buffer-identification-inactive
+                     spectral-modeline-buffer-identification-active
+                     spectral-modeline-buffer-identification-inactive
 
                      eej-org-task-active
                      eej-org-task-inactive
@@ -201,17 +201,17 @@
   (put construct 'risky-local-variable t))
 
 ;;; Code:
-(setq eej-modeline-format-active
+(setq spectral-modeline-format-active
       '("%e" ;; out of memory condition, which is never used
-        eej-modeline-kbd-macro-active
-        eej-modeline-narrow-active
+        spectral-modeline-kbd-macro-active
+        spectral-modeline-narrow-active
         
         eej-buffer-pos-active
         eej-buffer-read-state-active
-        eej-modeline-project-branch-active
+        spectral-modeline-project-branch-active
 
         " "
-        eej-modeline-buffer-identification-active
+        spectral-modeline-buffer-identification-active
         "  || "
 
         eej-org-task-active
@@ -222,17 +222,17 @@
         eej-flymake-state-active
         ))
 
-(setq eej-modeline-format-inactive
+(setq spectral-modeline-format-inactive
       '("%e" ;; out of memory condition, which is never used
-        eej-modeline-kbd-macro-active
-        eej-modeline-narrow-active
+        spectral-modeline-kbd-macro-active
+        spectral-modeline-narrow-active
         
         eej-buffer-pos-active
         eej-buffer-read-state-active
-        eej-modeline-project-branch-active
+        spectral-modeline-project-branch-active
 
         " "
-        eej-modeline-buffer-identification-inactive
+        spectral-modeline-buffer-identification-inactive
         "  || "
 
         eej-org-task-inactive
@@ -243,7 +243,7 @@
         ))
 
 
-(setq-default mode-line-format 'eej-modeline-format-active)
+(setq-default mode-line-format 'spectral-modeline-format-active)
 
 (defun eej-set-modeline-format ()
   "Set the modeline format based on whether its active or inactive."
@@ -251,8 +251,8 @@
    (lambda (window)
      (with-current-buffer (window-buffer window)
        (if (eq window (selected-window))
-           (setq mode-line-format eej-modeline-format-active)
-         (setq mode-line-format eej-modeline-format-inactive))))
+           (setq mode-line-format spectral-modeline-format-active)
+         (setq mode-line-format spectral-modeline-format-inactive))))
    (window-list)))
 (add-hook 'buffer-list-update-hook #'eej-set-modeline-format)
 (provide 'modeline)
