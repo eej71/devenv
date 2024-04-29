@@ -296,7 +296,7 @@
 
 (use-package git-commit
   :hook
-  (git-commit-mode . #'spectral-git-commit-setup)
+  (git-commit-mode . #'spectral-git-commit-setup))
 
 (straight-use-package 'rainbow-delimiters)
 (use-package rainbow-delimiters
@@ -632,7 +632,7 @@
   (rainbow-mode t))
 (use-package rainbow-mode
   :config
-  (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-wods))
+  (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
 
 ;; Not sure what these are for or if we need them
 ;; `vertico-previous'.
@@ -722,7 +722,7 @@
 
 (defun spectral-recompute-clock-sum ()
   "Recomputes the clock sum time for the projects buffer."
-  (org-align-all-tags))
+  (org-align-all-tags)
   (save-window-excursion
     ;; Is there a better way to find this buffer? Seems... clumsy
     (switch-to-buffer "projects.org")
