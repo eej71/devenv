@@ -67,6 +67,10 @@
   (turn-on-font-lock)
   (org-indent-mode t)
   (whitespace-mode -1)
+
+  ;; This hack is here as a way to fix up the org todo order sorting
+  (setq-local org-todo-keywords-1 '("STARTED" "TODO" "NEXT" "WAITING" "DONE" "CNCL" "NOTE"))
+  (message "org-todo-keywords-1 is now %s" org-todo-keywords-1)
   (eej-org-mode))
 
 (straight-use-package 'org)
@@ -121,6 +125,7 @@
         org-tags-column 120
         org-tags-match-list-sublevels t
 
+        ;; If you change the keywords here, you have to edit the same list over in spectral-org-setup
         org-todo-keywords '((sequence "TODO" "STARTED" "NEXT" "WAITING" "|" "DONE" "CNCL")
                             (sequence "NOTE"))
 
@@ -142,7 +147,7 @@
         org-checkbox-hierarchical-statistics nil)
   (org-clock-persistence-insinuate)
 
-  (add-hook 'org-mode-hook #'spectral-org-mode)
+  (add-hook 'org-mode-hook #'spectral-org-setup)
   (add-hook 'org-clock-out-hook #'spectral-recompute-clock-sum)
 
   (add-hook 'org-shiftup-final-hook #'windmove-up)
