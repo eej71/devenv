@@ -76,7 +76,7 @@
 	fetchexclude = *
 
 [merge]
-	renamelimit = 2600
+	renamelimit = 999999
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f

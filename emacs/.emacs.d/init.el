@@ -292,11 +292,12 @@
 
 (defun spectral-git-commit-setup ()
   "Modifications to the git commit buffer."
-  (whitespace-mode -1))
+  (setq-local fill-column 120))
 
-(use-package git-commit
-  :hook
-  (git-commit-mode . #'spectral-git-commit-setup))
+(use-package git-commit)
+
+;; Normally I would add this with the :hook mechanism, but it didn't work with git-commit?
+(add-hook 'git-commit-setup-hook #'spectral-git-commit-setup)
 
 (straight-use-package 'rainbow-delimiters)
 (use-package rainbow-delimiters
@@ -427,7 +428,7 @@
  '(exec-path-from-shell-check-startup-files nil)
  '(fci-rule-color "#383838")
  '(flycheck-color-mode-line-face-to-color 'mode-line-buffer-id)
- '(git-commit-summary-max-length 80)
+ '(git-commit-summary-max-length 120)
  '(global-display-line-numbers-mode nil)
  '(gtags-suggested-key-mapping t)
  '(inhibit-startup-screen t)
