@@ -101,6 +101,235 @@
 (unless (display-graphic-p)
   (xterm-mouse-mode -1))
 
+  :bind
+  (("C-c a" . org-agenda)
+  ("C-c c" . org-capture)
+
+  :map org-mode-map
+  ("C-x <up>" . 'org-metaup)
+  ("C-x <down>" . 'org-metadown)
+  ("C-x <left>" . 'org-metaleft)
+  ("C-x <right>" . 'org-metaright)))
+
+(use-package org-jira
+  ;; It's necessary to place everything in :config otherwise org jira is sad
+  :config
+  (add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira))
+
+(use-package org-super-agenda)
+
+(defun eej-indent-style ()
+  "Override the built in indentation with my own choices."
+  `(;; custom rules
+    ((n-p-gp nil nil "namespace_definition") grand-parent 0)
+    ,@(alist-get 'gnu (c-ts-mode--indent-styles 'cpp))))
+
+(use-package treesit
+  :straight nil
+  :config
+  (add-to-list 'treesit-language-source-alist '(bash "https://github.com/tree-sitter/tree-sitter-bash"))
+  (add-to-list 'treesit-language-source-alist '(c "https://github.com/tree-sitter/tree-sitter-c.git"))
+  (add-to-list 'treesit-language-source-alist '(cmake "https://github.com/uyha/tree-sitter-cmake"))
+  (add-to-list 'treesit-language-source-alist '(cpp "https://github.com/tree-sitter/tree-sitter-cpp.git"))
+  (add-to-list 'treesit-language-source-alist '(css "https://github.com/tree-sitter/tree-sitter-css"))
+  (add-to-list 'treesit-language-source-alist '(elisp "https://github.com/Wilfred/tree-sitter-elisp.git"))
+  (add-to-list 'treesit-language-source-alist '(go "https://github.com/tree-sitter/tree-sitter-go"))
+  (add-to-list 'treesit-language-source-alist '(html "https://github.com/tree-sitter/tree-sitter-html"))
+  (add-to-list 'treesit-language-source-alist '(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+  (add-to-list 'treesit-language-source-alist '(json "https://github.com/tree-sitter/tree-sitter-json"))
+  (add-to-list 'treesit-language-source-alist '(make "https://github.com/alemuller/tree-sitter-make"))
+  (add-to-list 'treesit-language-source-alist '(markdown "https://github.com/ikatyang/tree-sitter-markdown"))
+  (add-to-list 'treesit-language-source-alist '(python "https://github.com/tree-sitter/tree-sitter-python"))
+  (add-to-list 'treesit-language-source-alist '(toml "https://github.com/tree-sitter/tree-sitter-toml"))
+  (add-to-list 'treesit-language-source-alist '(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
+  (add-to-list 'treesit-language-source-alist '(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
+  (add-to-list 'treesit-language-source-alist '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
+  ;; TODO: Bring this back once we are running emacs as a daemon again
+  ;;(mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+  :custom
+  (major-mode-remap-alist '((c++-mode . c++-ts-mode) (c-mode . c++-ts-mode) (c-or-c++-mode . c++-ts-mode)))
+  (c-ts-mode-indent-style #'eej-indent-style)
+  (treesit-font-lock-level 4))
+
+(use-package spectral-theme
+  :straight nil
+  ;;:load-path "~/.emacs.d/"
+
+  ;; TODO: Is init the right time and place? - or should it be config?
+  :init
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/")
+  (load-file "~/.emacs.d/modeline.el")
+  (load-theme 'spectral t))
+
+(straight-use-package '(vertico :files (:defaults "extensions/*")
+                         :includes (vertico-buffer
+                                    vertico-directory
+                                    vertico-flat
+                                    vertico-indexed
+                                    vertico-mouse
+                                    vertico-quick
+                                    vertico-repeat
+                                    vertico-reverse)))
+
+(use-package vertico
+  :config
+  (vertico-mode t)
+  (vertico-indexed-mode)
+  :custom
+  (vertico-resize t)
+  (vertico-cycle t)
+  (vertico-count 15)
+  (vertico-indexed-start 1))
+
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+(use-package savehist
+  :straight nil
+  :init
+  (savehist-mode))
+
+(use-package windmove
+  :config
+  (windmove-mode)
+  (windmove-default-keybindings)
+  :custom
+  (windmove-wrap-around t))
+
+(defun eej/is-buffer-read-only ()
+  "Set the buffer to read only if its a file not managed by git."
+  (if (and buffer-file-name
+           (not (project-current nil (file-truename default-directory))))
+      (read-only-mode t)))
+
+(use-package magit
+  :bind
+  ("C-c g" . magit-file-dispatch)
+
+  :hook
+  (find-file . eej/is-buffer-read-only)
+
+  :custom
+  (magit-diff-refine-hunk 'all))
+
+(use-package project
+  ;; TODO: Describe-key seems broken for this - is that describe-key being broken or me being broken?
+  ;;:bind-keymap ("f" . project-prefix-map) ;; Already mapped as C-x p
+  :config
+  (setq project-switch-commands '((consult-project-extra-find "Find file") (project-find-regexp "Find regexp")
+                                  (project-find-dir "Find directory") (project-vc-dir "VC-Dir")
+                                  (project-eshell "Eshell"))))
+
+(defun spectral-git-commit-setup ()
+  "Modifications to the git commit buffer."
+  (setq-local fill-column 120))
+
+;; (use-package git-commit)
+
+;; Normally I would add this with the :hook mechanism, but it didn't work with git-commit?
+;;(add-hook 'git-commit-setup-hook #'spectral-git-commit-setup)
+
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode)
+  :custom
+  ;; We are limited to a total of 9 faces - so we just skip every other color group
+  (rainbow-x-colors nil) ;; Dislike the names of colors being colored
+  (rainbow-delimiters-max-face-count 7))
+
+(use-package ace-window
+  :bind (("M-o" . ace-window)
+         ("C-x o" . ace-window))   ;; replace default other-window
+  :config
+  (ace-window-display-mode 1)
+  (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)
+        aw-dispatch-always t
+        aw-background nil
+        aw-split-style 'fair)
+  )
+
+(use-package smartparens)
+
+(use-package github)
+
+(use-package orderless
+  :custom
+  (read-file-name-completion-ignore-case t)
+  (read-buffer-completion-ignore-case t)
+  (completion-ignore-case t)
+  (completion-styles '(substring flex orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+;; TODO: More to setup here
+(use-package consult
+  :init
+  (define-prefix-command 'eej-consult)
+  (global-set-key (kbd "C-c s") 'eej-consult)
+
+  :bind
+  ("C-x b" . consult-buffer)
+  ;; TODO: consult-history - what is it?
+  ;; TODO: consult-man seems broken
+  ("C-x r b" . consult-bookmark)
+  ("M-g g" . consult-goto-line)
+
+  ("C-c s f" . consult-find)
+  ("C-c s g" . consult-grep)
+  ("C-c s l" . consult-line)
+  ("C-c s L" . consult-line-multi)
+  ("C-c s k" . consult-keep-lines)
+  ("C-c s r" . consult-ripgrep)
+  ("C-c s u" . consult-focus-lines)
+
+  ;; TODO: Could probably rip apart the register kepmap perfix a bit more
+  ("C-x r x" . consult-register-store)
+  ("C-x r s" . consult-register-store)
+  ("C-x r j" . consult-register-load)
+
+  :config
+  (setq consult-narrow-key "<")
+  (setq consult-ripgrep-args "rg --null --color=never --max-columns=1000 --path-separator /   --smart-case --no-heading --with-filename --line-number --no-search-zip")
+
+  (advice-add #'project-find-regexp :override #'consult-ripgrep)
+
+  ;; Improves the usability of the register window...
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  )
+
+(use-package consult-project-extra
+  :straight t
+  :bind
+  ;; TODO: The problem with this setup is that this wrecks project-switch-buffer keymap - no way to pick a file
+  ;; 1) Try declaring this in the bind-keymap portion of the project loading
+  ;; 2) Try a bind-keymap thing here instead of just stuffing this into that key sequence
+  (("C-x p f" . consult-project-extra-find)
+   ("C-x p o" . consult-project-extra-find-other-window)))
+
+;; TODO: Add a hook so when something is staged in an engine repo - we call clang-format on that region
+(use-package clang-format)
+
+(use-package recentf
+  :config
+  (recentf-mode t)
+  (run-at-time nil 600 'recentf-save-list)
+  :custom
+  (recentf-max-menu-items 50
+   recentf-max-saved-items 50))
+
+;; TODO: Is ack still in use?
 (use-package ack :init
   (setq
    ack-and-a-half-arguments "--ignore-dir=release --ignore-dir=debug"))
@@ -156,6 +385,7 @@
  '(show-paren-when-point-in-periphery t)
  '(show-paren-when-point-inside-paren t)
  '(transient-mark-mode 1)
+ '(tramp-default-method "ssh")
  '(undo-tree-history-directory-alist '((".*" . "~/tmp/")))
  '(user-full-name "Eric Johnson")
  '(user-mail-address (getenv "EEJ_EMAIL"))

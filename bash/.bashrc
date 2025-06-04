@@ -70,34 +70,12 @@ export VISUAL='emacsclient -nw'
 # This is required for tree-sitter
 LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
-
-HISTCONTROL=ignoredups:erasedups
-HISTIGNORE="&:ls:ll:[bf]g:exit:pwd:clear:history"
-HISTTIMEFORMAT="%F %T  "
-HISTSIZE=1000000
-HISTFILESIZE=1000000
-
-PROMPT_DIRTRIM=4
-# Keep shell histories shared across concurrent sessions.
-# - history -a: append this shell's new entries to $HISTFILE
-# - history -n: read entries added by other shells
-eej_history_sync() {
-    builtin history -a
-    builtin history -n
-}
-
-case ";${PROMPT_COMMAND};" in
-    *";eej_history_sync;"*) ;;
-    ";;") PROMPT_COMMAND="eej_history_sync" ;;
-    *) PROMPT_COMMAND="eej_history_sync;${PROMPT_COMMAND}" ;;
-esac
-
-# Up/Down search history by current prefix, newest match first.
-bind "\"\e[A\": history-search-backward"
-bind "\"\e[B\": history-search-forward"
-bind "\"\eOA\": history-search-backward"
-bind "\"\eOB\": history-search-forward"
-
+export HISTCONTROL=erasedups
+export HISTIGNORE="&:ls:[bf]g:exit"
+export HISTSIZE=100000
+export HISTFILESIZE=100000
+export PROMPT_DIRTRIM=4
+export PROMPT_COMMAND="history -a ; history -c ; history -r; $PROMPT_COMMAND"
 export PATH=~/tmux/:${PATH}
 export PATH
 export TERM=xterm-256color
