@@ -1,6 +1,11 @@
-;;
+;;; init.el --- My Emacs configuration -*- lexical-binding: t; -*-
+;; -*- mode: emacs-lisp; flycheck-disabled-checkers: (emacs-lisp-checkdoc); -*-
+;; Local Variables:
+;; byte-compile-warnings: (not unresolved free-vars)
+;; End:
+
 ;; System configurations that are required
-;; "--with-native-compilation --with-json --with-tree-sitter --with-x --with-rsvg"
+;; "--with-native-compilation --with-tree-sitter --with-x --with-rsvg"
 ;; System built requires lib
 ;;
 ;; sudo yum install libgccjit.x86_64
@@ -8,6 +13,8 @@
 ;; sudo yum install libtree-sitter-devel.x86_64
 ;; sudo yum install -y jansson-devel.x86_64
 ;; sudo yum install -y librsvg2-devel.x86_64
+;;
+;; ./configure PKG_CONFIG_PATH=/home/ejohnson/projects/tree-sitter/ --with-native-compilation --with-tree-sitter --with-x --with-rsvg --with-modules --no-create --no-recursion
 
 
 ;; Make sure we have a sufficiently built emacs
@@ -15,9 +22,9 @@
   "Check Emacs config to see if FEATURE is present."
   (if (string-search feature system-configuration-options)
       t
-    (error (concat "Emacs not built with " x))))
+    (error (concat "Emacs not built with " feature))))
 (defconst spectral-emacs-requires-configs
-  '("--with-native-compilation" "--with-json" "--with-tree-sitter" "--with-x" "--with-rsvg")
+  '("--with-native-compilation" "--with-tree-sitter" "--with-x" "--with-rsvg")
   "These are the minimum features that spectral requires of Emacs.")
 (mapc #'spectral-emacs-config-check spectral-emacs-requires-configs)
 
@@ -39,13 +46,7 @@
 ;; 18) look at nlinum as a replacement for display-line-number-mode
 
 ;; Prevent package.el loading packages prior to their init-file loading
-(setq package-enable-at-startup nil)
 (setq straight-use-package-by-default t)
-
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -299,10 +300,10 @@
   "Modifications to the git commit buffer."
   (setq-local fill-column 120))
 
-(use-package git-commit)
+;; (use-package git-commit)
 
 ;; Normally I would add this with the :hook mechanism, but it didn't work with git-commit?
-(add-hook 'git-commit-setup-hook #'spectral-git-commit-setup)
+;;(add-hook 'git-commit-setup-hook #'spectral-git-commit-setup)
 
 (straight-use-package 'rainbow-delimiters)
 (use-package rainbow-delimiters
