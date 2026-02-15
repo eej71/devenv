@@ -2,7 +2,7 @@ org-clock-save.el
 local/
 
 # Excluding for now since oauth tokens were here
-config/.config/gh/hosts.yml
+config/.config
 
 # Local customization files
 emacs/.emacs.d/local-config.el
