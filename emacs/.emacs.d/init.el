@@ -68,11 +68,13 @@
   (turn-on-font-lock)
   (org-indent-mode t)
   (whitespace-mode -1)
-
-  ;; This hack is here as a way to fix up the org todo order sorting
-  (setq-local org-todo-keywords-1 '("STARTED" "TODO" "NEXT" "WAITING" "DONE" "CNCL" "NOTE"))
-  (message "org-todo-keywords-1 is now %s" org-todo-keywords-1)
   (eej-org-mode))
+
+(defun spectral-org-todo-order-sort (orig-fun &rest args)
+  "Fix up `org-todo-keywords-1' before calling ORIG-FUN with ARGS which cleans up my todo sorting."
+  (let ((org-todo-keywords-1 '("STARTED" "TODO" "NEXT" "WAITING" "DONE" "CNCL" "NOTE")))
+    (apply orig-fun args)))
+(advice-add 'org-sort-entries :around #'spectral-org-todo-order-sort)
 
 (straight-use-package 'org)
 ;; TODO: consult-org-heading or consult-org-agenda
