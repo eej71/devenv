@@ -643,6 +643,15 @@
   :config
   (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
 
+(use-package gptel
+  :straight (:host github :repo "karthink/gptel")
+  :config
+  (setq gptel-model 'claude-sonnet-4-5-20250929)
+  (setq gptel-backend
+        (gptel-make-anthropic "Claude"
+          :key (getenv "CLAUDE_API_KEY")
+          :models '(claude-sonnet-4-5-20250929))))
+
 ;; Not sure what these are for or if we need them
 ;; `vertico-previous'.
 ;;(keymap-set vertico-map "M-q" #'vertico-quick-insert)
