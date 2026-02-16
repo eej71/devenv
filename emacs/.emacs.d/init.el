@@ -141,6 +141,7 @@
 
         org-use-speed-commands t
         org-use-tag-inheritance t
+        fill-column 90
         org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)
         org-refile-targets '((org-agenda-files . (:todo . "STARTED"))
                              (org-agenda-files . (:todo . "NEXT"))
@@ -431,6 +432,7 @@
      "fbcba8deb199e323f26cf4244ceadfc54c5914a473490456707c109701e14909"
      "9932992fd74b289a1ceda66b9a34c882e11a3189e25cc7398710f03ab8f0144f" default))
  '(custom-theme-directory "~/devenv/elisp/")
+ '(dired-isearch-filenames t)
  '(display-line-numbers-grow-only t)
  '(display-line-numbers-width 3)
  '(exec-path-from-shell-check-startup-files nil)
@@ -464,6 +466,7 @@
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks nil)
  '(visible-bell nil)
+ '(warning-suppress-types '((native-compiler)))
  '(warning-suppress-log-types '((corfu-doc)))
  '(whitespace-line-column 220)
  '(whitespace-style '(face tabs lines-char indentation::space trailing)))
@@ -658,7 +661,7 @@
 ;;(keymap-set vertico-map "C-q" #'vertico-quick-exit)
 
 ;; Can this be moved into the org specific configs?
-(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for eej-org-mode-map.")
+(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for 'eej-org-mode-map'.")
 (define-minor-mode eej-org-mode
   "A minor mode to bring the shift arrows keys with windmove mode active."
   :init-value nil
@@ -690,7 +693,7 @@
       nil)))
 
 (defun eej/find-nested-started ()
-  "A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."  
+  "Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
   (if (not (org-goto-first-child))
       nil
     (let ((end (save-excursion (org-end-of-subtree t))))
