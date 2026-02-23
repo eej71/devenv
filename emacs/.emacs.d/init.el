@@ -635,6 +635,11 @@
   :config
   (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
 
+(use-package vterm
+  :straight t
+  :config
+  (setq vterm-shell "bash")) ; Optional: set your shell
+
 (use-package gptel
   :straight (:host github :repo "karthink/gptel")
   :config
