@@ -76,7 +76,6 @@
     (apply orig-fun args)))
 (advice-add 'org-sort-entries :around #'spectral-org-todo-order-sort)
 
-(straight-use-package 'org)
 ;; TODO: consult-org-heading or consult-org-agenda
 (use-package org
   ;; It's necessary to place everything in :config otherwise org mode loading is sad
@@ -176,13 +175,11 @@
   ("C-x <left>" . 'org-metaleft)
   ("C-x <right>" . 'org-metaright)))
 
-(straight-use-package 'org-jira)
 (use-package org-jira
   ;; It's necessary to place everything in :config otherwise org jira is sad
   :config
   (add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira))
 
-(straight-use-package 'org-super-agenda)
 (use-package org-super-agenda)
 
 (defun eej-indent-style ()
@@ -265,7 +262,6 @@
   :init
   (savehist-mode))
 
-(straight-use-package 'windmove)
 (use-package windmove
   :config
   (windmove-mode)
@@ -279,7 +275,6 @@
            (not (project-current nil (file-truename default-directory))))
       (read-only-mode t)))
 
-(straight-use-package 'magit)
 (use-package magit
   :bind
   ("C-c g" . magit-file-dispatch)
@@ -290,7 +285,6 @@
   :custom
   (magit-diff-refine-hunk 'all))
 
-(straight-use-package 'project)
 (use-package project
   ;; TODO: Describe-key seems broken for this - is that describe-key being broken or me being broken?
   ;;:bind-keymap ("f" . project-prefix-map) ;; Already mapped as C-x p
@@ -308,7 +302,6 @@
 ;; Normally I would add this with the :hook mechanism, but it didn't work with git-commit?
 ;;(add-hook 'git-commit-setup-hook #'spectral-git-commit-setup)
 
-(straight-use-package 'rainbow-delimiters)
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode)
@@ -317,16 +310,11 @@
   (rainbow-x-colors nil) ;; Dislike the names of colors being colored
   (rainbow-delimiters-max-face-count 7))
 
-(straight-use-package 'ace-window)
-(use-package ace-window)
 
-(straight-use-package 'smartparens)
 (use-package smartparens)
 
-(straight-use-package 'github)
 (use-package github)
 
-(straight-use-package 'orderless)
 (use-package orderless
   :custom
   (read-file-name-completion-ignore-case t)
@@ -336,7 +324,6 @@
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
-(straight-use-package 'consult)
 ;; TODO: More to setup here
 (use-package consult
   :init
@@ -386,10 +373,8 @@
    ("C-x p o" . consult-project-extra-find-other-window)))
 
 ;; TODO: Add a hook so when something is staged in an engine repo - we call clang-format on that region
-(straight-use-package 'clang-format)
 (use-package clang-format)
 
-(straight-use-package 'recentf)
 (use-package recentf
   :config
   (recentf-mode t)
@@ -399,7 +384,6 @@
    recentf-max-saved-items 50))
 
 ;; TODO: Is ack still in use?
-(straight-use-package 'ack)
 (use-package ack :init
   (setq
    ack-and-a-half-arguments "--ignore-dir=release --ignore-dir=debug"))
@@ -587,12 +571,10 @@
 (global-set-key [f7] 'set-mark-command)
 (global-set-key (kbd "C-x z") 'ff-get-other-file)
 
-(straight-use-package 'marginalia)
 (use-package marginalia
   :config
   (marginalia-mode t))
 
-(straight-use-package 'which-key)
 (use-package which-key
   :config
   (which-key-mode t)
@@ -602,7 +584,6 @@
 
 
 ;; TODO: Copied from https://github.com/oantolin/embark
-(straight-use-package 'embark)
 (use-package embark
   :ensure t
 
@@ -634,11 +615,9 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-(straight-use-package 'yaml-mode)
 (use-package yaml-mode)
 
 ;; Colorizes rgb names
-(straight-use-package 'rainbow-mode)
 (defun spectral-enable-colorized-words ()
   "Colorizes strings with the right color."
   (rainbow-mode t))
