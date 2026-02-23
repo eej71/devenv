@@ -205,7 +205,7 @@
       '("%e" ;; out of memory condition, which is never used
         spectral-modeline-kbd-macro-active
         spectral-modeline-narrow-active
-        
+
         eej-buffer-pos-active
         eej-buffer-read-state-active
         spectral-modeline-project-branch-active
@@ -218,6 +218,10 @@
 
         mode-line-format-right-align
 
+        (:eval
+         (when-let ((path (window-parameter nil 'ace-window-path)))
+           (format " [%s]" path)))
+
         ;; TODO: These need to be wrapped in a prog-mode check I think
         eej-flymake-state-active
         ))
@@ -226,7 +230,7 @@
       '("%e" ;; out of memory condition, which is never used
         spectral-modeline-kbd-macro-active
         spectral-modeline-narrow-active
-        
+
         eej-buffer-pos-active
         eej-buffer-read-state-active
         spectral-modeline-project-branch-active
@@ -237,6 +241,10 @@
 
         eej-org-task-inactive
         mode-line-format-right-align
+
+        (:eval
+         (when-let ((path (window-parameter nil 'ace-window-path)))
+           (format " [%s]" path)))
 
         ;; TODO: These need to be wrapped in a prog-mode check I think
         eej-flymake-state-inactive
