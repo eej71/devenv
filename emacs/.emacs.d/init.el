@@ -310,6 +310,16 @@
   (rainbow-x-colors nil) ;; Dislike the names of colors being colored
   (rainbow-delimiters-max-face-count 7))
 
+(use-package ace-window
+  :bind (("M-o" . ace-window)
+         ("C-x o" . ace-window))   ;; replace default other-window
+  :config
+  (ace-window-display-mode 1)
+  (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)
+        aw-dispatch-always t
+        aw-background nil
+        aw-split-style 'fair)
+  )
 
 (use-package smartparens)
 
