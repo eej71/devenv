@@ -105,7 +105,360 @@
   (setq
    ack-and-a-half-arguments "--ignore-dir=release --ignore-dir=debug"))
 
-;; ── Local machine-specific config ───────────────────────────────────────
+;; TODO: Purge uniquify if its not needed
+;;(straight-use-package 'uniquify-files)
+;;(use-package uniquify-files)
+;;:custom (uniquify-buffer-name-style '(post-forward-angle-brackets nil (uniquify))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+ '(backup-directory-alist (list '(".*" . "~/tmp/")))
+ '(compilation-mode-line-errors
+   '(" ["
+     (:propertize (:eval (int-to-string compilation-num-errors-found)) face compilation-error help-echo
+                  "Number of errors so far")
+     "]") t)
+ '(compilation-skip-threshold 1)
+ '(completion-ignore-case t t)
+ '(custom-enabled-themes '(spectral))
+ '(custom-safe-themes
+   '("841f05044422544925a592e810c73b6e44d41fb9f40d86960dc79a3fd2ce4803"
+     "fbcba8deb199e323f26cf4244ceadfc54c5914a473490456707c109701e14909"
+     "9932992fd74b289a1ceda66b9a34c882e11a3189e25cc7398710f03ab8f0144f" default))
+ '(custom-theme-directory "~/devenv/elisp/")
+ '(dired-isearch-filenames t)
+ '(display-line-numbers-grow-only t)
+ '(display-line-numbers-width 3)
+ '(exec-path-from-shell-check-startup-files nil)
+ '(fci-rule-color "#383838")
+ '(flycheck-color-mode-line-face-to-color 'mode-line-buffer-id)
+ '(git-commit-summary-max-length 120)
+ '(global-display-line-numbers-mode nil)
+ '(gtags-suggested-key-mapping t)
+ '(inhibit-startup-screen t)
+ '(linum-format "%4d ")
+ '(mode-line-format
+   '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification
+     (vc-mode vc-mode) mode-line-modes mode-line-misc-info mode-line-end-spaces))
+ '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(redisplay-dont-pause t t)
+ '(request-curl-options '("-k"))
+ '(ring-bell-function nil)
+ '(safe-local-variable-values '((flycheck-disabled-checkers emacs-lisp-checkdoc)))
+ '(show-paren-style 'parenthesis)
+ '(show-paren-when-point-in-periphery t)
+ '(show-paren-when-point-inside-paren t)
+ '(transient-mark-mode 1)
+ '(undo-tree-history-directory-alist '((".*" . "~/tmp/")))
+ '(user-full-name "Eric Johnson")
+ '(user-mail-address (getenv "EEJ_EMAIL"))
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   '((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF")
+     (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF")
+     (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3")))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(vc-follow-symlinks nil)
+ '(visible-bell nil)
+ '(warning-suppress-types '((native-compiler)))
+ '(warning-suppress-log-types '((corfu-doc)))
+ '(whitespace-line-column 220)
+ '(whitespace-style '(face tabs lines-char indentation::space trailing)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;;
+;; Eglot is just too much trouble. Can't make it parse compiler_commands.json and nothing works.
+;; Other packages to bring in - eldoc, flymake, xref and imenu
+;;(use-package eglot
+;;  :custom
+;;  (eglot-inlay-hints-mode 0)
+;;  :hook
+;;  ;;(c++-ts-mode . eglot-ensure)
+;;  )
+
+;; debug this function with debug to see why M-t is not doing this corfu-popupinfo-toggle
+(use-package corfu
+  :straight
+  (corfu :files (:defaults "extensions/*")
+         :includes (corfu-info corfu-history corfu-popupinfo corfu-indexed))
+
+  :init
+  (corfu-popupinfo-mode)
+  (corfu-indexed-mode)
+  (corfu-history-mode)
+  (global-corfu-mode)
+
+  :custom
+  (corfu-min-width 30)
+  ;;(corfu-popupinfo-delay 0)
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-scroll-margin 5)        ;; Use scroll margin
+  (corfu-count 20))
+
+(straight-use-package
+ '(corfu-terminal
+   :type git
+   :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
+
+(unless (display-graphic-p)
+  (corfu-terminal-mode +1))
+
+(straight-use-package
+ '(corfu-doc-terminal
+   :type git
+   :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git"))
+(unless (display-graphic-p)
+  ;; This is here because corfu-popupinfo isn't really working for the terminal
+  (corfu-doc-mode +1)
+  (corfu-doc-terminal-mode +1))
+
+(use-package flymake
+  :init
+  ;; Create a useful prefix command to navigate flymake commands
+  (define-prefix-command 'eej-flymake-map)
+  (global-set-key (kbd "C-c f") 'eej-flymake-map)
+  (flymake-mode +1)
+  (define-key eej-flymake-map (kbd "c") 'consult-flymake)
+  (define-key eej-flymake-map (kbd "n") 'flymake-goto-next-error)
+  (define-key eej-flymake-map (kbd "p") 'flymake-goto-prev-error)
+  (define-key eej-flymake-map (kbd "r") 'clang-format-region)
+  (define-key eej-flymake-map (kbd "b") 'clang-format-buffer))
+
+(defun eej/prog-mode-setup ()
+  "Perform all the required setup for a prog mode."
+  (setq-default indent-tabs-mode nil)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M [])
+  (display-line-numbers-mode t)
+  (whitespace-mode t)
+  (setq fill-column 120)
+  (setq-default nxml-slash-auto-complete-flag t)
+  (flymake-mode +1)
+  (electric-pair-local-mode t))
+
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; TAB cycle if there are only few candidates
+  (setq completion-cycle-threshold 3)
+  (setq fill-column 120)
+  (put 'downcase-region 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+  (put 'compilation-search-path 'safe-local-variable 'string-or-null-p)
+  :hook
+  (prog-mode . eej/prog-mode-setup)
+  (nxml-mode . eej/prog-mode-setup)
+  (c-initialization .  (lambda () "" (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
+  :config
+  (tool-bar-mode -1)
+  (global-auto-revert-mode t)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  ;;(global-hl-line-mode -1)
+
+  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete))
+
+;; TODO: We can remove this once windows terminal program fixes their C-spc bug
+(global-set-key [f7] 'set-mark-command)
+(global-set-key (kbd "C-x z") 'ff-get-other-file)
+
+(use-package marginalia
+  :config
+  (marginalia-mode t))
+
+(use-package which-key
+  :config
+  (which-key-mode t)
+  :custom
+  (which-key-idle-delay 0.5)
+  (which-key-side-window-location 'bottom))
+
+
+;; TODO: Copied from https://github.com/oantolin/embark
+(use-package embark
+  :ensure t
+
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("M-." . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+  ;; strategy, if you want to see the documentation from multiple providers.
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :ensure t ; only need to install it, embark loads it after consult if found
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package yaml-mode)
+
+;; Colorizes rgb names
+(defun spectral-enable-colorized-words ()
+  "Colorizes strings with the right color."
+  (rainbow-mode t))
+(use-package rainbow-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
+
+(use-package vterm
+  :straight t
+  :config
+  (setq vterm-shell "bash")) ; Optional: set your shell
+
+(use-package gptel
+  :straight (:host github :repo "karthink/gptel")
+  :config
+  (setq gptel-model 'claude-sonnet-4-5-20250929)
+  (setq gptel-backend
+        (gptel-make-anthropic "Claude"
+          :key (getenv "CLAUDE_API_KEY")
+          :models '(claude-sonnet-4-5-20250929))))
+
+(use-package eca :straight t)
+(use-package agent-shell :ensure t)
+
+;; Not sure what these are for or if we need them
+;; `vertico-previous'.
+;;(keymap-set vertico-map "M-q" #'vertico-quick-insert)
+;;(keymap-set vertico-map "C-q" #'vertico-quick-exit)
+
+;; Can this be moved into the org specific configs?
+(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for 'eej-org-mode-map'.")
+(define-minor-mode eej-org-mode
+  "A minor mode to bring the shift arrows keys with windmove mode active."
+  :init-value nil
+  :keymap eej-org-mode-map)
+
+(define-key eej-org-mode-map (kbd "S-<down>") #'org-shiftdown)
+(define-key eej-org-mode-map (kbd "S-<left>") #'org-shiftleft)
+(define-key eej-org-mode-map (kbd "S-<right>") #'org-shiftright)
+(define-key eej-org-mode-map (kbd "S-<up>") #'org-shiftup)
+
+
+;;; CODE:
+(defun eej/find-stuck-projects ()
+  "A project has at least one DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
+  (let ((at-least-one-action (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
+        (at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done)))
+        (at-least-one-scheduled (save-excursion (-some #'identity (remove nil (org-map-entries #'eej/is-todo-scheduled t 'tree))))))
+    (if (and at-least-one-done (not at-least-one-action) (not at-least-one-scheduled))
+        nil
+      (or (outline-next-heading) (org-end-of-subtree t)))))
+
+(defun eej/is-todo-scheduled ()
+  "Is this an incomplete todo with a scheduled date."
+  (let* ((element (org-element-at-point))
+         (todo-type (org-element-property :todo-type element))
+         (scheduled (org-element-property :scheduled element)))
+    (if (and (eq todo-type 'todo) scheduled)
+        (point)
+      nil)))
+
+(defun eej/find-nested-started ()
+  "Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
+  (if (not (org-goto-first-child))
+      nil
+    (let ((end (save-excursion (org-end-of-subtree t))))
+      (if (re-search-forward "STARTED" end t)
+          (progn (beginning-of-line) (point))
+        (or
+         (org-agenda-skip-subtree-if 'todo '("WAITING"))
+         ;; If org-agenda-skip-subtree-if allowed for this...
+         ;; (org-agenda-skip-subtree-if 'scheduled 'todo '("DONE"))
+         (-some #'identity (remove nil (org-map-entries #'eej/is-todo-scheduled t 'tree)))
+         )))))
+
+;; Needed because indented levels in the clock table report (C-a r)
+;; will display \\emsp and I can't figure out how to make it look
+;; nice. So this is what it will be. Borrowed from this thread.
+;; http://lists.gnu.org/archive/html/emacs-orgmode/2014-08/msg00974.html
+(defun org-clocktable-indent-string (level)
+  "An attempt to improve the formatting of the clocktable for a given LEVEL."
+  (if (= level 1) ""
+    (let ((str " "))
+      (dotimes (k (1- level) str)
+        (setq str (concat "__" str))))))
+
+(defun eej/post-worklog-to-jira ()
+  "Post up time to jira."
+  (interactive)
+  ;; Get the jira ticket number
+  (save-excursion
+    (save-restriction
+      (let* ((jira-ticket (or (org-entry-get (car org-clock-history) "JIRA-TICKET" t)
+                              (read-string "JIRA Ticket: ")))
+             (jira-title  (or (org-entry-get (car org-clock-history) "JIRA-TITLE" t) "Unknown"))
+             (task-title  (progn
+                            (org-goto-marker-or-bmk (car org-clock-history))
+                            (org-element-property ':title (org-element-at-point))))
+             (task-time-seconds (and org-clock-start-time (round (- (org-float-time) (org-float-time org-clock-start-time))))))
+        (cond
+         ;; We don't care about less than five minutes
+         ((< task-time-seconds 300) t)
+         ;; No ticket - so can't post
+         ((not jira-ticket) (message "No JIRA Ticket - time lost"))
+         (t (jiralib-add-worklog jira-ticket
+                                 (jiralib-format-datetime)
+                                 task-time-seconds
+                                 (read-string (format "JIRA: [%s:%s] (%dm): " jira-ticket jira-title (/ task-time-seconds 60))
+                                              task-title))))))))
+
+(defun spectral-recompute-clock-sum ()
+  "Recomputes the clock sum time for the projects buffer."
+  (org-align-all-tags)
+  (save-window-excursion
+    ;; Is there a better way to find this buffer? Seems... clumsy
+    (switch-to-buffer "projects.org")
+    (goto-char 1)
+    (org-clock-sum (org-read-date nil nil "-21d") (org-read-date nil nil "now"))
+    (message "Recomputed clocks for projects.org")))
+
+(put 'narrow-to-region 'disabled nil)
+
+;; TODO: Is there a way to get this into use-package?
+;;(load-file "modeline.el")
 (require 'local-config "~/.emacs.d/local-config.el")
 
 ;;; init.el ends here
