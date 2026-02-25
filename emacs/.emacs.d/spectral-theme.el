@@ -80,6 +80,7 @@
 (defconst spectral-green-11 "#002f00")
 (defconst spectral-green-12 "#001d00")
 
+(defconst spectral-springgreen-00 "#8affc9")
 (defconst spectral-springgreen-01 "#8affc9")
 (defconst spectral-springgreen-02 "#35f093")
 (defconst spectral-springgreen-03 "#1bd97a")
@@ -251,13 +252,13 @@
 
 (defun eej/project-hash-value ()
   "Return an integer that is a distinct value for where this project is located."
-  (let* ((project-dir (nth 2 (project-current nil (file-truename default-directory))))
-         (project-hash (string-to-number (md5 (concat (system-name) project-dir)) 16)))
-    project-hash))
+  (when-let* ((current-project (project-current nil (file-truename default-directory)))
+              (project-dir (project-root current-project)))
+    (string-to-number (md5 (concat (system-name) project-dir)) 16)))
 
 (defun eej/modify-modeline-face ()
   "Modifies the modeline face for the git project name based on a hash value."
-  (let ((hash (eej/project-hash-value)))
+  (when-let ((hash (eej/project-hash-value)))
     (face-remap-add-relative 'spectral-modeline-project-branch-face
                              `(:foreground ,(eej/create-color-name hash 0)
                                            :background ,(eej/create-color-name (/ hash 7) 8)))))
@@ -348,10 +349,15 @@
  ;; Rename these to spectral
  `(spectral-modeline-saved-face ((t (:foreground ,spectral-green-01))))
  `(spectral-modeline-modified-face ((t (:foreground ,spectral-red-06))))
+ `(spectral-modeline-kbd-macro-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-07 :bold t))))
+ `(spectral-modeline-narrow-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-09 :bold t))))
  `(spectral-modeline-project-branch-face ((t (:foreground ,spectral-magenta-04))))
  `(spectral-modeline-buffer-identification-face ((t :foreground ,spectral-background-00 :background ,spectral-foreground-00 :bold t)))
  `(spectral-modeline-org-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-green-09 :italic t)))
+ `(spectral-modeline-org-task-inactive-face ((t :foreground ,spectral-foreground-05 :background ,spectral-background-03 :italic t)))
  `(spectral-modeline-org-no-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-red-08)))
+ `(spectral-modeline-org-no-task-inactive-face ((t :foreground ,spectral-foreground-16 :background ,spectral-background-03)))
+ `(spectral-modeline-inactive-face ((t (:foreground ,spectral-foreground-20))))
 
  ;; Not reviewed or verified
  `(compilation-column-number ((t (:foreground ,spectral-yellow-01))))

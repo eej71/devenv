@@ -41,7 +41,7 @@ case "$EEJ_PROFILE" in
         function ed { TERM=xterm-256color emacsclient -nw $@; }
         function xed { emacsclient -n -c --frame-parameters="((width . 170)(height . 40)(top . 10)(left . 10))" $@ 2> /dev/null; }
         function ted { emacsclient -n -c --frame-parameters="((width . 170)(height . 40)(top . 10)(left . 10))" $@ 2> /dev/null; }
-        xset r rate 350 60 # Defines the faster repeat rate for X11
+        #xset r rate 350 60 # Defines the faster repeat rate for X11
         ;;
 
     *)
@@ -62,13 +62,34 @@ export VISUAL='emacsclient -nw'
 # This is required for tree-sitter
 LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
-export HISTCONTROL=erasedups
-export HISTIGNORE="&:ls:[bf]g:exit"
-export HISTSIZE=100000
-export HISTFILESIZE=100000
-export PROMPT_DIRTRIM=4
-export PROMPT_COMMAND="history -a ; history -c ; history -r; $PROMPT_COMMAND"
-export PATH=~/tmux/:~/cgdb/cgdb/:$PATH
+
+HISTCONTROL=ignoredups:erasedups
+HISTIGNORE="&:ls:[bf]g:exit"
+HISTSIZE=1000000
+HISTFILESIZE=1000000
+
+PROMPT_DIRTRIM=4
+# Keep shell histories shared across concurrent sessions.
+# - history -a: append this shell's new entries to $HISTFILE
+# - history -n: read entries added by other shells
+eej_history_sync() {
+    builtin history -a
+    builtin history -n
+}
+
+case ";${PROMPT_COMMAND};" in
+    *";eej_history_sync;"*) ;;
+    ";;") PROMPT_COMMAND="eej_history_sync" ;;
+    *) PROMPT_COMMAND="eej_history_sync;${PROMPT_COMMAND}" ;;
+esac
+
+# Up/Down search history by current prefix, newest match first.
+bind "\"\e[A\": history-search-backward"
+bind "\"\e[B\": history-search-forward"
+bind "\"\eOA\": history-search-backward"
+bind "\"\eOB\": history-search-forward"
+
+export PATH=~/tmux/:${PATH}
 export PATH
 export TERM=xterm-256color
 
@@ -82,3 +103,16 @@ export LS_COLORS='rs=0:di=01;96:ln=01;95:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;
 ## \033[38;5;XYZm is a foreground color
 PS1='\[\033[48;5;19m\]\[\033[38;5;255m\]\[$(tput smul)\]\w\[$(tput rmul)\]$(__git_ps1)\[\e[0m\] > '
 export QT_GRAPHICSSYSTEM=native
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Undo the silliness of any corporate proxy settings
+unset HTTP_PROXY
+unset HTTPS_PROXY
+unset http_proxy
+unset https_proxy
+unset FTP_PROXY
+unset ftp_proxy
+export PATH="$HOME/.claude/bin:$HOME/.local/bin:$PATH"

@@ -4,9 +4,12 @@
 ;;; Mode line
 
 (require 'project)
-(require 'vc-git)
-(require 'org)
-(require 'org-clock)
+(require 'vc)
+
+(declare-function org-duration-from-minutes "org-duration" (minutes))
+(declare-function org-clock-get-clocked-time "org-clock" ())
+(defvar org-clock-current-task)
+(defvar org-clock-heading)
 
 ;; other things to add in to this
 ;;
@@ -35,6 +38,14 @@
 
 (defface spectral-modeline-saved-face nil
   "Face used to highlight when the file is saved."
+  :group 'spectral-modeline-faces)
+
+(defface spectral-modeline-kbd-macro-face nil
+  "Face for keyboard macro recording indicator."
+  :group 'spectral-modeline-faces)
+
+(defface spectral-modeline-narrow-face nil
+  "Face for narrowing indicator."
   :group 'spectral-modeline-faces)
 
 (defface spectral-modeline-project-branch-face nil "Face for project:branch."  :group 'spectral-modeline-faces)
@@ -79,8 +90,15 @@
     "-" )))
 
 (defun spectral-modeline-git-name ()
-  "Return the current branch name - assumes git."
-  (vc-git--symbolic-ref (buffer-file-name)))
+  "Return the current branch name for Git."
+  (when-let* ((file (or buffer-file-name default-directory))
+              (backend (vc-responsible-backend file t))
+              ((eq backend 'Git))
+              (vc-mode-line-string
+               (ignore-errors (vc-call-backend backend 'mode-line-string file))))
+    (if (string-match "\\`\\s-*Git[:-]\\(.+\\)\\'" vc-mode-line-string)
+        (match-string 1 vc-mode-line-string)
+      vc-mode-line-string)))
 
 (defun spectral-modeline--compute-project-branch-face (project)
   "Return the face for this particular `PROJECT` branch."
@@ -90,7 +108,7 @@
   "Return the text and face for the project-branch based on ACTIVE."
   (if (and buffer-file-name (project-current nil (file-truename default-directory)))
       (let ((project-name (spectral-modeline-project-name)))
-        (let ((retval (format "{%s:%s}" project-name (spectral-modeline-git-name))))
+        (let ((retval (format "{%s:%s}" project-name (or (spectral-modeline-git-name) "-"))))
           (if active
               (propertize retval 'face (spectral-modeline--compute-project-branch-face project-name))
             retval)))
@@ -163,12 +181,12 @@
 (require 'flymake)
 (defun eej-buffer--flymake-state (active)
   "Return flymake counters - but only for `prog-mode' related buffer and ACTIVE."
-  (if (not (derived-mode-p 'prog-mode))
+  (if (or (not active)
+          (not (derived-mode-p 'prog-mode))
+          (not (bound-and-true-p flymake-mode)))
       nil
-    (if active
-        (append (flymake--mode-line-exception)
-                (flymake--mode-line-counters))
-      nil)))
+    (list flymake-mode-line-exception
+          flymake-mode-line-counters)))
 
 (defvar-local eej-flymake-state-active '(:eval (eej-buffer--flymake-state t)))
 (defvar-local eej-flymake-state-inactive '(:eval (eej-buffer--flymake-state nil)))
@@ -201,6 +219,15 @@
   (put construct 'risky-local-variable t))
 
 ;;; Code:
+(defvar spectral-modeline-format-active nil
+  "Modeline layout to use for the selected window.")
+
+(defvar spectral-modeline-format-inactive nil
+  "Modeline layout to use for unselected windows.")
+
+(defvar spectral-modeline-format nil
+  "Single modeline entry that selects active/inactive layout per window.")
+
 (setq spectral-modeline-format-active
       '("%e" ;; out of memory condition, which is never used
         spectral-modeline-kbd-macro-active
@@ -228,12 +255,12 @@
 
 (setq spectral-modeline-format-inactive
       '("%e" ;; out of memory condition, which is never used
-        spectral-modeline-kbd-macro-active
-        spectral-modeline-narrow-active
+        spectral-modeline-kbd-macro-inactive
+        spectral-modeline-narrow-inactive
 
-        eej-buffer-pos-active
-        eej-buffer-read-state-active
-        spectral-modeline-project-branch-active
+        eej-buffer-pos-inactive
+        eej-buffer-read-state-inactive
+        spectral-modeline-project-branch-inactive
 
         " "
         spectral-modeline-buffer-identification-inactive
@@ -250,17 +277,25 @@
         eej-flymake-state-inactive
         ))
 
+(setq spectral-modeline-format
+      '(:eval
+        (if (mode-line-window-selected-p)
+            spectral-modeline-format-active
+          spectral-modeline-format-inactive)))
 
-(setq-default mode-line-format 'spectral-modeline-format-active)
+(defun eej-modeline-restore-default ()
+  "Restore the custom modeline defaults after startup."
+  ;; Clean up older per-buffer locals created by legacy hook-based switching.
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (when (and (local-variable-p 'mode-line-format)
+                 (memq mode-line-format
+                       (list spectral-modeline-format-active
+                             spectral-modeline-format-inactive)))
+        (kill-local-variable 'mode-line-format))))
+  (setq-default mode-line-format (list spectral-modeline-format))
+  (force-mode-line-update t))
 
-(defun eej-set-modeline-format ()
-  "Set the modeline format based on whether its active or inactive."
-  (mapc
-   (lambda (window)
-     (with-current-buffer (window-buffer window)
-       (if (eq window (selected-window))
-           (setq mode-line-format spectral-modeline-format-active)
-         (setq mode-line-format spectral-modeline-format-inactive))))
-   (window-list)))
-(add-hook 'buffer-list-update-hook #'eej-set-modeline-format)
+(add-hook 'after-init-hook #'eej-modeline-restore-default)
+(eej-modeline-restore-default)
 (provide 'modeline)

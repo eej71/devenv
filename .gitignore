@@ -6,3 +6,9 @@ config/.config
 
 # Local customization files
 emacs/.emacs.d/local-config.el
+
+# eca - editor code assistant
+emacs/.emacs.d/eca
+
+# Seems to keep local cookies here?
+emacs/.emacs.d/url

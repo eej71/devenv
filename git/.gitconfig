@@ -28,10 +28,6 @@
 [difftool "meld"]
        cmd = meld "$LOCAL" "$REMOTE"
 
-[user]
-       name = Eric Johnson
-       email = johnson.eric@gmail.com
-
 [branch "master"]
 	rebase = true
 
@@ -91,10 +87,12 @@
         autocorrect = 10
 
 [credential]
-	helper = manager-core
+	helper = cache --timeout=3600
 
 [merge]
 	conflictstyle = diff3
 
 [branch]
         sort = -committerdate
+[grep]
+	lineNumber = true
