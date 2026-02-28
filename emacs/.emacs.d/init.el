@@ -127,19 +127,13 @@
 (require 'ai-tools)                ; copilot, gptel, agent-shell
 (require 'org-custom)              ; org mode & org-jira
 
-;; Load custom.el after modules so the theme is available
-(when (file-exists-p custom-file)
-  (load custom-file))
-
-;; ── General defaults ────────────────────────────────────────────────────
-(global-auto-revert-mode t)
-(setq fill-column 120
-      tab-always-indent 'complete
-      completion-cycle-threshold 3)
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
-(put 'compilation-search-path 'safe-local-variable 'string-or-null-p)
+  (add-hook 'org-mode-hook #'spectral-org-setup)
+  (add-hook 'org-clock-out-hook #'spectral-recompute-clock-sum)
+  (add-hook 'org-mode-hook #'visual-line-mode)
+  (add-hook 'org-shiftup-final-hook #'windmove-up)
+  (add-hook 'org-shiftleft-final-hook #'windmove-left)
+  (add-hook 'org-shiftdown-final-hook #'windmove-down)
+  (add-hook 'org-shiftright-final-hook #'windmove-right)
 
 ;; Don't grab mouse events in terminal Emacs (keeps Windows Terminal selection working)
 ;; TODO: This should be put into something more generic for frame creation
@@ -658,6 +652,15 @@
   (add-to-list 'copilot-major-mode-alist '(c-ts-mode   . "c"))
 
   (setq copilot-indent-offset-warning-disable t))
+(use-package visual-fill-column
+  :ensure t
+  :hook (org-mode . visual-fill-column-mode)
+  :custom
+  (visual-fill-column-width 150)
+  (visual-fill-column-enable-sensible-window-split t)
+  :config
+  (add-hook 'visual-fill-column-mode-hook #'visual-line-mode))
+
 ;; Not sure what these are for or if we need them
 ;; `vertico-previous'.
 ;;(keymap-set vertico-map "M-q" #'vertico-quick-insert)
