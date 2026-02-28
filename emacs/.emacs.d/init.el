@@ -757,5 +757,110 @@
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
 (require 'local-config "~/.emacs.d/local-config.el")
+(defun eej/copilot-chat--get-property (prop)
+  "Extract a #+PROPERTY: PROP value from the current buffer."
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward
+           (concat "^#\\+PROPERTY:\\s-+" (regexp-quote prop) "\\s-+\\(.+\\)$")
+           nil t)
+      (string-trim (match-string 1)))))
 
-;;; init.el ends here
+(defun eej/copilot-chat--get-date ()
+  "Extract the #+DATE: value from the current buffer.
+Returns the inner timestamp string, e.g. \"2026-02-27 Fri 16:34\"."
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward
+           "^#\\+DATE:\\s-+\\[\\([^]]+\\)\\]" nil t)
+      (string-trim (match-string 1)))))
+
+(defun eej/copilot-chat--compute-filename ()
+  "Compute a unique filename for the current Copilot chat buffer.
+Uses SESSION_DIR and DATE properties to build the name."
+  (let* ((session-dir (eej/copilot-chat--get-property "SESSION_DIR"))
+         (date-str    (eej/copilot-chat--get-date))
+         (dir         "~/org/chats/"))
+    (when (and session-dir date-str)
+      ;; Convert session dir: /home/WORKNAME/ejohnson/fubar/ -> _home_WORKNAME_ejohnson_fubar_
+      (let* ((dir-part (replace-regexp-in-string "/" "_" session-dir))
+             ;; Remove leading/trailing underscores for cleanliness
+             (dir-part (replace-regexp-in-string "\\`_+" "" dir-part))
+             (dir-part (replace-regexp-in-string "_+\\'" "" dir-part))
+             ;; Parse date: "2026-02-27 Fri 16:34" -> "2026_02_27_16_34"
+             (date-part (when (string-match
+                               "\\([0-9]\\{4\\}\\)-\\([0-9]\\{2\\}\\)-\\([0-9]\\{2\\}\\)\\s-+[A-Za-z]+\\s-+\\([0-9]\\{2\\}\\):\\([0-9]\\{2\\}\\)"
+                               date-str)
+                          (concat (match-string 1 date-str) "_"
+                                  (match-string 2 date-str) "_"
+                                  (match-string 3 date-str) "_"
+                                  (match-string 4 date-str) "_"
+                                  (match-string 5 date-str)))))
+        (when (and dir-part date-part)
+          (unless (file-directory-p dir)
+            (make-directory dir t))
+          (concat dir date-part "__" dir-part ".org"))))))
+
+(defun eej/copilot-chat-save-buffer ()
+  "Save the current buffer if it is a Copilot chat buffer."
+  (when (string-match-p "\\`\\*Copilot" (buffer-name))
+    (let ((filename (eej/copilot-chat--compute-filename)))
+      (when filename
+        (write-region (point-min) (point-max) filename nil 'quiet)
+        (message "Copilot chat saved to %s" filename)))))
+
+(defun eej/copilot-chat-auto-save-all ()
+  "Auto-save all Copilot chat buffers."
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (eej/copilot-chat-save-buffer))))
+
+;; --- Hook: save on buffer kill ---
+(defun eej/copilot-chat-kill-hook ()
+  "Save Copilot chat buffer before it is killed."
+  (eej/copilot-chat-save-buffer))
+
+(add-hook 'kill-buffer-hook #'eej/copilot-chat-kill-hook)
+
+;; --- Timer: save every 10 minutes ---
+(defvar eej/copilot-chat-save-timer nil
+  "Timer for periodic Copilot chat auto-save.")
+
+(when (timerp eej/copilot-chat-save-timer)
+  (cancel-timer eej/copilot-chat-save-timer))
+
+(setq eej/copilot-chat-save-timer
+      (run-with-timer 600 600 #'eej/copilot-chat-auto-save-all))
+
+(require 'org-id)
+(setq org-id-method 'ts)
+
+;; 1. Session metadata — advise buffer creation
+(defun eej/copilot-chat-insert-session-metadata (buffer)
+  "Insert session metadata at the top of BUFFER if freshly created."
+  (when (buffer-live-p buffer)
+    (with-current-buffer buffer
+      (when (and (derived-mode-p 'org-mode)
+                 (save-excursion
+                   (goto-char (point-min))
+                   (not (looking-at-p "#\\+TITLE:"))))
+        (save-excursion
+          (goto-char (point-min))
+          (let* ((dir (or default-directory "unknown"))
+                 (branch (string-trim
+                          (shell-command-to-string
+                           (format "git -C %s rev-parse --abbrev-ref HEAD 2>/dev/null"
+                                   (shell-quote-argument dir)))))
+                 (timestamp (format-time-string "[%Y-%m-%d %a %H:%M]")))
+            (insert (format "#+TITLE: Copilot Chat Session\n"))
+            (insert (format "#+DATE: %s\n" timestamp))
+            (insert (format "#+PROPERTY: SESSION_DIR %s\n" dir))
+            (insert (format "#+PROPERTY: GIT_BRANCH %s\n"
+                            (if (string-empty-p branch) "N/A" branch)))
+            (insert "\n")))))))
+
+(advice-add 'copilot-chat--org-get-buffer :filter-return
+            (lambda (buffer)
+              (eej/copilot-chat-insert-session-metadata buffer)
+              buffer))
+
