@@ -652,6 +652,14 @@
   (add-to-list 'copilot-major-mode-alist '(c-ts-mode   . "c"))
 
   (setq copilot-indent-offset-warning-disable t))
+
+(use-package copilot-chat
+  :straight (:host github :repo "chep/copilot-chat.el" :files ("*.el"))
+  :after (request org markdown-mode)
+  :config
+  (setq copilot-chat-default-model "claude-opus-4.6")
+  )
+
 (use-package visual-fill-column
   :ensure t
   :hook (org-mode . visual-fill-column-mode)
