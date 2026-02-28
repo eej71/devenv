@@ -864,3 +864,43 @@ Uses SESSION_DIR and DATE properties to build the name."
               (eej/copilot-chat-insert-session-metadata buffer)
               buffer))
 
+;; 2. Per-heading IDs — advise format-data
+(defun eej/copilot-chat-add-heading-id (orig-fn instance content type)
+  "Advise `copilot-chat--org-format-data' to inject :ID: property drawers."
+  (let ((data (funcall orig-fn instance content type)))
+    (cond
+     ;; User prompt heading
+     ((eq type 'prompt)
+      (let ((id (org-id-new)))
+        (replace-regexp-in-string
+         (regexp-quote (format-time-string "*[%T]* You\n"))
+         (format-time-string (concat "*[%T]* You\n"
+                                     ":PROPERTIES:\n"
+                                     ":ID: " id "\n"
+                                     ":END:\n"))
+         data t t)))
+     ;; First word of answer (heading is generated)
+     ((copilot-chat-first-word-answer instance)
+      ;; first-word-answer was JUST set to nil by orig-fn,
+      ;; but the heading was generated in this call
+      (when (string-match (concat ":" copilot-chat--org-answer-tag ":\n") data)
+        (let ((id (org-id-new)))
+          (replace-regexp-in-string
+           (concat ":" copilot-chat--org-answer-tag ":\n")
+           (format ":%s:\n:PROPERTIES:\n:ID: %s\n:END:\n"
+                   copilot-chat--org-answer-tag id)
+           data t t))))
+     (t data))))
+
+(advice-add 'copilot-chat--org-format-data :around
+            #'eej/copilot-chat-add-heading-id)
+
+(defun eej-copilot-chat-faces ()
+  "Make user/AI headings visually distinct in copilot-chat."
+  (when (string-match-p "Copilot Chat" (buffer-name))
+    (face-remap-add-relative 'org-level-1
+                             '(:inverse-video t :weight bold))
+    (face-remap-add-relative 'org-level-2
+                             '(:weight semi-bold :foreground "gray70"))))
+
+(add-hook 'org-mode-hook #'eej-copilot-chat-faces)
