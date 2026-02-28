@@ -632,6 +632,32 @@
 (use-package eca :straight t)
 (use-package agent-shell :ensure t)
 
+(use-package buttercup :straight t)
+
+(use-package copilot
+  :vc (:url "https://github.com/copilot-emacs/copilot.el"
+       :branch "main"
+       :rev :newest)
+
+  :bind (:map copilot-mode-map
+         ("M-/" . copilot-complete)
+         :map copilot-completion-map
+         ("C-<return>" . copilot-accept-completion)
+         ("C-g" . copilot-clear-overlay)
+         ("M-n" . copilot-next-completion)
+         ("M-p" . copilot-previous-completion)
+         ;;("M-f" . copilot-accept-completion-by-word)
+         ;;("M-e" . copilot-accept-completion-by-line)
+         )
+
+  :hook (prog-mode . copilot-mode)
+
+  :config
+  ;; Map major-mode (symbol) -> Copilot language id (string)
+  (add-to-list 'copilot-major-mode-alist '(c++-ts-mode . "cpp"))
+  (add-to-list 'copilot-major-mode-alist '(c-ts-mode   . "c"))
+
+  (setq copilot-indent-offset-warning-disable t))
 ;; Not sure what these are for or if we need them
 ;; `vertico-previous'.
 ;;(keymap-set vertico-map "M-q" #'vertico-quick-insert)
