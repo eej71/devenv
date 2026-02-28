@@ -70,12 +70,15 @@ export VISUAL='emacsclient -nw'
 # This is required for tree-sitter
 LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
-export HISTCONTROL=erasedups
-export HISTIGNORE="&:ls:[bf]g:exit"
-export HISTSIZE=100000
-export HISTFILESIZE=100000
-export PROMPT_DIRTRIM=4
-export PROMPT_COMMAND="history -a ; history -c ; history -r; $PROMPT_COMMAND"
+
+HISTCONTROL=ignoredups:erasedups
+HISTIGNORE="&:ls:[bf]g:exit"
+HISTSIZE=1000000
+HISTFILESIZE=1000000
+
+PROMPT_DIRTRIM=4
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} history -a; history -n"
+
 export PATH=~/tmux/:${PATH}
 export PATH
 export TERM=xterm-256color
