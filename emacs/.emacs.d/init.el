@@ -278,8 +278,6 @@
   "Modifications to the git commit buffer."
   (setq-local fill-column 120))
 
-;; (use-package git-commit)
-
 ;; Normally I would add this with the :hook mechanism, but it didn't work with git-commit?
 ;;(add-hook 'git-commit-setup-hook #'spectral-git-commit-setup)
 
