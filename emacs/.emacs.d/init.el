@@ -44,7 +44,11 @@
 
 (straight-use-package 'use-package)
 
-(add-to-list 'straight-built-in-pseudo-packages 'jsonrpc)
+(defun spectral-org-setup ()
+  "Initialize our org mode buffers."
+  (turn-on-font-lock)
+  (org-indent-mode t)
+  (whitespace-mode -1))
 
 ;; Load Org from straight before any module can pull in the built-in Org.
 (straight-use-package
@@ -52,17 +56,58 @@
 (require 'org)
 (require 'org-clock)
 
-(defun spectral--org-from-straight-p (path)
-  "Return non-nil when PATH points at straight-managed Org."
-  (and path
-       (string-match-p "/straight/\\(repos\\|build\\)/org/" path)))
+;; TODO: consult-org-heading or consult-org-agenda
+(use-package org
+  ;; It's necessary to place everything in :config otherwise org mode loading is sad
+  :init
+  (setq org-replace-disputed-keys t)
+  :config
+  (setq org-adapt-indentation t
+        org-agenda-block-separator ""
+        org-agenda-files '("~/org/projects.org")
+        org-agenda-log-mode-add-notes nil
+        org-agenda-log-mode-items '(clock)
+        org-agenda-prefix-format '((agenda . "  %-12:c%?-12t% s")
+                                   (timeline . "  % s")
+                                   (todo . "  %-12:c")
+                                   (tags . "  %-12:c")
+                                   (search . "  %-12:c"))
+        org-agenda-remove-tags t
+        org-agenda-sorting-strategy  '((agenda habit-down time-up priority-down category-keep)
+                                       (todo todo-state-down priority-down category-keep)
+                                       (tags priority-down category-keep)
+                                       (search category-keep))
+        org-agenda-start-with-clockreport-mode t
+        org-agenda-tags-column 150
+        org-agenda-time-grid '((daily today require-timed) ""
+                               (500 800 900 930 1000 1030 1100 1130 1200 1300 1330 1400 1430 1500 1530 1600 1630 1700 1800))
 
-(defun spectral-assert-straight-org ()
-  "Warn when loaded Org is not sourced from straight."
-  (let ((org-source (or (symbol-file 'org-mode)
-                        (locate-library "org"))))
-    (unless (spectral--org-from-straight-p org-source)
-      (warn "Org not loaded from straight: %s" org-source))))
+        org-babel-load-languages '((emacs-lisp . t) (sql . t))
+        org-checkbox-hierarchical-statistics nil
+        org-clock-history-length 25
+        org-clock-in-switch-to-state "STARTED"
+        org-clock-into-drawer t
+        org-clock-mode-line-total 'today
+        org-clock-out-remove-zero-time-clocks t
+        org-clock-persist t
+        org-clock-persist-file "~/org/org-clock-save.el"
+        org-clock-sound t
+        org-columns-default-format "%100ITEM %TODO %TAGS"
+        org-deadline-warning-days 3
+        org-directory "~/org"
+        org-default-notes-file (concat org-directory "/notes.org")
+        org-enforce-todo-dependencies t
+        org-hide-leading-stars t
+        org-log-done 'time
+        org-log-into-drawer t
+        org-log-note-clock-out nil
+        org-outline-path-complete-in-steps nil
+        org-refile-use-outline-path 4
+        org-return-follows-link t
+        org-reverse-note-order t
+        org-startup-indented t
+        org-tags-column 120
+        org-tags-match-list-sublevels t
 
 (spectral-assert-straight-org)
 
@@ -593,19 +638,6 @@
 ;; `vertico-previous'.
 ;;(keymap-set vertico-map "M-q" #'vertico-quick-insert)
 ;;(keymap-set vertico-map "C-q" #'vertico-quick-exit)
-
-;; Can this be moved into the org specific configs?
-(defvar eej-org-mode-map (make-sparse-keymap) "Keymap for 'eej-org-mode-map'.")
-(define-minor-mode eej-org-mode
-  "A minor mode to bring the shift arrows keys with windmove mode active."
-  :init-value nil
-  :keymap eej-org-mode-map)
-
-(define-key eej-org-mode-map (kbd "S-<down>") #'org-shiftdown)
-(define-key eej-org-mode-map (kbd "S-<left>") #'org-shiftleft)
-(define-key eej-org-mode-map (kbd "S-<right>") #'org-shiftright)
-(define-key eej-org-mode-map (kbd "S-<up>") #'org-shiftup)
-
 
 ;;; CODE:
 (defun eej/find-stuck-projects ()
