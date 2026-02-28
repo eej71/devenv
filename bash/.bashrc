@@ -97,12 +97,3 @@ export QT_GRAPHICSSYSTEM=native
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Undo the silliness of any corporate proxy settings
-unset HTTP_PROXY
-unset HTTPS_PROXY
-unset http_proxy
-unset https_proxy
-unset FTP_PROXY
-unset ftp_proxy
-export PATH="$HOME/.claude/bin:$HOME/.local/bin:$PATH"
