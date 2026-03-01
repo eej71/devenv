@@ -21,9 +21,6 @@
 (defvar eej/copilot-chat-save-timer nil
   "Timer for periodic Copilot chat auto-save.")
 
-(defvar-local eej/copilot-chat-filename nil
-  "Deterministic filename for persisting this Copilot chat buffer.")
-
 (defun eej/start-codex ()
   "Open Codex CLI in ~/fubar (empty dir)."
   (interactive)
@@ -83,17 +80,11 @@
             (make-directory save-dir t))
           (expand-file-name (concat date-part "__" dir-part ".org") save-dir))))))
 
-(defun eej/copilot-chat--ensure-filename ()
-  "Ensure and return this buffer's persistent Copilot chat filename."
-  (unless eej/copilot-chat-filename
-    (setq-local eej/copilot-chat-filename (eej/copilot-chat--compute-filename)))
-  eej/copilot-chat-filename)
-
 (defun eej/copilot-chat-save-buffer ()
   "Save the current buffer if it is a Copilot chat buffer."
   (when (and (derived-mode-p 'org-mode)
              (string-match-p "\\`\\*Copilot" (buffer-name)))
-    (when-let ((filename (eej/copilot-chat--ensure-filename)))
+    (when-let ((filename (eej/copilot-chat--compute-filename)))
       (write-region (point-min) (point-max) filename nil 'quiet))))
 
 (defun eej/copilot-chat-auto-save-all ()
@@ -141,11 +132,6 @@
 (defun eej/copilot-chat--insert-session-metadata-advice (buffer)
   "Advice helper that inserts session metadata in BUFFER."
   (eej/copilot-chat-insert-session-metadata buffer)
-  (with-current-buffer buffer
-    (when (and (derived-mode-p 'org-mode)
-               (string-match-p "\\`\\*Copilot" (buffer-name)))
-      (eej/copilot-chat--ensure-filename)
-      (add-hook 'kill-buffer-hook #'eej/copilot-chat-kill-hook nil t)))
   buffer)
 
 (defun eej/copilot-chat-add-heading-id (orig-fn instance content type)
@@ -184,8 +170,8 @@
   "Enable Copilot Chat local extensions."
   (require 'org-id)
   (setq org-id-method 'ts)
+  (add-hook 'kill-buffer-hook #'eej/copilot-chat-kill-hook)
   (add-hook 'org-mode-hook #'eej-copilot-chat-faces)
-  (add-hook 'org-store-link-functions #'eej/org-store-link-for-copilot-chat 0)
   (unless (advice-member-p #'eej/copilot-chat--insert-session-metadata-advice
                            'copilot-chat--org-get-buffer)
     (advice-add 'copilot-chat--org-get-buffer :filter-return
@@ -196,16 +182,5 @@
                 #'eej/copilot-chat-add-heading-id))
   (eej/copilot-chat--start-save-timer))
 
-(defun eej/org-store-link-for-copilot-chat ()
-  "Store an Org link for Copilot chat buffers."
-  (when (and (derived-mode-p 'org-mode)
-             (string-match-p "\\`\\*Copilot" (buffer-name)))
-    (when-let ((filename (eej/copilot-chat--ensure-filename)))
-      (let* ((desc (format "Copilot chat: %s" (buffer-name)))
-             (link (format "file:%s" (expand-file-name filename))))
-        (org-link-store-props :type "file"
-                              :link link
-                              :description desc)
-        link))))
-
 (provide 'copilot-chat-custom)
+;;; copilot-chat-custom.el ends here

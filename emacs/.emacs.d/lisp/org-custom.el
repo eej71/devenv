@@ -6,6 +6,8 @@
 
 ;;; Code:
 
+(require 'seq)
+
 (defun spectral-org-setup ()
   "Initialize our org mode buffers."
   (turn-on-font-lock)
@@ -27,160 +29,35 @@ This cleans up my todo sorting."
   (goto-char (point-min))
   (forward-line (max 0 (1- (string-to-number search-string)))))
 
-(defun eej/org--subtree-end ()
-  "Return the end position of the current subtree."
-  (save-excursion
-    (org-back-to-heading t)
-    (org-end-of-subtree t t)))
-
-(defun eej/org--next-heading-or-eob ()
-  "Return next heading position, or end of buffer when no heading remains."
-  (save-excursion
-    (or (outline-next-heading) (point-max))))
-
-(defun eej/org--future-time-p (time-value)
-  "Return non-nil when TIME-VALUE exists and is in the future."
-  (and time-value (time-less-p (current-time) time-value)))
-
-(defun eej/org--todo-scheduled-p ()
-  "Return non-nil when current TODO heading has a SCHEDULED timestamp."
-  (save-excursion
-    (org-back-to-heading t)
-    (let ((planning-end (line-end-position 2)))
-      (forward-line 1)
-      (re-search-forward org-scheduled-time-regexp planning-end t))))
-
-(defun eej/org--project-descendant-flags ()
-  "Return (HAS-FINAL . HAS-ACTIVE) for descendants in current subtree."
-  (save-excursion
-    (org-back-to-heading t)
-    (let ((subtree-end (eej/org--subtree-end))
-          has-final
-          has-active
-          state)
-      (when (org-goto-first-child)
-        (while (and (< (point) subtree-end)
-                    (not (and has-final has-active)))
-          (setq state (org-get-todo-state))
-          (cond
-           ((or (equal state "DONE") (equal state "CNCL"))
-            (setq has-final t))
-           ((or (equal state "STARTED")
-                (equal state "WAITING")
-                (equal state "NEXT"))
-            (setq has-active t))
-           ((and (equal state "TODO")
-                 (eej/org--todo-scheduled-p))
-            (setq has-active t)))
-          (outline-next-heading)))
-      (cons has-final has-active))))
-
-(defun eej/org--subtree-has-descendant-project-p ()
-  "Return non-nil when subtree has a descendant TODO with a final descendant.
-
-This is used to keep only the bottom-most stuck project in a TODO lineage."
-  (save-excursion
-    (org-back-to-heading t)
-    (let ((subtree-end (eej/org--subtree-end))
-          (todo-level-stack nil)
-          state
-          level
-          found)
-      (when (org-goto-first-child)
-        (while (and (not found)
-                    (< (point) subtree-end))
-          (setq level (org-outline-level))
-          ;; Keep only TODO ancestors of the current heading.
-          (while (and todo-level-stack
-                      (>= (car todo-level-stack) level))
-            (pop todo-level-stack))
-          (setq state (org-get-todo-state))
-          (cond
-           ((equal state "TODO")
-            (push level todo-level-stack))
-           ((or (equal state "DONE") (equal state "CNCL"))
-            (when todo-level-stack
-              (setq found t))))
-          (outline-next-heading)))
-      found)))
-
-(defun eej/org--subtree-has-actionable-started-descendant-p ()
-  "Return non-nil when descendants contain actionable STARTED heading."
-  (save-excursion
-    (org-back-to-heading t)
-    (let ((subtree-end (eej/org--subtree-end))
-          found
-          scheduled)
-      (when (org-goto-first-child)
-        (while (and (not found)
-                    (re-search-forward "^[*]+[ \t]+STARTED\\_>" subtree-end t))
-          (goto-char (line-beginning-position))
-          (setq scheduled (org-get-scheduled-time (point)))
-          (setq found (not (eej/org--future-time-p scheduled)))
-          (unless found
-            (outline-next-heading))))
-      found)))
-
 (defun eej/find-stuck-projects ()
-  "Keep bottom-most TODO projects that are stuck.
+  "Find projects with at least one DONE task but no active tasks.
+A project has at least one DONE task and no child STARTED|WAITING|NEXT
+or any scheduled TODO."
+  (let ((at-least-one-action (save-excursion (org-agenda-skip-subtree-if 'todo '("STARTED" "WAITING" "NEXT"))))
+        (at-least-one-done (save-excursion (org-agenda-skip-subtree-if 'todo 'done)))
+        (at-least-one-scheduled (save-excursion (seq-some #'identity (org-map-entries #'eej/is-todo-scheduled t 'tree)))))
+    (if (and at-least-one-done (not at-least-one-action) (not at-least-one-scheduled))
+        nil
+      (or (outline-next-heading) (org-end-of-subtree t)))))
 
-Project qualification is subtree-wide (any DONE/CNCL descendant).
-Active descendants are STARTED/WAITING/NEXT, or TODO with any SCHEDULED date.
-
-When both parent and child are stuck, only the child (bottom-most) is kept.
-This skip function is intended for a `todo \"TODO\"' matcher."
-  (let* ((subtree-end (eej/org--subtree-end))
-         (state (org-get-todo-state))
-         (flags (and (equal state "TODO")
-                     (eej/org--project-descendant-flags)))
-         (has-final (car flags))
-         (has-active (cdr flags)))
-    (cond
-     ;; Safety fallback for non-TODO callers.
-     ((not flags) subtree-end)
-     ;; No final descendants means no descendant can qualify as a project.
-     (has-final
-      (cond
-       ;; Active descendants can exist on a sibling branch; keep descending.
-       (has-active (eej/org--next-heading-or-eob))
-       ;; Current is stuck but not leaf-most; keep descending to find leaf-most.
-       ((eej/org--subtree-has-descendant-project-p) (eej/org--next-heading-or-eob))
-       ;; Leaf-most stuck project: keep it.
-       (t nil)))
-     ;; No finals anywhere below: prune subtree.
-     (t subtree-end))))
+(defun eej/is-todo-scheduled ()
+  "Is this an incomplete todo with a scheduled date."
+  (let* ((element (org-element-at-point))
+         (todo-type (org-element-property :todo-type element))
+         (scheduled (org-element-property :scheduled element)))
+    (and (eq todo-type 'todo) scheduled (point))))
 
 (defun eej/find-nested-started ()
-  "Skip non-actionable review entries and non-deepest actionable STARTED entries.
-
-Review-actionable entries are:
-- TODO with SCHEDULED date that is not in the future.
-- STARTED that is not scheduled in the future.
-
-For STARTED entries, only the deepest actionable STARTED in a subtree is kept.
-This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
-  (let ((state (org-get-todo-state))
-        scheduled)
-    (cond
-     ((equal state "TODO")
-      (setq scheduled (org-get-scheduled-time (point)))
-      (if (and scheduled
-               (not (eej/org--future-time-p scheduled)))
-          nil
-        (eej/org--next-heading-or-eob)))
-     ((equal state "STARTED")
-      (setq scheduled (org-get-scheduled-time (point)))
-      (if (or (eej/org--future-time-p scheduled)
-              (eej/org--subtree-has-actionable-started-descendant-p))
-          (eej/org--next-heading-or-eob)
-        nil))
-     (t (eej/org--next-heading-or-eob)))))
-
-(defun eej/skip-future-scheduled ()
-  "Skip current heading when it is scheduled in the future."
-  (if (eej/org--future-time-p (org-get-scheduled-time (point)))
-      (eej/org--next-heading-or-eob)
-    nil))
+  "Find nested STARTED tasks.
+Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
+  (if (not (org-goto-first-child))
+      nil
+    (let ((end (save-excursion (org-end-of-subtree t))))
+      (if (re-search-forward "STARTED" end t)
+          (progn (beginning-of-line) (point))
+        (or
+         (org-agenda-skip-subtree-if 'todo '("WAITING"))
+         (seq-some #'identity (org-map-entries #'eej/is-todo-scheduled t 'tree)))))))
 
 (defun org-clocktable-indent-string (level)
   "Improve the formatting of the clocktable for a given LEVEL."
@@ -189,7 +66,28 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
       (dotimes (_ (1- level) str)
         (setq str (concat "__" str))))))
 
-
+(defun eej/post-worklog-to-jira ()
+  "Post up time to jira."
+  (interactive)
+  (save-excursion
+    (save-restriction
+      (let* ((jira-ticket (or (org-entry-get (car org-clock-history) "JIRA-TICKET" t)
+                              (read-string "JIRA Ticket: ")))
+             (jira-title  (or (org-entry-get (car org-clock-history) "JIRA-TITLE" t) "Unknown"))
+             (task-title  (progn
+                            (org-goto-marker-or-bmk (car org-clock-history))
+                            (org-element-property ':title (org-element-at-point))))
+             (task-time-seconds (if org-clock-start-time
+                                    (round (- (float-time) (float-time org-clock-start-time)))
+                                  0)))
+        (cond
+         ((< task-time-seconds 300) t)
+         ((not jira-ticket) (message "No JIRA Ticket - time lost"))
+         (t (jiralib-add-worklog jira-ticket
+                                 (jiralib-format-datetime)
+                                 task-time-seconds
+                                 (read-string (format "JIRA: [%s:%s] (%dm): " jira-ticket jira-title (/ task-time-seconds 60))
+                                              task-title))))))))
 
 (defun spectral-recompute-clock-sum ()
   "Recomputes the clock sum time for the projects buffer."
@@ -212,7 +110,6 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
   :init
   (setq org-replace-disputed-keys t)
   :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((sql . t) (emacs-lisp . t) (shell . t)))
   (setq org-adapt-indentation t
         org-agenda-block-separator ""
         org-agenda-files '("~/org/projects.org")
@@ -243,7 +140,6 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
         org-clock-persist-file "~/org/org-clock-save.el"
         org-clock-sound t
         org-columns-default-format "%100ITEM %TODO %TAGS"
-        org-confirm-babel-evaluate nil
         org-deadline-warning-days 3
         org-directory "~/org"
         org-default-notes-file (concat org-directory "/notes.org")
@@ -276,7 +172,6 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
                              (org-agenda-files . (:todo . "NEXT"))
                              (org-agenda-files . (:tag . "refile"))
                              (org-agenda-files . (:todo . "TODO"))))
-  (make-directory (file-name-directory org-clock-persist-file) t)
   (org-clock-persistence-insinuate)
   (add-hook 'org-mode-hook #'spectral-org-setup)
   (add-hook 'org-clock-out-hook #'spectral-recompute-clock-sum)
@@ -302,10 +197,10 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
   ;; (add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira)
   (let ((jira-token (or (getenv "JIRALIB_ATLASSIAN_CLOUD_TOKEN")
                         (bound-and-true-p jiralib-atlassian-cloud-token))))
-    (setq jiralib-url (getenv "JIRA_URL")
+    (setq jiralib-url "https://gtsjira.atlassian.net"
           request-log-level 'debug
           url-debug t
-          jiralib-user-login-name (getenv "EEJ_EMAIL")
+          jiralib-user-login-name "ejohnson@example.com"
           jiralib-atlassian-cloud-token jira-token
           jiralib-token (when jira-token
                           `("Authorization" . ,(format "Basic %s"
@@ -315,6 +210,7 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
 (use-package org-super-agenda)
 
 (use-package visual-fill-column
+  :ensure t
   :hook (org-mode . visual-fill-column-mode)
   :custom
   (visual-fill-column-width 150)
@@ -324,22 +220,3 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
 
 (provide 'org-custom)
 ;;; org-custom.el ends here
-
-  ;; The Problem: When you jump from the agenda to projects.org using Enter, the buffer is being visited but the org-mode-hook might not be running completely or font-lock isn't properly initialized. This is a known issue with org-mode when buffers are opened indirectly through the agenda.
-  ;; Possible causes:
-  ;;  1. org-super-agenda-mode is enabled globally (line 218 in local-config.el) which might interfere with normal org-mode buffer setup
-  ;;  2. Font-lock might not be re-enabled when jumping from agenda
-  ;;  3. The agenda might be using find-file-noselect or similar functions that don't trigger all hooks properly
-  ;; Here's what I recommend:
-  ;;  1. First, let's verify the issue - Can you check if font-lock-mode is actually enabled in the unformatted buffer? Run M-x describe-mode or check the modeline when you're in the "unformatted" projects.org buffer.
-  ;;  2. Try forcing font-lock refresh - When you see the unformatted buffer, try running M-x font-lock-fontify-buffer to see if that fixes it temporarily.
-  ;;  3. Likely fix - Add a hook to ensure font-lock is properly enabled when visiting from agenda:
-  ;;  (add-hook 'org-agenda-after-show-hook #'font-lock-fontify-buffer)
-  ;; Or more robustly, ensure the org-mode buffer is properly initialized:
-  ;;  (defun spectral-org-agenda-after-show-setup ()
-  ;;    "Ensure proper org-mode setup after showing from agenda."
-  ;;    (when (derived-mode-p 'org-mode)
-  ;;      (font-lock-mode 1)
-  ;;      (font-lock-fontify-buffer)))
-  ;;  (add-hook 'org-agenda-after-show-hook #'spectral-org-agenda-after-show-setup)
-  ;; Would you like me to add this fix to your configuration?
