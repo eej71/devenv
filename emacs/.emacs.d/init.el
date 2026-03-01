@@ -153,7 +153,14 @@
 (use-package org-jira
   ;; It's necessary to place everything in :config otherwise org jira is sad
   :config
-  (add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira))
+  ;;(add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira)
+  (setq jiralib-url "https://gtsjira.atlassian.net"
+        request-log-level 'debug
+        url-debug t
+        jiralib-user-login-name "ejohnson@example.com"
+        jiralib-atlassian-cloud-token "blarfblarf"
+        jiralib-token `("Authorization" . , (format "Basic %s" (base64-encode-string (concat jiralib-user-login-name ":" jiralib-atlassian-cloud-token) t))))
+  )
 
 (use-package org-super-agenda)
 
@@ -413,6 +420,8 @@
  '(mode-line-format
    '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification
      (vc-mode vc-mode) mode-line-modes mode-line-misc-info mode-line-end-spaces))
+ '(package-vc-selected-packages
+   '((copilot :url "https://github.com/copilot-emacs/copilot.el" :branch "main")))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(redisplay-dont-pause t t)
  '(request-curl-options '("-k"))
@@ -780,6 +789,20 @@
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
 (require 'local-config "~/.emacs.d/local-config.el")
+
+;; (defun my/log-url-request-headers ()
+;;   "Capture and log outgoing HTTP request headers."
+;;   (let ((request-start (point))
+;;         (request-end (save-excursion
+;;                        (search-forward "\r\n\r\n" nil t))))
+;;     (when request-end
+;;       (let ((headers (buffer-substring-no-properties request-start request-end)))
+;;         (with-current-buffer (get-buffer-create "*http-request-headers*")
+;;           (goto-char (point-max))
+;;           (insert "\n\n=== HTTP Request ===\n" headers "\n====================\n"))))))
+
+;; (advice-add 'url-http--insert-request :after #'my/log-url-request-headers)
+
 ;;; I'm very disappointed with codex integration - so this will likely be purged
 (defun eej/start-codex ()
   "Open Codex CLI in ~/fubar (empty dir)."
