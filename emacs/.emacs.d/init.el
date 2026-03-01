@@ -673,7 +673,7 @@
   ;; Map major-mode (symbol) -> Copilot language id (string)
   (add-to-list 'copilot-major-mode-alist '(c++-ts-mode . "cpp"))
   (add-to-list 'copilot-major-mode-alist '(c-ts-mode   . "c"))
-
+  (setq copilot-model "claude-opus-4.6")
   (setq copilot-indent-offset-warning-disable t))
 
 (use-package copilot-chat
