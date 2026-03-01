@@ -829,7 +829,7 @@ Uses SESSION_DIR and DATE properties to build the name."
     (let ((filename (eej/copilot-chat--compute-filename)))
       (when filename
         (write-region (point-min) (point-max) filename nil 'quiet)
-        (message "Copilot chat saved to %s" filename)))))
+        ))))
 
 (defun eej/copilot-chat-auto-save-all ()
   "Auto-save all Copilot chat buffers."
