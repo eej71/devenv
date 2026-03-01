@@ -959,3 +959,10 @@ Uses SESSION_DIR and DATE properties to build the name."
          (t (setq done t)))))))
 
 (global-set-key (kbd "C-c h") 'eej-resize-window-hydra)
+
+(defun eej-copilot-tab-or-indent ()
+  "Accept copilot completion if visible, otherwise indent."
+  (interactive)
+  (if (copilot--overlay-visible)
+      (copilot-accept-completion)
+    (indent-for-tab-command)))
