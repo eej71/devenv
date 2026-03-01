@@ -658,12 +658,13 @@
   :bind (:map copilot-mode-map
          ("M-/" . copilot-complete)
          :map copilot-completion-map
-         ("C-<return>" . copilot-accept-completion)
+         ("TAB" . eej-copilot-tab-or-indent)
+         ("<tab>" . eej-copilot-tab-or-indent)
          ("C-g" . copilot-clear-overlay)
          ("M-n" . copilot-next-completion)
          ("M-p" . copilot-previous-completion)
-         ;;("M-f" . copilot-accept-completion-by-word)
-         ;;("M-e" . copilot-accept-completion-by-line)
+         ("M-f" . copilot-accept-completion-by-word)
+         ("M-e" . copilot-accept-completion-by-line)
          )
 
   :hook (prog-mode . copilot-mode)
