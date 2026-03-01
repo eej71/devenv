@@ -625,6 +625,30 @@
 
 (use-package eca :straight t)
 (use-package agent-shell :ensure t)
+(straight-use-package
+ '(shell-maker :type git
+               :host github
+               :repo "xenodium/shell-maker"))
+
+(straight-use-package
+ '(acp :type git
+       :host github
+       :repo "xenodium/acp.el"))
+
+;; Ensure Emacs has the same PATH you'd use in a terminal
+(add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/home/WORKNAME/.nvm/versions/node/v20.20.0/bin/codex-acp")
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+
+;; Use login-based auth (no API key)
+;;(setq agent-shell-openai-authentication (agent-shell-openai-make-authentication :login t))
+
+;; IMPORTANT: inherit env so Codex sees HOME, PATH, cert vars, proxies, etc.
+;;(setq agent-shell-openai-codex-environment (agent-shell-make-environment-variables :inherit-env t))
+
+(use-package agent-shell
+  :straight (:host github :repo "xenodium/agent-shell"))
+
 
 (use-package buttercup :straight t)
 
