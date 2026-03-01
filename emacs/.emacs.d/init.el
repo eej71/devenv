@@ -289,8 +289,8 @@
   :config
   (ace-window-display-mode 1)
   (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)
+        aw-background t
         aw-dispatch-always t
-        aw-background nil
         aw-split-style 'fair)
   )
 
