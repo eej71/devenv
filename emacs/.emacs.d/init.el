@@ -623,8 +623,6 @@
           :key (getenv "CLAUDE_API_KEY")
           :models '(claude-sonnet-4-5-20250929))))
 
-(use-package eca :straight t)
-(use-package agent-shell :ensure t)
 (straight-use-package
  '(shell-maker :type git
                :host github
