@@ -66,28 +66,7 @@ Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
       (dotimes (_ (1- level) str)
         (setq str (concat "__" str))))))
 
-(defun eej/post-worklog-to-jira ()
-  "Post up time to jira."
-  (interactive)
-  (save-excursion
-    (save-restriction
-      (let* ((jira-ticket (or (org-entry-get (car org-clock-history) "JIRA-TICKET" t)
-                              (read-string "JIRA Ticket: ")))
-             (jira-title  (or (org-entry-get (car org-clock-history) "JIRA-TITLE" t) "Unknown"))
-             (task-title  (progn
-                            (org-goto-marker-or-bmk (car org-clock-history))
-                            (org-element-property ':title (org-element-at-point))))
-             (task-time-seconds (if org-clock-start-time
-                                    (round (- (float-time) (float-time org-clock-start-time)))
-                                  0)))
-        (cond
-         ((< task-time-seconds 300) t)
-         ((not jira-ticket) (message "No JIRA Ticket - time lost"))
-         (t (jiralib-add-worklog jira-ticket
-                                 (jiralib-format-datetime)
-                                 task-time-seconds
-                                 (read-string (format "JIRA: [%s:%s] (%dm): " jira-ticket jira-title (/ task-time-seconds 60))
-                                              task-title))))))))
+
 
 (defun spectral-recompute-clock-sum ()
   "Recomputes the clock sum time for the projects buffer."
