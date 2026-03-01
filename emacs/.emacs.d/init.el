@@ -780,6 +780,22 @@
 ;; TODO: Is there a way to get this into use-package?
 ;;(load-file "modeline.el")
 (require 'local-config "~/.emacs.d/local-config.el")
+;;; I'm very disappointed with codex integration - so this will likely be purged
+(defun eej/start-codex ()
+  "Open Codex CLI in ~/fubar (empty dir)."
+  (interactive)
+  (require 'vterm)
+  (let* ((root (expand-file-name "~/fubar"))
+         (buf (get-buffer-create "*codex*")))
+    (with-current-buffer buf
+      (setq default-directory root)
+      (unless (derived-mode-p 'vterm-mode)
+        (vterm-mode))
+      (vterm-send-string (concat "cd " (shell-quote-argument root) "\n")))
+    (pop-to-buffer buf)
+    (vterm-send-string "codex\n")))
+
+;;; 
 (defun eej/copilot-chat--get-property (prop)
   "Extract a #+PROPERTY: PROP value from the current buffer."
   (save-excursion
