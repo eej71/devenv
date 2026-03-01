@@ -63,15 +63,6 @@
 (unless (display-graphic-p)
   (corfu-terminal-mode +1))
 
-(straight-use-package
- '(corfu-doc-terminal
-   :type git
-   :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git"))
-(unless (display-graphic-p)
-  ;; This is here because corfu-popupinfo isn't really working for the terminal
-  (corfu-doc-mode +1)
-  (corfu-doc-terminal-mode +1))
-
 ;; Flymake — on-the-fly syntax checking
 (use-package flymake
   :init
