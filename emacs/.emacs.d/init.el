@@ -926,3 +926,19 @@ Uses SESSION_DIR and DATE properties to build the name."
                              '(:weight semi-bold :foreground "gray70"))))
 
 (add-hook 'org-mode-hook #'eej-copilot-chat-faces)
+
+(defun eej-resize-window-hydra ()
+  "Interactively resize window with arrow keys. Press q to quit."
+  (interactive)
+  (let ((done nil))
+    (while (not done)
+      (let ((key (read-key
+                  (format "Resize: [←] narrower [→] wider [↑] taller [↓] shorter [q]uit"))))
+        (cond
+         ((eq key 'left)  (shrink-window-horizontally 3))
+         ((eq key 'right) (enlarge-window-horizontally 3))
+         ((eq key 'down)    (enlarge-window 2))
+         ((eq key 'up)  (shrink-window 2))
+         (t (setq done t)))))))
+
+(global-set-key (kbd "C-c h") 'eej-resize-window-hydra)
