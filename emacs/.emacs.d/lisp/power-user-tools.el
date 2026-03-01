@@ -117,20 +117,6 @@
   (undo-tree-visualizer-diff t)                            ; Show diff in visualizer
   (undo-tree-visualizer-timestamps t))                     ; Show timestamps
 
-(defun eej/undo-tree-disable-history-for-bookmarks-file ()
-  "Disable persistent undo-tree history when visiting the bookmarks file."
-  (when (and (bound-and-true-p undo-tree-mode)
-             buffer-file-name
-             (string= (file-truename buffer-file-name)
-                      (file-truename
-                       (expand-file-name
-                        (if (boundp 'bookmark-default-file)
-                            bookmark-default-file
-                          (locate-user-emacs-file "bookmarks"))))))
-    (setq-local undo-tree-auto-save-history nil)))
-
-(add-hook 'find-file-hook #'eej/undo-tree-disable-history-for-bookmarks-file)
-
 ;; ── Diff-hl - Show git diff indicators in the margin ──────────────────
 ;; USAGE: Automatically shows indicators in the left margin for:
 ;;          + Green: Added lines

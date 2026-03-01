@@ -54,6 +54,7 @@
 (require 'completion-framework)    ; vertico, consult, orderless, marginalia, embark
 (require 'programming-modes)       ; treesit, corfu, flymake, formatting
 (require 'version-control)         ; magit, project
+(require 'power-user-tools)        ; advanced productivity packages (avy, expand-region, etc)
 (require 'copilot-chat-custom)     ; copilot-chat persistence & metadata
 (require 'ai-tools)                ; copilot, gptel, agent-shell
 (require 'org-custom)              ; org mode & org-jira
