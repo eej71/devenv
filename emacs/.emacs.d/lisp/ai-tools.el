@@ -75,7 +75,7 @@
            (file (format-time-string "%F-%H-%M-%S.md")))
       (expand-file-name file dir)))
 
-  (setopt agent-shell-transcript-file-path-function #'ee/agent-shell-transcript-path))
+  (setopt agent-shell-transcript-file-path-function #'eej/agent-shell-transcript-path))
 
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
