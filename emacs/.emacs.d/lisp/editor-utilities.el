@@ -44,5 +44,42 @@
   "Colorizes strings with the right color."
   (rainbow-mode 1))
 
+
+(use-package vterm
+  :straight t
+  :config
+  (setq vterm-shell "bash"))
+
+(use-package multi-vterm
+  :after vterm
+  :bind (("C-c v n" . multi-vterm)
+         ("C-c v p" . multi-vterm-prev)
+         ("C-c v N" . multi-vterm-next)))
+
+
+(require 'tramp)
+(require 'vterm)
+
+(defun eej/vterm-here ()
+  "Open vterm in `default-directory`. If remote (TRAMP), ssh to that host and cd."
+  (interactive)
+  (let* ((dir default-directory)
+         (remote (file-remote-p dir))
+         (vec (and remote (tramp-dissect-file-name dir)))
+         (host (and vec (tramp-file-name-host vec)))
+         (user (and vec (tramp-file-name-user vec)))
+         (path (and vec (tramp-file-name-localname vec)))
+         (target (if user (format "%s@%s" user host) host))
+         (bufname (if remote (format "*vterm:%s*" host) "*vterm*")))
+    (vterm bufname)
+    (when remote
+      ;; Hop into the host and land in the same directory.
+      (vterm-send-string
+       (format "ssh -t %s 'cd %s && exec $SHELL -l'"
+               target (shell-quote-argument path)))
+      (vterm-send-return))))
+
+(global-set-key (kbd "C-c t") #'eej/vterm-here)
+
 (provide 'editor-utilities)
 ;;; editor-utilities.el ends here

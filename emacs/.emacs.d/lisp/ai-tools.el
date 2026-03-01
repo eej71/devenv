@@ -12,11 +12,6 @@
   (unless (string-match-p (regexp-quote path) (or (getenv "PATH") ""))
     (setenv "PATH" (concat path ":" (or (getenv "PATH") "")))))
 
-(use-package vterm
-  :straight t
-  :config
-  (setq vterm-shell "bash"))
-
 (use-package gptel
   :straight (:host github :repo "karthink/gptel")
   :config
