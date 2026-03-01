@@ -17,7 +17,6 @@
   (magit-diff-refine-hunk 'all))
 
 (use-package project
-  :straight (:type built-in)
   :config
   (setq project-switch-commands '((consult-project-extra-find "Find file") (project-find-regexp "Find regexp")
                                   (project-find-dir "Find directory") (project-vc-dir "VC-Dir")

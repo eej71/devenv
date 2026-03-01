@@ -11,17 +11,21 @@
   (read-file-name-completion-ignore-case t)
   (read-buffer-completion-ignore-case t)
   (completion-ignore-case t)
-  (completion-styles '(orderless basic))
+  (completion-styles '(substring flex orderless basic))
   (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion))))
-  (orderless-matching-styles '(orderless-literal orderless-regexp orderless-flex)))
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+(straight-use-package '(vertico :files (:defaults "extensions/*")
+                         :includes (vertico-buffer
+                                    vertico-directory
+                                    vertico-flat
+                                    vertico-indexed
+                                    vertico-mouse
+                                    vertico-quick
+                                    vertico-repeat
+                                    vertico-reverse)))
 
 (use-package vertico
-  :straight (vertico :files (:defaults "extensions/*")
-                     :includes (vertico-directory
-                                vertico-indexed
-                                vertico-quick
-                                vertico-repeat))
   :config
   (vertico-mode t)
   (vertico-indexed-mode)
@@ -34,29 +38,14 @@
 ;; Configure directory extension.
 (use-package vertico-directory
   :after vertico
-  :straight nil
+  :ensure nil
+  ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
               ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
-
-;; Jump to a candidate by typing a two-character avy-style label.
-(use-package vertico-quick
-  :after vertico
-  :straight nil
-  :bind (:map vertico-map
-              ("M-q" . vertico-quick-jump)))
-
-;; Resume the last minibuffer session.
-(use-package vertico-repeat
-  :after vertico
-  :straight nil
-  :bind (("M-r" . vertico-repeat)
-         :map vertico-map
-         ("M-r" . vertico-repeat-next)
-         ("M-R" . vertico-repeat-previous))
-  :hook (minibuffer-setup . vertico-repeat-save))
 
 (use-package savehist
   :straight nil
@@ -64,43 +53,41 @@
   (savehist-mode))
 
 (use-package consult
-  :bind
-  ("C-x b"   . consult-buffer)
-  ("C-x r b" . consult-bookmark)
-  ("C-x r s" . consult-register-store)
-  ("C-x r j" . consult-register-load)
+  :init
+  (define-prefix-command 'eej-consult)
+  (global-set-key (kbd "C-c s") 'eej-consult)
 
-  ("M-g g"   . consult-goto-line)
-  ("M-g i"   . consult-imenu)
-  ("M-g I"   . consult-imenu-multi)
-  ("M-g o"   . consult-outline)
+  :bind
+  ("C-x b" . consult-buffer)
+  ("C-x r b" . consult-bookmark)
+  ("M-g g" . consult-goto-line)
 
   ("C-c s f" . consult-find)
   ("C-c s g" . consult-grep)
-  ("C-c s G" . consult-git-grep)
   ("C-c s l" . consult-line)
   ("C-c s L" . consult-line-multi)
   ("C-c s k" . consult-keep-lines)
-  ("C-c s o" . consult-org-heading)
   ("C-c s r" . consult-ripgrep)
   ("C-c s u" . consult-focus-lines)
 
+  ("C-x r x" . consult-register-store)
+  ("C-x r s" . consult-register-store)
+  ("C-x r j" . consult-register-load)
+
   :config
   (setq consult-narrow-key "<")
-  (setq consult-ripgrep-args "rg --null --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --with-filename --line-number --no-search-zip")
-
-  ;; Avoid eager preview when traversing large codebases.
-  (consult-customize consult-ripgrep consult-grep consult-git-grep consult-find
-                     :preview-key "M-.")
+  (setq consult-ripgrep-args "rg --null --color=never --max-columns=1000 --path-separator /   --smart-case --no-heading --with-filename --line-number --no-search-zip")
 
   (advice-add #'project-find-regexp :override #'consult-ripgrep)
 
+  ;; Improves the usability of the register window...
   (setq register-preview-delay 0.5
         register-preview-function #'consult-register-format)
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
 
 (use-package consult-project-extra
+  :straight t
   :bind
   (("C-x p f" . consult-project-extra-find)
    ("C-x p o" . consult-project-extra-find-other-window)))
@@ -109,16 +96,12 @@
   :config
   (marginalia-mode t))
 
-(use-package xref
-  :straight nil
-  :bind
-  (("M-." . xref-find-definitions)
-   ("M-," . xref-go-back)))
-
 (use-package embark
+  :ensure t
+
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-c ." . embark-dwim)
+   ("M-." . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
@@ -140,6 +123,7 @@
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
+  :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 

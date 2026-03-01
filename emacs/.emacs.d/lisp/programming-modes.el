@@ -55,19 +55,35 @@
   (corfu-scroll-margin 5)
   (corfu-count 20))
 
-(use-package yasnippet
-  :hook (org-mode . yas-minor-mode)
-  :bind (:map yas-minor-mode-map
-              ("M-/" . eej/yas-expand-or-dabbrev))
-  :config
-  (defun eej/yas-expand-or-dabbrev ()
-    "Try yasnippet expansion, fall back to dabbrev-expand."
-    (interactive)
-    (unless (yas-expand)
-      (dabbrev-expand nil))))
+(straight-use-package
+ '(corfu-terminal
+   :type git
+   :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
+
+(unless (display-graphic-p)
+  (corfu-terminal-mode +1))
+
+(straight-use-package
+ '(corfu-doc-terminal
+   :type git
+   :repo "https://codeberg.org/akib/emacs-corfu-doc-terminal.git"))
+(unless (display-graphic-p)
+  ;; This is here because corfu-popupinfo isn't really working for the terminal
+  (corfu-doc-mode +1)
+  (corfu-doc-terminal-mode +1))
 
 ;; Flymake — on-the-fly syntax checking
-(use-package flymake)
+(use-package flymake
+  :init
+  ;; Create a useful prefix command to navigate flymake commands
+  (define-prefix-command 'eej-flymake-map)
+  (global-set-key (kbd "C-c f") 'eej-flymake-map)
+  (flymake-mode +1)
+  (define-key eej-flymake-map (kbd "c") 'consult-flymake)
+  (define-key eej-flymake-map (kbd "n") 'flymake-goto-next-error)
+  (define-key eej-flymake-map (kbd "p") 'flymake-goto-prev-error)
+  (define-key eej-flymake-map (kbd "r") 'clang-format-region)
+  (define-key eej-flymake-map (kbd "b") 'clang-format-buffer))
 
 (use-package clang-format)
 
@@ -87,7 +103,7 @@
   :config
   (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
 
-(use-package buttercup)
+(use-package buttercup :straight t)
 
 ;; Programming mode hooks
 (add-hook 'prog-mode-hook #'eej/prog-mode-setup)

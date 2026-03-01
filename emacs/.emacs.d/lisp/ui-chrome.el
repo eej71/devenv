@@ -10,7 +10,7 @@
   :straight nil
   :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/")
-  (require 'modeline (expand-file-name "modeline" user-emacs-directory))
+  (load-file "~/.emacs.d/modeline.el")
   (load-theme 'spectral t))
 
 (use-package windmove
@@ -24,12 +24,7 @@
   :bind (("M-o" . ace-window)
          ("C-x o" . ace-window))   ;; replace default other-window
   :config
-  ;; Don't use ace-window-display-mode — it destructures mode-line-format
-  ;; with ,@ splicing, which breaks our single (:eval …) custom modeline.
-  ;; The custom modeline already includes the ace-window path display.
-  (aw-update)
-  (add-hook 'window-configuration-change-hook #'aw-update)
-  (add-hook 'after-make-frame-functions #'aw--after-make-frame t)
+  (ace-window-display-mode 1)
   (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)
         aw-background t
         aw-dispatch-always t
