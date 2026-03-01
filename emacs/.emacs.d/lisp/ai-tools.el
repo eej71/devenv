@@ -71,5 +71,16 @@
   (setq copilot-chat-default-model "claude-opus-4.6")
   (eej/copilot-chat-enable))
 
+(with-eval-after-load 'agent-shell
+  (defun eej/agent-shell-transcript-path ()
+    "Store agent-shell transcripts under ~/.cache/agent-shell/transcripts/."
+    (let* ((base (expand-file-name "~/org/agent-shell/transcripts/"))
+           (project (file-name-nondirectory (directory-file-name (agent-shell-cwd))))
+           (dir (expand-file-name project base))
+           (file (format-time-string "%F-%H-%M-%S.md")))
+      (expand-file-name file dir)))
+
+  (setopt agent-shell-transcript-file-path-function #'ee/agent-shell-transcript-path))
+
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
