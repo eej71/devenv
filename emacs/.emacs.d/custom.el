@@ -32,9 +32,6 @@
  '(gtags-suggested-key-mapping t)
  '(inhibit-startup-screen t)
  '(linum-format "%4d ")
- '(mode-line-format
-   '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification
-     (vc-mode vc-mode) mode-line-modes mode-line-misc-info mode-line-end-spaces))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(redisplay-dont-pause t t)
  '(request-curl-options '("-k"))

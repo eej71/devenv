@@ -24,7 +24,12 @@
   :bind (("M-o" . ace-window)
          ("C-x o" . ace-window))   ;; replace default other-window
   :config
-  (ace-window-display-mode 1)
+  ;; Don't use ace-window-display-mode — it destructures mode-line-format
+  ;; with ,@ splicing, which breaks our single (:eval …) custom modeline.
+  ;; The custom modeline already includes the ace-window path display.
+  (aw-update)
+  (add-hook 'window-configuration-change-hook #'aw-update)
+  (add-hook 'after-make-frame-functions #'aw--after-make-frame t)
   (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)
         aw-background t
         aw-dispatch-always t

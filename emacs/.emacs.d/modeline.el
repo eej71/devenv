@@ -293,7 +293,7 @@
                        (list spectral-modeline-format-active
                              spectral-modeline-format-inactive)))
         (kill-local-variable 'mode-line-format))))
-  (setq-default mode-line-format spectral-modeline-format)
+  (setq-default mode-line-format (list spectral-modeline-format))
   (force-mode-line-update t))
 
 (add-hook 'after-init-hook #'eej-modeline-restore-default)
