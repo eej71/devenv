@@ -89,6 +89,7 @@ Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
   :init
   (setq org-replace-disputed-keys t)
   :config
+  (org-babel-do-load-languages 'org-babel-load-languages '((sql . t) (emacs-lisp . t)))
   (setq org-adapt-indentation t
         org-agenda-block-separator ""
         org-agenda-files '("~/org/projects.org")
