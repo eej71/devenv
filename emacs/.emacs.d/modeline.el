@@ -5,11 +5,8 @@
 
 (require 'project)
 (require 'vc)
-
-(declare-function org-duration-from-minutes "org-duration" (minutes))
-(declare-function org-clock-get-clocked-time "org-clock" ())
-(defvar org-clock-current-task)
-(defvar org-clock-heading)
+(require 'org)
+(require 'org-clock)
 
 ;; other things to add in to this
 ;;
@@ -91,7 +88,7 @@
 
 (defun spectral-modeline-git-name ()
   "Return the current branch name for Git."
-  (when-let* ((file (file-truename (or buffer-file-name default-directory)))
+  (when-let* ((file (or buffer-file-name default-directory))
               (backend (vc-responsible-backend file t))
               ((eq backend 'Git))
               (vc-mode-line-string
@@ -293,7 +290,7 @@
                        (list spectral-modeline-format-active
                              spectral-modeline-format-inactive)))
         (kill-local-variable 'mode-line-format))))
-  (setq-default mode-line-format (list spectral-modeline-format))
+  (setq-default mode-line-format spectral-modeline-format)
   (force-mode-line-update t))
 
 (add-hook 'after-init-hook #'eej-modeline-restore-default)

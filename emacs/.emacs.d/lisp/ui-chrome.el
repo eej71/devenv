@@ -10,7 +10,7 @@
   :straight nil
   :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/")
-  (load-file "~/.emacs.d/modeline.el")
+  (require 'modeline (expand-file-name "modeline" user-emacs-directory))
   (load-theme 'spectral t))
 
 (use-package windmove
