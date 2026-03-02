@@ -41,7 +41,25 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
-(straight-use-package 'org)
+;; Load Org from straight before any module can pull in the built-in Org.
+(straight-use-package
+ '(org :type git :host github :repo "emacs-straight/org-mode"))
+(require 'org)
+(require 'org-clock)
+
+(defun spectral--org-from-straight-p (path)
+  "Return non-nil when PATH points at straight-managed Org."
+  (and path
+       (string-match-p "/straight/\\(repos\\|build\\)/org/" path)))
+
+(defun spectral-assert-straight-org ()
+  "Warn when loaded Org is not sourced from straight."
+  (let ((org-source (or (symbol-file 'org-mode)
+                        (locate-library "org"))))
+    (unless (spectral--org-from-straight-p org-source)
+      (warn "Org not loaded from straight: %s" org-source))))
+
+(spectral-assert-straight-org)
 
 ;; ── Custom file ─────────────────────────────────────────────────────────
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

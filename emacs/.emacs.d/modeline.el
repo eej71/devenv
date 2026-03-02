@@ -5,8 +5,11 @@
 
 (require 'project)
 (require 'vc)
-(require 'org)
-(require 'org-clock)
+
+(declare-function org-duration-from-minutes "org-duration" (minutes))
+(declare-function org-clock-get-clocked-time "org-clock" ())
+(defvar org-clock-current-task)
+(defvar org-clock-heading)
 
 ;; other things to add in to this
 ;;

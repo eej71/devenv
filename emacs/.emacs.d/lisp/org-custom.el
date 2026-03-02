@@ -189,7 +189,7 @@ Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
 (use-package org-super-agenda)
 
 (use-package visual-fill-column
-  :ensure t
+  :straight t
   :hook (org-mode . visual-fill-column-mode)
   :custom
   (visual-fill-column-width 150)

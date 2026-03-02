@@ -35,8 +35,6 @@
  '(mode-line-format
    '(" " mode-line-position mode-line-modified mode-line-frame-identification mode-line-buffer-identification
      (vc-mode vc-mode) mode-line-modes mode-line-misc-info mode-line-end-spaces))
- '(package-vc-selected-packages
-   '((copilot :url "https://github.com/copilot-emacs/copilot.el" :branch "main")))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(redisplay-dont-pause t t)
  '(request-curl-options '("-k"))

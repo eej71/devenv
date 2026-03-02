@@ -38,7 +38,7 @@
 ;; Configure directory extension.
 (use-package vertico-directory
   :after vertico
-  :ensure nil
+  :straight nil
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
@@ -97,7 +97,7 @@
   (marginalia-mode t))
 
 (use-package embark
-  :ensure t
+  :straight t
 
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
@@ -123,7 +123,7 @@
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
+  :straight t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
