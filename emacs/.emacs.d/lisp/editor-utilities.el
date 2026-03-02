@@ -46,7 +46,6 @@
 
 
 (use-package vterm
-  :straight t
   :config
   (setq vterm-shell "bash"))
 

@@ -15,17 +15,16 @@
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
-(straight-use-package '(vertico :files (:defaults "extensions/*")
-                         :includes (vertico-buffer
-                                    vertico-directory
-                                    vertico-flat
-                                    vertico-indexed
-                                    vertico-mouse
-                                    vertico-quick
-                                    vertico-repeat
-                                    vertico-reverse)))
-
 (use-package vertico
+  :straight (vertico :files (:defaults "extensions/*")
+                     :includes (vertico-buffer
+                                vertico-directory
+                                vertico-flat
+                                vertico-indexed
+                                vertico-mouse
+                                vertico-quick
+                                vertico-repeat
+                                vertico-reverse))
   :config
   (vertico-mode t)
   (vertico-indexed-mode)
@@ -87,7 +86,6 @@
         xref-show-definitions-function #'consult-xref))
 
 (use-package consult-project-extra
-  :straight t
   :bind
   (("C-x p f" . consult-project-extra-find)
    ("C-x p o" . consult-project-extra-find-other-window)))
@@ -97,8 +95,6 @@
   (marginalia-mode t))
 
 (use-package embark
-  :straight t
-
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
    ("M-." . embark-dwim)        ;; good alternative: M-.
@@ -123,7 +119,6 @@
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :straight t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 

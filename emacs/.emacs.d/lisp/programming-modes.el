@@ -55,14 +55,6 @@
   (corfu-scroll-margin 5)
   (corfu-count 20))
 
-(straight-use-package
- '(corfu-terminal
-   :type git
-   :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
-
-(unless (display-graphic-p)
-  (corfu-terminal-mode +1))
-
 ;; Flymake — on-the-fly syntax checking
 (use-package flymake
   :init
@@ -94,7 +86,7 @@
   :config
   (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
 
-(use-package buttercup :straight t)
+(use-package buttercup)
 
 ;; Programming mode hooks
 (add-hook 'prog-mode-hook #'eej/prog-mode-setup)

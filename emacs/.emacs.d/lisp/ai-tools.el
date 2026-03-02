@@ -13,7 +13,6 @@
     (setenv "PATH" (concat path ":" (or (getenv "PATH") "")))))
 
 (use-package gptel
-  :straight (:host github :repo "karthink/gptel")
   :config
   (setq gptel-model 'claude-sonnet-4-5-20250929)
   (setq gptel-backend
@@ -21,24 +20,14 @@
           :key (getenv "CLAUDE_API_KEY")
           :models '(claude-sonnet-4-5-20250929))))
 
-(straight-use-package
- '(shell-maker :type git
-               :host github
-               :repo "xenodium/shell-maker"))
+(use-package shell-maker)
 
-(straight-use-package
- '(acp :type git
-       :host github
-       :repo "xenodium/acp.el"))
+(use-package acp)
 
-(use-package agent-shell
-  :straight (:host github :repo "xenodium/agent-shell"))
+(use-package agent-shell)
 
 (use-package copilot
-  :vc (:url "https://github.com/copilot-emacs/copilot.el"
-       :branch "main"
-       :rev :newest)
-
+  :straight (:host github :repo "copilot-emacs/copilot.el")
   :bind (:map copilot-mode-map
          ("M-/" . copilot-complete)
          :map copilot-completion-map
@@ -60,7 +49,6 @@
   (setq copilot-indent-offset-warning-disable t))
 
 (use-package copilot-chat
-  :straight (:host github :repo "chep/copilot-chat.el" :files ("*.el"))
   :after (request org markdown-mode)
   :config
   (setq copilot-chat-default-model "claude-opus-4.6")
