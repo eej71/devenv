@@ -7,7 +7,7 @@
 ;;; Code:
 
 ;; Ensure Emacs has the same PATH you'd use in a terminal
-(dolist (path '("/usr/local/bin" "/home/WORKNAME/.nvm/versions/node/v20.20.0/bin"))
+(dolist (path '("/usr/local/bin"))
   (add-to-list 'exec-path path)
   (unless (string-match-p (regexp-quote path) (or (getenv "PATH") ""))
     (setenv "PATH" (concat path ":" (or (getenv "PATH") "")))))
