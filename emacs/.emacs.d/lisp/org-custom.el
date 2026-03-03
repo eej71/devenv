@@ -89,7 +89,7 @@ Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
   :init
   (setq org-replace-disputed-keys t)
   :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((sql . t) (emacs-lisp . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages '((sql . t) (emacs-lisp . t) (shell . t)))
   (setq org-adapt-indentation t
         org-agenda-block-separator ""
         org-agenda-files '("~/org/projects.org")
@@ -120,6 +120,7 @@ Has >1 DONE task and no child STARTED|WAITING|NEXT or any scheduled TODO."
         org-clock-persist-file "~/org/org-clock-save.el"
         org-clock-sound t
         org-columns-default-format "%100ITEM %TODO %TAGS"
+        org-confirm-babel-evaluate nil
         org-deadline-warning-days 3
         org-directory "~/org"
         org-default-notes-file (concat org-directory "/notes.org")

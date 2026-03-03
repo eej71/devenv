@@ -49,10 +49,22 @@
   (setq copilot-indent-offset-warning-disable t))
 
 (use-package copilot-chat
-  :after (request org markdown-mode)
+  :demand t
   :config
-  (setq copilot-chat-default-model "claude-opus-4.6")
-  (eej/copilot-chat-enable))
+  (eej/copilot-chat-enable)
+
+  (defvar eej/copilot-chat-model-set-p nil
+    "Whether the default copilot-chat model has been set.")
+
+  (defun eej/copilot-chat-set-default-model ()
+    "Set copilot-chat model to claude-opus-4.6 once."
+    (unless eej/copilot-chat-model-set-p
+      (message "Setting copilot-chat model to claude-opus-4.6")
+      (copilot-chat-set-model "claude-opus-4.6")
+      (setq eej/copilot-chat-model-set-p t)))
+
+  (add-hook 'copilot-chat-org-prompt-mode-hook
+            #'eej/copilot-chat-set-default-model))
 
 (with-eval-after-load 'agent-shell
   (defun eej/agent-shell-transcript-path ()
