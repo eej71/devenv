@@ -21,6 +21,9 @@
 (defvar eej/copilot-chat-save-timer nil
   "Timer for periodic Copilot chat auto-save.")
 
+(defvar-local eej/copilot-chat-filename nil
+  "Deterministic filename for persisting this Copilot chat buffer.")
+
 (defun eej/start-codex ()
   "Open Codex CLI in ~/fubar (empty dir)."
   (interactive)
@@ -80,11 +83,17 @@
             (make-directory save-dir t))
           (expand-file-name (concat date-part "__" dir-part ".org") save-dir))))))
 
+(defun eej/copilot-chat--ensure-filename ()
+  "Ensure and return this buffer's persistent Copilot chat filename."
+  (unless eej/copilot-chat-filename
+    (setq-local eej/copilot-chat-filename (eej/copilot-chat--compute-filename)))
+  eej/copilot-chat-filename)
+
 (defun eej/copilot-chat-save-buffer ()
   "Save the current buffer if it is a Copilot chat buffer."
   (when (and (derived-mode-p 'org-mode)
              (string-match-p "\\`\\*Copilot" (buffer-name)))
-    (when-let ((filename (eej/copilot-chat--compute-filename)))
+    (when-let ((filename (eej/copilot-chat--ensure-filename)))
       (write-region (point-min) (point-max) filename nil 'quiet))))
 
 (defun eej/copilot-chat-auto-save-all ()
@@ -132,6 +141,11 @@
 (defun eej/copilot-chat--insert-session-metadata-advice (buffer)
   "Advice helper that inserts session metadata in BUFFER."
   (eej/copilot-chat-insert-session-metadata buffer)
+  (with-current-buffer buffer
+    (when (and (derived-mode-p 'org-mode)
+               (string-match-p "\\`\\*Copilot" (buffer-name)))
+      (eej/copilot-chat--ensure-filename)
+      (add-hook 'kill-buffer-hook #'eej/copilot-chat-kill-hook nil t)))
   buffer)
 
 (defun eej/copilot-chat-add-heading-id (orig-fn instance content type)
@@ -170,8 +184,8 @@
   "Enable Copilot Chat local extensions."
   (require 'org-id)
   (setq org-id-method 'ts)
-  (add-hook 'kill-buffer-hook #'eej/copilot-chat-kill-hook)
   (add-hook 'org-mode-hook #'eej-copilot-chat-faces)
+  (add-hook 'org-store-link-functions #'eej/org-store-link-for-copilot-chat 0)
   (unless (advice-member-p #'eej/copilot-chat--insert-session-metadata-advice
                            'copilot-chat--org-get-buffer)
     (advice-add 'copilot-chat--org-get-buffer :filter-return
@@ -182,39 +196,16 @@
                 #'eej/copilot-chat-add-heading-id))
   (eej/copilot-chat--start-save-timer))
 
-(defvar-local eej/copilot-chat-filename nil
-  "Deterministic filename for persisting this Copilot chat buffer.")
-
-(defvar-local eej/copilot-chat-id nil
-  "Persistent ID for this Copilot chat buffer (string).")
-
-(defun eej/copilot-chat--ensure-metadata ()
-  (unless eej/copilot-chat-filename
-    (setq eej/copilot-chat-filename (eej/copilot-chat--compute-filename)))
-  ;; you said you already keep persistent IDs; this is just a placeholder hook
-  (unless eej/copilot-chat-id
-    (setq eej/copilot-chat-id (or (bound-and-true-p copilot-chat-session-id)
-                                  (format "copilot-%s" (md5 (buffer-name)))))))
-
 (defun eej/org-store-link-for-copilot-chat ()
   "Store an Org link for Copilot chat buffers."
   (when (and (derived-mode-p 'org-mode)
              (string-match-p "\\`\\*Copilot" (buffer-name)))
-    (eej/copilot-chat--ensure-metadata)
-    (when (and eej/copilot-chat-filename eej/copilot-chat-id)
-      ;; Ensure the link has a stable search target.
-      ;; Option A: store a dedicated heading or CUSTOM_ID in the persisted file.
-      ;; Here we assume the persisted transcript contains the id as a heading or token.
+    (when-let ((filename (eej/copilot-chat--ensure-filename)))
       (let* ((desc (format "Copilot chat: %s" (buffer-name)))
-             (link (format "file:%s::*%s"
-                           (expand-file-name eej/copilot-chat-filename)
-                           eej/copilot-chat-id)))
+             (link (format "file:%s" (expand-file-name filename))))
         (org-link-store-props :type "file"
                               :link link
                               :description desc)
         link))))
-
-;; Prepend so it runs before generic org handlers.
-(add-hook 'org-store-link-functions #'eej/org-store-link-for-copilot-chat 0)
 
 (provide 'copilot-chat-custom)
