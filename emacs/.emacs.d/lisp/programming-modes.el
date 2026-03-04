@@ -61,7 +61,6 @@
   ;; Create a useful prefix command to navigate flymake commands
   (define-prefix-command 'eej-flymake-map)
   (global-set-key (kbd "C-c f") 'eej-flymake-map)
-  (flymake-mode +1)
   (define-key eej-flymake-map (kbd "c") 'consult-flymake)
   (define-key eej-flymake-map (kbd "n") 'flymake-goto-next-error)
   (define-key eej-flymake-map (kbd "p") 'flymake-goto-prev-error)
