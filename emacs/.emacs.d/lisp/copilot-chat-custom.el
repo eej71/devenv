@@ -182,5 +182,39 @@
                 #'eej/copilot-chat-add-heading-id))
   (eej/copilot-chat--start-save-timer))
 
+(defvar-local eej/copilot-chat-filename nil
+  "Deterministic filename for persisting this Copilot chat buffer.")
+
+(defvar-local eej/copilot-chat-id nil
+  "Persistent ID for this Copilot chat buffer (string).")
+
+(defun eej/copilot-chat--ensure-metadata ()
+  (unless eej/copilot-chat-filename
+    (setq eej/copilot-chat-filename (eej/copilot-chat--compute-filename)))
+  ;; you said you already keep persistent IDs; this is just a placeholder hook
+  (unless eej/copilot-chat-id
+    (setq eej/copilot-chat-id (or (bound-and-true-p copilot-chat-session-id)
+                                  (format "copilot-%s" (md5 (buffer-name)))))))
+
+(defun eej/org-store-link-for-copilot-chat ()
+  "Store an Org link for Copilot chat buffers."
+  (when (and (derived-mode-p 'org-mode)
+             (string-match-p "\\`\\*Copilot" (buffer-name)))
+    (eej/copilot-chat--ensure-metadata)
+    (when (and eej/copilot-chat-filename eej/copilot-chat-id)
+      ;; Ensure the link has a stable search target.
+      ;; Option A: store a dedicated heading or CUSTOM_ID in the persisted file.
+      ;; Here we assume the persisted transcript contains the id as a heading or token.
+      (let* ((desc (format "Copilot chat: %s" (buffer-name)))
+             (link (format "file:%s::*%s"
+                           (expand-file-name eej/copilot-chat-filename)
+                           eej/copilot-chat-id)))
+        (org-link-store-props :type "file"
+                              :link link
+                              :description desc)
+        link))))
+
+;; Prepend so it runs before generic org handlers.
+(add-hook 'org-store-link-functions #'eej/org-store-link-for-copilot-chat 0)
+
 (provide 'copilot-chat-custom)
-;;; copilot-chat-custom.el ends here
