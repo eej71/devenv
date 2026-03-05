@@ -24,7 +24,18 @@
 
 (use-package acp)
 
-(use-package agent-shell)
+(use-package agent-shell
+  :custom
+  (agent-shell-github-default-model-id "claude-opus-4.6")
+  :config
+  (defun eej/agent-shell-transcript-path ()
+    "Store agent-shell transcripts under ~/org/agent-shell/transcripts/."
+    (let* ((base (expand-file-name "~/org/agent-shell/transcripts/"))
+           (project (file-name-nondirectory (directory-file-name (agent-shell-cwd))))
+           (dir (expand-file-name project base))
+           (file (format-time-string "%F-%H-%M-%S.md")))
+      (expand-file-name file dir)))
+  (setopt agent-shell-transcript-file-path-function #'eej/agent-shell-transcript-path))
 
 (use-package copilot
   :straight (:host github :repo "copilot-emacs/copilot.el")
@@ -51,27 +62,8 @@
 (use-package copilot-chat
   :demand t
   :config
-  (eej/copilot-chat-enable)
-
-  (defun eej/copilot-chat-set-default-model ()
-    "Set copilot-chat model to claude-opus-4.6 once."
-
-    (message "Setting copilot-chat model to claude-opus-4.6")
-    (copilot-chat-set-model "claude-opus-4.6"))
-
-  (add-hook 'copilot-chat-org-prompt-mode-hook
-            #'eej/copilot-chat-set-default-model))
-
-(with-eval-after-load 'agent-shell
-  (defun eej/agent-shell-transcript-path ()
-    "Store agent-shell transcripts under ~/.cache/agent-shell/transcripts/."
-    (let* ((base (expand-file-name "~/org/agent-shell/transcripts/"))
-           (project (file-name-nondirectory (directory-file-name (agent-shell-cwd))))
-           (dir (expand-file-name project base))
-           (file (format-time-string "%F-%H-%M-%S.md")))
-      (expand-file-name file dir)))
-
-  (setopt agent-shell-transcript-file-path-function #'eej/agent-shell-transcript-path))
+  (setq copilot-chat-default-model "claude-opus-4.6")
+  (eej/copilot-chat-enable))
 
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
