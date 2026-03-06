@@ -105,3 +105,4 @@ unset http_proxy
 unset https_proxy
 unset FTP_PROXY
 unset ftp_proxy
+export PATH="$HOME/.claude/bin:$HOME/.local/bin:$PATH"
