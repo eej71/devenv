@@ -77,7 +77,25 @@ HISTSIZE=1000000
 HISTFILESIZE=1000000
 
 PROMPT_DIRTRIM=4
-PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} history -a; history -n"
+# Keep shell histories shared across concurrent sessions.
+# - history -a: append this shell's new entries to $HISTFILE
+# - history -n: read entries added by other shells
+eej_history_sync() {
+    builtin history -a
+    builtin history -n
+}
+
+case ";${PROMPT_COMMAND};" in
+    *";eej_history_sync;"*) ;;
+    ";;") PROMPT_COMMAND="eej_history_sync" ;;
+    *) PROMPT_COMMAND="eej_history_sync;${PROMPT_COMMAND}" ;;
+esac
+
+# Up/Down search history by current prefix, newest match first.
+bind "\"\e[A\": history-search-backward"
+bind "\"\e[B\": history-search-forward"
+bind "\"\eOA\": history-search-backward"
+bind "\"\eOB\": history-search-forward"
 
 export PATH=~/tmux/:${PATH}
 export PATH
