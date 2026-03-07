@@ -56,16 +56,7 @@
   (corfu-count 20))
 
 ;; Flymake — on-the-fly syntax checking
-(use-package flymake
-  :init
-  ;; Create a useful prefix command to navigate flymake commands
-  (define-prefix-command 'eej-flymake-map)
-  (global-set-key (kbd "C-c f") 'eej-flymake-map)
-  (define-key eej-flymake-map (kbd "c") 'consult-flymake)
-  (define-key eej-flymake-map (kbd "n") 'flymake-goto-next-error)
-  (define-key eej-flymake-map (kbd "p") 'flymake-goto-prev-error)
-  (define-key eej-flymake-map (kbd "r") 'clang-format-region)
-  (define-key eej-flymake-map (kbd "b") 'clang-format-buffer))
+(use-package flymake)
 
 (use-package clang-format)
 

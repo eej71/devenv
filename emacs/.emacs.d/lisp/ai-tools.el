@@ -70,9 +70,19 @@
     (copilot-chat--display instance)
     (copilot-chat-goto-input)))
 
+(define-prefix-command 'eej-ai-map)
+(global-set-key (kbd "C-c i") 'eej-ai-map)
+(define-key eej-ai-map (kbd "a") #'eej/project-agent-shell)
+(define-key eej-ai-map (kbd "c") #'eej/project-copilot-chat)
+(define-key eej-ai-map (kbd "g") #'gptel)
+(define-key eej-ai-map (kbd "l") #'claude-code-ide)
+(define-key eej-ai-map (kbd "b") #'claude-code-ide-switch-to-buffer)
+(define-key eej-ai-map (kbd "x") #'eej/start-codex)
+
 (with-eval-after-load 'project
   (define-key project-prefix-map (kbd "a") #'eej/project-agent-shell)
-  (define-key project-prefix-map (kbd "h") #'eej/project-copilot-chat))
+  (define-key project-prefix-map (kbd "h") #'eej/project-copilot-chat)
+  (define-key project-prefix-map (kbd "l") #'claude-code-ide))
 
 (use-package gptel
   :config

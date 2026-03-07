@@ -97,7 +97,7 @@
 (use-package embark
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
-   ("M-." . embark-dwim)        ;; good alternative: M-.
+   ("C-c ." . embark-dwim)
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
