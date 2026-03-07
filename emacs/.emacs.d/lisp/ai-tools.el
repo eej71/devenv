@@ -138,5 +138,22 @@
   (setq copilot-chat-default-model "claude-opus-4.6")
   (eej/copilot-chat-enable))
 
+(use-package claude-code-ide
+  :straight (claude-code-ide :type git :host github :repo "manzaltu/claude-code-ide.el")
+  :custom
+  (claude-code-ide-cli-extra-flags "--model claude-opus-4-6 -c model_reasoning_effort=high")
+  (claude-code-ide-window-side 'left)
+  (claude-code-ide-window-width 110)
+  :config
+  (defun eej/claude-code-send-return ()
+    "Submit input to the Claude Code terminal process."
+    (interactive)
+    (claude-code-ide--terminal-send-return))
+  (advice-add 'claude-code-ide--setup-terminal-keybindings :after
+              (lambda ()
+                (local-set-key (kbd "RET") #'claude-code-ide-insert-newline)
+                (local-set-key (kbd "C-c RET") #'eej/claude-code-send-return)
+                (local-set-key (kbd "C-c C-c") #'eej/claude-code-send-return))))
+
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
