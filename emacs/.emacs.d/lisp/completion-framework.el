@@ -94,6 +94,12 @@
   :config
   (marginalia-mode t))
 
+(use-package xref
+  :straight nil
+  :bind
+  (("M-." . xref-find-definitions)
+   ("M-," . xref-go-back)))
+
 (use-package embark
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
