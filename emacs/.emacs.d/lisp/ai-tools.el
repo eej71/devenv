@@ -123,9 +123,15 @@
          ("M-f" . copilot-accept-completion-by-word)
          ("M-e" . copilot-accept-completion-by-line))
 
-  :hook (prog-mode . copilot-mode)
+  :hook (prog-mode . eej/maybe-copilot-mode)
 
   :config
+  (defun eej/maybe-copilot-mode ()
+    "Enable `copilot-mode' only when the language server is available."
+    (condition-case nil
+        (when (copilot-server-executable)
+          (copilot-mode 1))
+      (error nil)))
   ;; Map major-mode (symbol) -> Copilot language id (string)
   (add-to-list 'copilot-major-mode-alist '(c++-ts-mode . "cpp"))
   (add-to-list 'copilot-major-mode-alist '(c-ts-mode   . "c"))
