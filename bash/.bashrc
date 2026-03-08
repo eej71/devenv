@@ -23,12 +23,18 @@ fi
 # Specific domains
 case "$EEJ_PROFILE" in
     Home)
-        source /usr/share/doc/git/contrib/completion/git-completion.bash
-        source /usr/share/doc/git/contrib/completion/git-prompt.sh
-        function ed { emacsclient -nw $@; }
-        #macos
-        #source /usr/local/Cellar/git/2.10.0/etc/bash_completion.d/git-completion.bash
-        #source /usr/local/Cellar/git/2.10.0/etc/bash_completion.d/git-prompt.sh
+        for _f in \
+            /usr/share/doc/git/contrib/completion/git-completion.bash \
+            /usr/share/bash-completion/completions/git; do
+            [ -f "$_f" ] && { source "$_f"; break; }
+        done
+        for _f in \
+            /usr/share/doc/git/contrib/completion/git-prompt.sh \
+            /etc/bash_completion.d/git-prompt \
+            /usr/lib/git-core/git-sh-prompt; do
+            [ -f "$_f" ] && { source "$_f"; break; }
+        done
+        unset _f
         function ed { emacsclient -nw $@; }
         function xed { emacsclient -n -c $@ 2> /dev/null; }
         function ted { emacsclient -n -c $@ 2> /dev/null; }
