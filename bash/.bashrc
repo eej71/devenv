@@ -23,6 +23,7 @@ fi
 # Specific domains
 case "$EEJ_PROFILE" in
     Home)
+        _ps1_bg="35;70;80"
         for _f in \
             /usr/share/doc/git/contrib/completion/git-completion.bash \
             /usr/share/bash-completion/completions/git; do
@@ -41,6 +42,7 @@ case "$EEJ_PROFILE" in
         ;;
 
     Work)
+        _ps1_bg="26;61;74"
         alias ls='ls --color=auto'
         source /usr/share/doc/git/contrib/completion/git-completion.bash
         source /usr/share/doc/git/contrib/completion/git-prompt.sh
@@ -70,7 +72,8 @@ LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 
 HISTCONTROL=ignoredups:erasedups
-HISTIGNORE="&:ls:[bf]g:exit"
+HISTIGNORE="&:ls:ll:[bf]g:exit:pwd:clear:history"
+HISTTIMEFORMAT="%F %T  "
 HISTSIZE=1000000
 HISTFILESIZE=1000000
 
@@ -107,7 +110,7 @@ export LS_COLORS='rs=0:di=01;96:ln=01;95:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;
 ## The notation \[ \] is used to tell bash that it presents as 0 onscreen chars
 ## \033[48;5;XYZm is a background color
 ## \033[38;5;XYZm is a foreground color
-PS1='\[\033[48;5;19m\]\[\033[38;5;255m\]\[$(tput smul)\]\w\[$(tput rmul)\]$(__git_ps1)\[\e[0m\] > '
+PS1="\[\033[48;2;${_ps1_bg}m\]\[\033[38;2;255;255;255m\]\h|\[$(tput smul)\]\w\[$(tput rmul)\]\$(__git_ps1)\[\e[0m\] > "
 export QT_GRAPHICSSYSTEM=native
 
 export NVM_DIR="$HOME/.nvm"
