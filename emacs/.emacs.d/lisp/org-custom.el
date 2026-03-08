@@ -276,6 +276,7 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
                              (org-agenda-files . (:todo . "NEXT"))
                              (org-agenda-files . (:tag . "refile"))
                              (org-agenda-files . (:todo . "TODO"))))
+  (make-directory (file-name-directory org-clock-persist-file) t)
   (org-clock-persistence-insinuate)
   (add-hook 'org-mode-hook #'spectral-org-setup)
   (add-hook 'org-clock-out-hook #'spectral-recompute-clock-sum)
