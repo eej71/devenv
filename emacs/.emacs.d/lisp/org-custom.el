@@ -301,10 +301,10 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
   ;; (add-hook 'org-clock-out-hook #'eej/post-worklog-to-jira)
   (let ((jira-token (or (getenv "JIRALIB_ATLASSIAN_CLOUD_TOKEN")
                         (bound-and-true-p jiralib-atlassian-cloud-token))))
-    (setq jiralib-url "https://gtsjira.atlassian.net"
+    (setq jiralib-url (getenv "JIRA_URL")
           request-log-level 'debug
           url-debug t
-          jiralib-user-login-name "ejohnson@example.com"
+          jiralib-user-login-name (getenv "EEJ_EMAIL")
           jiralib-atlassian-cloud-token jira-token
           jiralib-token (when jira-token
                           `("Authorization" . ,(format "Basic %s"
