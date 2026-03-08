@@ -15,7 +15,14 @@
 ;; Node.js uses compiled-in certs that don't include corporate CA certs.
 ;; Point it at the system bundle so SSL inspection doesn't break copilot.el.
 (unless (getenv "NODE_EXTRA_CA_CERTS")
-  (setenv "NODE_EXTRA_CA_CERTS" "/etc/pki/tls/certs/ca-bundle.crt"))
+  (let ((bundle (seq-find #'file-exists-p
+                          '("/etc/pki/tls/certs/ca-bundle.crt"      ; Fedora/RHEL
+                            "/etc/ssl/certs/ca-certificates.crt"    ; Debian/Ubuntu
+                            "/etc/ssl/ca-bundle.pem"                ; openSUSE
+                            "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem")))) ; newer RHEL
+    (if bundle
+        (setenv "NODE_EXTRA_CA_CERTS" bundle)
+      (message "ai-tools: WARNING: no system CA bundle found for NODE_EXTRA_CA_CERTS"))))
 
 (defun eej/project-root-or-default ()
   "Return current project root or `default-directory' when outside a project."
