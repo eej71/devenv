@@ -18,14 +18,10 @@
 
 (use-package vertico
   :straight (vertico :files (:defaults "extensions/*")
-                     :includes (vertico-buffer
-                                vertico-directory
-                                vertico-flat
+                     :includes (vertico-directory
                                 vertico-indexed
-                                vertico-mouse
                                 vertico-quick
-                                vertico-repeat
-                                vertico-reverse))
+                                vertico-repeat))
   :config
   (vertico-mode t)
   (vertico-indexed-mode)
@@ -39,13 +35,28 @@
 (use-package vertico-directory
   :after vertico
   :straight nil
-  ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
               ("M-DEL" . vertico-directory-delete-word))
-  ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;; Jump to a candidate by typing a two-character avy-style label.
+(use-package vertico-quick
+  :after vertico
+  :straight nil
+  :bind (:map vertico-map
+              ("M-q" . vertico-quick-jump)))
+
+;; Resume the last minibuffer session.
+(use-package vertico-repeat
+  :after vertico
+  :straight nil
+  :bind (("M-r" . vertico-repeat)
+         :map vertico-map
+         ("M-r" . vertico-repeat-next)
+         ("M-R" . vertico-repeat-previous))
+  :hook (minibuffer-setup . vertico-repeat-save))
 
 (use-package savehist
   :straight nil
