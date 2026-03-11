@@ -11,9 +11,10 @@
   (read-file-name-completion-ignore-case t)
   (read-buffer-completion-ignore-case t)
   (completion-ignore-case t)
-  (completion-styles '(substring flex orderless basic))
+  (completion-styles '(orderless basic))
   (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (orderless-matching-styles '(orderless-literal orderless-regexp orderless-flex)))
 
 (use-package vertico
   :straight (vertico :files (:defaults "extensions/*")
