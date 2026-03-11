@@ -64,34 +64,37 @@
   (savehist-mode))
 
 (use-package consult
-  :init
-  (define-prefix-command 'eej-consult)
-  (global-set-key (kbd "C-c s") 'eej-consult)
-
   :bind
-  ("C-x b" . consult-buffer)
+  ("C-x b"   . consult-buffer)
   ("C-x r b" . consult-bookmark)
-  ("M-g g" . consult-goto-line)
-
-  ("C-c s f" . consult-find)
-  ("C-c s g" . consult-grep)
-  ("C-c s l" . consult-line)
-  ("C-c s L" . consult-line-multi)
-  ("C-c s k" . consult-keep-lines)
-  ("C-c s r" . consult-ripgrep)
-  ("C-c s u" . consult-focus-lines)
-
-  ("C-x r x" . consult-register-store)
   ("C-x r s" . consult-register-store)
   ("C-x r j" . consult-register-load)
 
+  ("M-g g"   . consult-goto-line)
+  ("M-g i"   . consult-imenu)
+  ("M-g I"   . consult-imenu-multi)
+  ("M-g o"   . consult-outline)
+
+  ("C-c s f" . consult-find)
+  ("C-c s g" . consult-grep)
+  ("C-c s G" . consult-git-grep)
+  ("C-c s l" . consult-line)
+  ("C-c s L" . consult-line-multi)
+  ("C-c s k" . consult-keep-lines)
+  ("C-c s o" . consult-org-heading)
+  ("C-c s r" . consult-ripgrep)
+  ("C-c s u" . consult-focus-lines)
+
   :config
   (setq consult-narrow-key "<")
-  (setq consult-ripgrep-args "rg --null --color=never --max-columns=1000 --path-separator /   --smart-case --no-heading --with-filename --line-number --no-search-zip")
+  (setq consult-ripgrep-args "rg --null --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --with-filename --line-number --no-search-zip")
+
+  ;; Avoid eager preview when traversing large codebases.
+  (consult-customize consult-ripgrep consult-grep consult-git-grep consult-find
+                     :preview-key "M-.")
 
   (advice-add #'project-find-regexp :override #'consult-ripgrep)
 
-  ;; Improves the usability of the register window...
   (setq register-preview-delay 0.5
         register-preview-function #'consult-register-format)
   (setq xref-show-xrefs-function #'consult-xref
