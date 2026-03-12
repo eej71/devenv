@@ -55,6 +55,17 @@
   (corfu-scroll-margin 5)
   (corfu-count 20))
 
+(use-package yasnippet
+  :hook (org-mode . yas-minor-mode)
+  :bind (:map yas-minor-mode-map
+              ("M-/" . eej/yas-expand-or-dabbrev))
+  :config
+  (defun eej/yas-expand-or-dabbrev ()
+    "Try yasnippet expansion, fall back to dabbrev-expand."
+    (interactive)
+    (unless (yas-expand)
+      (dabbrev-expand nil))))
+
 ;; Flymake — on-the-fly syntax checking
 (use-package flymake)
 
