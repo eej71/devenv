@@ -1,7 +1,7 @@
 ;;; ai-tools.el --- AI-powered coding assistants -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
-;; Copilot, gptel, agent-shell, and related AI tooling.
+;; Copilot, gptel, and related AI tooling.
 ;; All use-package blocks are copied verbatim from the original init.el.
 
 ;;; Code:
@@ -23,26 +23,6 @@
   (if-let ((project (project-current nil (file-truename default-directory))))
       (project-root project)
     (expand-file-name default-directory)))
-
-(defun eej/project-copilot-agent-shell-buffer ()
-  "Return this project's Copilot `agent-shell' buffer, or nil."
-  (let ((buffers (agent-shell-project-buffers))
-        found)
-    (while (and buffers (not found))
-      (let ((buffer (car buffers)))
-        (when (eq 'copilot (alist-get :identifier (agent-shell-get-config buffer)))
-          (setq found buffer)))
-      (setq buffers (cdr buffers)))
-    found))
-
-(defun eej/project-agent-shell ()
-  "Switch to this project's Copilot agent shell, creating it if needed."
-  (interactive)
-  (require 'agent-shell)
-  (let ((default-directory (eej/project-root-or-default)))
-    (if-let ((existing (eej/project-copilot-agent-shell-buffer)))
-        (agent-shell--display-buffer existing)
-      (agent-shell-start :config (agent-shell-github-make-copilot-config)))))
 
 (defun eej/copilot-chat--project-instance (directory)
   "Return Copilot Chat instance for DIRECTORY, creating one when needed."
@@ -72,7 +52,6 @@
 
 (define-prefix-command 'eej-ai-map)
 (global-set-key (kbd "C-c i") 'eej-ai-map)
-(define-key eej-ai-map (kbd "a") #'eej/project-agent-shell)
 (define-key eej-ai-map (kbd "c") #'eej/project-copilot-chat)
 (define-key eej-ai-map (kbd "g") #'gptel)
 (define-key eej-ai-map (kbd "l") #'claude-code-ide)
@@ -80,7 +59,6 @@
 (define-key eej-ai-map (kbd "x") #'eej/start-codex)
 
 (with-eval-after-load 'project
-  (define-key project-prefix-map (kbd "a") #'eej/project-agent-shell)
   (define-key project-prefix-map (kbd "h") #'eej/project-copilot-chat)
   (define-key project-prefix-map (kbd "l") #'claude-code-ide))
 
@@ -91,24 +69,6 @@
         (gptel-make-anthropic "Claude"
           :key (getenv "CLAUDE_API_KEY")
           :models '(claude-sonnet-4-5-20250929))))
-
-(use-package shell-maker)
-
-(use-package acp)
-
-(use-package agent-shell
-  :custom
-  (agent-shell-github-default-model-id "claude-opus-4.6")
-  (agent-shell-preferred-agent-config 'copilot)
-  :config
-  (defun eej/agent-shell-transcript-path ()
-    "Store agent-shell transcripts under ~/org/agent-shell/transcripts/."
-    (let* ((base (expand-file-name "~/org/agent-shell/transcripts/"))
-           (project (file-name-nondirectory (directory-file-name (agent-shell-cwd))))
-           (dir (expand-file-name project base))
-           (file (format-time-string "%F-%H-%M-%S.md")))
-      (expand-file-name file dir)))
-  (setopt agent-shell-transcript-file-path-function #'eej/agent-shell-transcript-path))
 
 (use-package copilot
   :straight (:host github :repo "copilot-emacs/copilot.el")
