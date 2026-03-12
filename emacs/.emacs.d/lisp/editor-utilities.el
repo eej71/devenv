@@ -47,14 +47,17 @@
 
 (use-package vterm
   :config
+  (setq vterm-always-compile-module t)
   (setq vterm-shell "bash"))
 
 (use-package multi-vterm
+  :straight t
   :after vterm
-  :bind (("C-c v n" . multi-vterm)
+  :bind (("C-c v v" . multi-vterm)
+         ("C-c v n" . multi-vterm-next)
          ("C-c v p" . multi-vterm-prev)
-         ("C-c v N" . multi-vterm-next)))
-
+         ("C-c v d" . multi-vterm-dedicated-toggle)
+         ("C-c v r" . multi-vterm-project)))
 
 (require 'tramp)
 (require 'vterm)
@@ -77,8 +80,7 @@
        (format "ssh -t %s 'cd %s && exec $SHELL -l'"
                target (shell-quote-argument path)))
       (vterm-send-return))))
-
-(global-set-key (kbd "C-c t") #'eej/vterm-here)
+;;(global-set-key (kbd "C-c t") #'eej/vterm-here)
 
 (provide 'editor-utilities)
 ;;; editor-utilities.el ends here
