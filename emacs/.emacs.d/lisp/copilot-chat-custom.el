@@ -25,18 +25,23 @@
   "Deterministic filename for persisting this Copilot chat buffer.")
 
 (defun eej/start-codex ()
-  "Open Codex CLI in ~/fubar (empty dir)."
+  "Open Codex CLI in the current project root.
+Reuses an existing *codex:<project>* buffer when one exists."
   (interactive)
   (require 'vterm)
-  (let* ((root (expand-file-name "~/fubar"))
-         (buf (get-buffer-create "*codex*")))
-    (with-current-buffer buf
-      (setq default-directory root)
-      (unless (derived-mode-p 'vterm-mode)
-        (vterm-mode))
-      (vterm-send-string (concat "cd " (shell-quote-argument root) "\n")))
-    (pop-to-buffer buf)
-    (vterm-send-string "codex\n")))
+  (let* ((root (eej/project-root-or-default))
+         (name (file-name-nondirectory (directory-file-name root)))
+         (buf-name (format "*codex:%s*" name))
+         (buf (get-buffer buf-name)))
+    (if (and buf (buffer-live-p buf))
+        (pop-to-buffer buf)
+      (setq buf (get-buffer-create buf-name))
+      (with-current-buffer buf
+        (setq default-directory root)
+        (vterm-mode)
+        (vterm-send-string (concat "cd " (shell-quote-argument root) "\n"))
+        (vterm-send-string "codex\n"))
+      (pop-to-buffer buf))))
 
 (defun eej-copilot-tab-or-indent ()
   "Accept Copilot completion if visible, otherwise indent."
