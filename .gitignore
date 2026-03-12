@@ -12,3 +12,6 @@ emacs/.emacs.d/eca
 
 # Seems to keep local cookies here?
 emacs/.emacs.d/url
+
+# For now we exclude claude dirs
+.claude/
