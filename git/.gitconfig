@@ -67,10 +67,6 @@
 
 [status]
 	submoduleSummary = true
-
-[lfs]
-	fetchexclude = *
-
 [merge]
 	renamelimit = 999999
 
