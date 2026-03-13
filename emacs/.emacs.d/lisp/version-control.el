@@ -50,8 +50,7 @@ If BRANCH does not exist, create it from the current HEAD."
   (interactive "sBranch name: ")
   (let* ((root (eej/project-root-or-default))
          (parent (file-name-directory (directory-file-name root)))
-         (project-name (file-name-nondirectory (directory-file-name root)))
-         (wt-dir (expand-file-name (concat project-name "-" branch) parent))
+         (wt-dir (expand-file-name branch parent))
          (branch-exists (zerop (call-process "git" nil nil nil
                                              "rev-parse" "--verify" branch))))
     (when (file-directory-p wt-dir)
@@ -72,6 +71,14 @@ If BRANCH does not exist, create it from the current HEAD."
   "Create a git worktree for BRANCH and launch claude-code-ide in it."
   (interactive "sBranch name: ")
   (let ((wt-dir (eej/worktree-create branch)))
+    ;; delete-other-windows normally preserves side windows due to
+    ;; no-delete-other-windows parameter.  Tear them down first.
+    (walk-windows
+     (lambda (w)
+       (when (window-parameter w 'window-side)
+         (delete-window w)))
+     nil (selected-frame))
+    (delete-other-windows)
     (let ((default-directory wt-dir))
       (claude-code-ide))))
 
