@@ -443,22 +443,3 @@ property already exists so multiple entries accumulate."
 
 (provide 'org-custom)
 ;;; org-custom.el ends here
-
-  ;; The Problem: When you jump from the agenda to projects.org using Enter, the buffer is being visited but the org-mode-hook might not be running completely or font-lock isn't properly initialized. This is a known issue with org-mode when buffers are opened indirectly through the agenda.
-  ;; Possible causes:
-  ;;  1. org-super-agenda-mode is enabled globally (line 218 in local-config.el) which might interfere with normal org-mode buffer setup
-  ;;  2. Font-lock might not be re-enabled when jumping from agenda
-  ;;  3. The agenda might be using find-file-noselect or similar functions that don't trigger all hooks properly
-  ;; Here's what I recommend:
-  ;;  1. First, let's verify the issue - Can you check if font-lock-mode is actually enabled in the unformatted buffer? Run M-x describe-mode or check the modeline when you're in the "unformatted" projects.org buffer.
-  ;;  2. Try forcing font-lock refresh - When you see the unformatted buffer, try running M-x font-lock-fontify-buffer to see if that fixes it temporarily.
-  ;;  3. Likely fix - Add a hook to ensure font-lock is properly enabled when visiting from agenda:
-  ;;  (add-hook 'org-agenda-after-show-hook #'font-lock-fontify-buffer)
-  ;; Or more robustly, ensure the org-mode buffer is properly initialized:
-  ;;  (defun spectral-org-agenda-after-show-setup ()
-  ;;    "Ensure proper org-mode setup after showing from agenda."
-  ;;    (when (derived-mode-p 'org-mode)
-  ;;      (font-lock-mode 1)
-  ;;      (font-lock-fontify-buffer)))
-  ;;  (add-hook 'org-agenda-after-show-hook #'spectral-org-agenda-after-show-setup)
-  ;; Would you like me to add this fix to your configuration?
