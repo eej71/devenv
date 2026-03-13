@@ -60,7 +60,8 @@
 
 (with-eval-after-load 'project
   (define-key project-prefix-map (kbd "h") #'eej/project-copilot-chat)
-  (define-key project-prefix-map (kbd "l") #'claude-code-ide))
+  (define-key project-prefix-map (kbd "l") #'claude-code-ide)
+  (define-key project-prefix-map (kbd "j") #'eej/project-switch-full))
 
 (use-package gptel
   :config

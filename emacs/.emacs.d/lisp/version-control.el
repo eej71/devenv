@@ -98,6 +98,50 @@ If BRANCH does not exist, create it from the current HEAD."
           (user-error "git worktree remove failed — see *git-worktree* buffer"))
         (message "Removed worktree: %s" path)))))
 
+(defun eej/project-switch-full (dir)
+  "Switch to project at DIR with a clean slate.
+Clears all windows, opens the last few recently-touched files in
+the project, shows the claude-code-ide session if one exists, and
+falls back to `dired' if no recent files are found."
+  (interactive (list (project-prompt-project-dir)))
+  (let* ((root (expand-file-name (file-name-as-directory dir)))
+         (recent-files
+          (seq-take
+           (seq-filter (lambda (f) (string-prefix-p root (expand-file-name f)))
+                       (append
+                        ;; Live buffers visiting files in this project, most recent first
+                        (delq nil
+                              (mapcar (lambda (b)
+                                        (when-let ((f (buffer-file-name b)))
+                                          (when (string-prefix-p root (expand-file-name f))
+                                            (expand-file-name f))))
+                                      (buffer-list)))
+                        ;; Then recentf entries for the project
+                        (when (bound-and-true-p recentf-list)
+                          (seq-filter
+                           (lambda (f) (string-prefix-p root (expand-file-name f)))
+                           recentf-list))))
+           3)))
+    (delete-other-windows)
+    (if recent-files
+        (progn
+          (find-file (car recent-files))
+          (dolist (f (cdr recent-files))
+            (when (file-exists-p f)
+              (split-window-below)
+              (other-window 1)
+              (find-file f)))
+          (balance-windows)
+          (windmove-up)
+          (windmove-up))
+        (dired root))
+    ;; Show claude-code-ide side window if a session exists
+    (let ((default-directory root))
+      (when (fboundp 'claude-code-ide--get-buffer-name)
+        (when-let ((buf (get-buffer (claude-code-ide--get-buffer-name))))
+          (when (buffer-live-p buf)
+            (claude-code-ide--display-buffer-in-side-window buf)))))))
+
 (define-prefix-command 'eej-worktree-map)
 (define-key eej-worktree-map (kbd "c") #'eej/worktree-create)
 (define-key eej-worktree-map (kbd "C") #'eej/worktree-create-and-claude)
