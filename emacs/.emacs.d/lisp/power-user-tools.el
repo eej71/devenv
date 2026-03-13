@@ -112,7 +112,7 @@
   :config
   (global-undo-tree-mode)
   :custom
-  (undo-tree-auto-save-history t)                          ; Persist undo history
+  (undo-tree-auto-save-history nil)                         ; Disabled — serializing large undo trees causes minute-long save stalls
   (undo-tree-history-directory-alist '(("." . "~/tmp/undo-tree")))
   (undo-tree-visualizer-diff t)                            ; Show diff in visualizer
   (undo-tree-visualizer-timestamps t))                     ; Show timestamps
