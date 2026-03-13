@@ -101,9 +101,9 @@
 (use-package claude-code-ide
   :straight (claude-code-ide :type git :host github :repo "manzaltu/claude-code-ide.el")
   :custom
-  (claude-code-ide-cli-extra-flags "--model claude-opus-4-6 -c model_reasoning_effort=high")
+  (claude-code-ide-cli-extra-flags "--model claude-opus-4-6 --effort high")
   (claude-code-ide-window-side 'left)
-  (claude-code-ide-window-width 110)
+  (claude-code-ide-window-width 130)
   :config
   (defun eej/claude-code-send-return ()
     "Submit input to the Claude Code terminal process."
