@@ -93,12 +93,13 @@
   "Return the current branch name for Git."
   (when-let* ((file (or buffer-file-name default-directory))
               (backend (vc-responsible-backend file t))
-              ((eq backend 'Git))
-              (vc-mode-line-string
-               (ignore-errors (vc-call-backend backend 'mode-line-string file))))
-    (if (string-match "\\`\\s-*Git[:-]\\(.+\\)\\'" vc-mode-line-string)
-        (match-string 1 vc-mode-line-string)
-      vc-mode-line-string)))
+              ((eq backend 'Git)))
+    (or (when-let ((ml (ignore-errors
+                         (vc-call-backend backend 'mode-line-string file))))
+          (if (string-match "\\`\\s-*Git[:-]\\(.+\\)\\'" ml)
+              (match-string 1 ml)
+            ml))
+        (ignore-errors (vc-git--symbolic-ref file)))))
 
 (defun spectral-modeline--compute-project-branch-face (project)
   "Return the face for this particular `PROJECT` branch."
@@ -283,6 +284,18 @@
             spectral-modeline-format-active
           spectral-modeline-format-inactive)))
 
+(defvar spectral-header-line-format
+  '(:eval
+    (let* ((name (format " %s " (spectral-modeline-format-filename)))
+           (fill (make-string (max 0 (- (window-total-width) (length name))) ?\s)))
+      (if (mode-line-window-selected-p)
+          (propertize (concat name fill)
+                      'face '(:foreground "#ffffff" :background "#00008f" :bold t))
+        (propertize (concat name fill)
+                    'face '(:foreground "#9aa3b2" :background "#1f2430")))))
+  "Header line format for active/inactive window perimeter highlighting.")
+(put 'spectral-header-line-format 'risky-local-variable t)
+
 (defun eej-modeline-restore-default ()
   "Restore the custom modeline defaults after startup."
   ;; Clean up older per-buffer locals created by legacy hook-based switching.
@@ -294,6 +307,7 @@
                              spectral-modeline-format-inactive)))
         (kill-local-variable 'mode-line-format))))
   (setq-default mode-line-format (list spectral-modeline-format))
+  (setq-default header-line-format (list spectral-header-line-format))
   (force-mode-line-update t))
 
 (add-hook 'after-init-hook #'eej-modeline-restore-default)

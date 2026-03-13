@@ -277,8 +277,10 @@
  `(bold                         ((t (:bold t))))
  `(bold-italic                  ((t (:bold t :italic t))))
  `(border-glyph                 ((t (nil))))
- `(default                      ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-00))))
- `(fringe                       ((t (:background ,spectral-background-00))))
+ `(default                      ((((type graphic)) (:foreground ,spectral-foreground-00 :background ,spectral-background-00))
+                                 (t (:foreground ,spectral-foreground-00 :background unspecified))))
+ `(fringe                       ((((type graphic)) (:background ,spectral-background-00))
+                                 (t (:background unspecified))))
  `(buffers-tab                  ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-00))))
 
  `(text-cursor                  ((t (:foreground ,spectral-foreground-32 :background ,spectral-yellow-00b))))
@@ -445,12 +447,14 @@
  `(minibuffer-prompt ((t (:foreground ,spectral-yellow-01))))
 
  ;; This is still used - fold it in better...
- `(mode-line ((t (:background ,spectral-background-09))))
+ `(mode-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-11))))
  `(mode-line-inactive ((t (:foreground ,spectral-foreground-20 :background ,spectral-background-03))))
+
+ `(header-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-11))))
 
  `(secondary-selection ((t (:background ,spectral-background-12))))
  `(trailing-whitespace ((t (:background ,spectral-rose-01))))
- `(vertical-border ((t (:foreground ,spectral-foreground-05))))
+ `(vertical-border ((t (:foreground ,spectral-blue-11))))
 
    ;;; text in the git commit buffer with magit
  `(git-commit-summary ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-00))))
