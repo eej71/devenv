@@ -23,6 +23,7 @@ fi
 # Specific domains
 case "$EEJ_PROFILE" in
     Home)
+        _ps1_bg="35;70;80"
         source /usr/share/doc/git/contrib/completion/git-completion.bash
         source /usr/share/doc/git/contrib/completion/git-prompt.sh
         function ed { emacsclient -nw $@; }
@@ -32,7 +33,7 @@ case "$EEJ_PROFILE" in
         ;;
 
     Work)
-        _ps1_bg="26;61;74"
+        _ps1_bg="0;0;175"
         alias ls='ls --color=auto'
         source /usr/share/doc/git/contrib/completion/git-completion.bash
         source /usr/share/doc/git/contrib/completion/git-prompt.sh
