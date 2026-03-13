@@ -147,6 +147,7 @@
 (use-package diff-hl
   :hook
   ((prog-mode . diff-hl-mode)           ; Enable in programming modes
+   (nxml-mode . diff-hl-mode)           ; nxml derives from text-mode, not prog-mode
    (dired-mode . diff-hl-dired-mode)    ; Show git status in dired
    (magit-pre-refresh . diff-hl-magit-pre-refresh)
    (magit-post-refresh . diff-hl-magit-post-refresh))
