@@ -276,6 +276,39 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
                              (org-agenda-files . (:todo . "NEXT"))
                              (org-agenda-files . (:tag . "refile"))
                              (org-agenda-files . (:todo . "TODO"))))
+
+  ;; Ensure org files exist with proper scaffolding
+  (defvar eej/org-file-scaffolds
+    '(("projects.org" . "#+TITLE: Projects\n#+STARTUP: overview indent\n\n* Inbox\n")
+      ("journal.org"  . "#+TITLE: Journal\n#+FILETAGS: :journal:\n#+STARTUP: overview indent\n#+PROPERTY: CREATED_ALL t\n")
+      ("notebook.org" . "#+TITLE: Notebook\n#+FILETAGS: :notebook:\n#+STARTUP: overview indent\n#+PROPERTY: CREATED_ALL t\n#+TAGS: reference bookmark snippet howto\n\n* References\n* Bookmarks\n* How-To\n* Snippets\n"))
+    "Alist of (FILENAME . SCAFFOLD) for org files that should exist.")
+
+  (dolist (entry eej/org-file-scaffolds)
+    (let ((path (expand-file-name (car entry) org-directory)))
+      (unless (file-exists-p path)
+        (make-directory (file-name-directory path) t)
+        (write-region (cdr entry) nil path)
+        (message "Created %s" path))))
+
+  ;; Generic capture templates — site-specific templates are appended
+  ;; in local-config.el via `add-to-list'.
+  (setq org-capture-templates
+        '(("t" "Task" entry (file+headline "projects.org" "Inbox")
+           "* TODO %?\n:LOGBOOK:\n:END:\n" :prepend t)
+          ("n" "Note on clocked task" entry (clock)
+           "* NOTE %U %^{NOTE}" :immediate-finish t)
+          ("C" "Child task under clock" entry (clock)
+           "* TODO %?\n:LOGBOOK:\n:END:\n" :prepend t)
+          ("j" "Journal" entry (file+olp+datetree "journal.org")
+           (function eej/capture-template-journal))
+          ("r" "Reference" entry (file+headline "notebook.org" "References")
+           (function eej/capture-template-reference))
+          ("b" "Bookmark" entry (file+headline "notebook.org" "Bookmarks")
+           (function eej/capture-template-bookmark))
+          ("s" "Snippet" entry (file+headline "notebook.org" "Snippets")
+           (function eej/capture-template-snippet))))
+
   (org-clock-persistence-insinuate)
   (add-hook 'org-mode-hook #'spectral-org-setup)
   (add-hook 'org-clock-out-hook #'spectral-recompute-clock-sum)
