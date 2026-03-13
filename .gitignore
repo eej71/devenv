@@ -12,3 +12,9 @@ emacs/.emacs.d/eca
 
 # Seems to keep local cookies here?
 emacs/.emacs.d/url
+
+# agent shell transcripts should not be muled around
+emacs/.emacs.d/.agent-shell/
+
+# org-id-locations is just a cache file
+emacs/.emacs.d/.org-id-locations
