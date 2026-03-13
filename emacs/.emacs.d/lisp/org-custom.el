@@ -206,6 +206,93 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
 
 (advice-add 'org-sort-entries :around #'spectral-org-todo-order-sort)
 
+;;; Capture <-> Clock bidirectional linking
+;;
+;; For configured capture keys, when a task is clocked in:
+;;   - The captured entry gets a CLOCK-TASK property linking to the task
+;;   - The clocked task gets a backlink property (e.g. JOURNAL, REFERENCES)
+;;     linking to the captured entry
+
+(defun eej/clock-task-id-link ()
+  "Return an `id:' Org link to the currently clocked task.
+Ensures the clocked task has a persistent org-id, creating one if
+needed, so the link survives heading moves and refiles."
+  (if (org-clocking-p)
+      (org-with-point-at org-clock-marker
+        (org-id-get-create)
+        (format "[[id:%s][%s]]"
+                (org-id-get)
+                (org-get-heading t t t t)))
+    ""))
+
+(defun eej/capture-template-journal ()
+  "Capture template for journal entries."
+  (if (org-clocking-p)
+      "* %U %?\n:PROPERTIES:\n:CLOCK-TASK: %(eej/clock-task-id-link)\n:END:\n"
+    "* %U %?\n"))
+
+(defun eej/capture-template-reference ()
+  "Capture template for references."
+  (if (org-clocking-p)
+      "* %?\n:PROPERTIES:\n:CREATED: %U\n:SOURCE: %^{Source|}\n:CLOCK-TASK: %(eej/clock-task-id-link)\n:END:\n"
+    "* %?\n:PROPERTIES:\n:CREATED: %U\n:SOURCE: %^{Source|}\n:END:\n"))
+
+(defun eej/capture-template-bookmark ()
+  "Capture template for bookmarks."
+  (if (org-clocking-p)
+      "* %?\n:PROPERTIES:\n:CREATED: %U\n:URL: %^{URL}\n:CLOCK-TASK: %(eej/clock-task-id-link)\n:END:\n"
+    "* %?\n:PROPERTIES:\n:CREATED: %U\n:URL: %^{URL}\n:END:\n"))
+
+(defun eej/capture-template-snippet ()
+  "Capture template for code snippets."
+  (if (org-clocking-p)
+      "* %?\n:PROPERTIES:\n:CREATED: %U\n:CLOCK-TASK: %(eej/clock-task-id-link)\n:END:\n#+begin_src %^{Language|emacs-lisp|python|bash|c++}\n%i\n#+end_src\n"
+    "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n#+begin_src %^{Language|emacs-lisp|python|bash|c++}\n%i\n#+end_src\n"))
+
+(defvar eej/capture-clock-link-alist
+  '(("j" . "JOURNAL")
+    ("r" . "REFERENCES")
+    ("b" . "REFERENCES")
+    ("s" . "REFERENCES"))
+  "Alist of (CAPTURE-KEY . BACKLINK-PROPERTY).
+Capture keys listed here get bidirectional linking with the clocked task.")
+
+(defun eej/capture-clock-link--backlink-prop ()
+  "Return the backlink property name for the current capture, or nil."
+  (cdr (assoc (plist-get org-capture-plist :key)
+              eej/capture-clock-link-alist)))
+
+(defun eej/capture-clock-link-ensure-id ()
+  "Give the captured entry an org-id when a clock is running.
+Runs on `org-capture-prepare-finalize-hook'."
+  (when (and (eej/capture-clock-link--backlink-prop)
+             (org-clocking-p))
+    (org-id-get-create)))
+
+(defun eej/capture-clock-link-add-backlink ()
+  "Add a backlink property on the clocked task pointing to the captured entry.
+Runs on `org-capture-after-finalize-hook'.  Appends when the
+property already exists so multiple entries accumulate."
+  (let ((prop (eej/capture-clock-link--backlink-prop)))
+    (when (and prop
+               (org-clocking-p)
+               org-capture-last-stored-marker
+               (marker-buffer org-capture-last-stored-marker))
+      (let ((entry-id
+             (org-with-point-at org-capture-last-stored-marker
+               (org-id-get)))
+            (timestamp (format-time-string "%Y-%m-%d %H:%M")))
+        (when entry-id
+          (org-with-point-at org-clock-marker
+            (let* ((link (format "[[id:%s][%s]]" entry-id timestamp))
+                   (existing (org-entry-get nil prop)))
+              (org-set-property
+               prop
+               (if existing (concat existing " " link) link)))))))))
+
+(add-hook 'org-capture-prepare-finalize-hook #'eej/capture-clock-link-ensure-id)
+(add-hook 'org-capture-after-finalize-hook #'eej/capture-clock-link-add-backlink)
+
 ;; TODO: consult-org-heading or consult-org-agenda
 (use-package org
   ;; It's necessary to place everything in :config otherwise org mode loading is sad
