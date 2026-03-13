@@ -114,7 +114,8 @@
               (lambda ()
                 (local-set-key (kbd "RET") #'claude-code-ide-insert-newline)
                 (local-set-key (kbd "C-c RET") #'eej/claude-code-send-return)
-                (local-set-key (kbd "C-c C-c") #'eej/claude-code-send-return))))
+                (local-set-key (kbd "C-c C-c") #'eej/claude-code-send-return)))
+)
 
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
