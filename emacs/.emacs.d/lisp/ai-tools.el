@@ -155,5 +155,18 @@
       (message "ai-tools: Minuet inline completion configured (Claude)"))
   (message "ai-tools: CLAUDE_API_KEY not set, skipping Minuet inline completion"))
 
+(defun eej/toggle-auto-suggestions ()
+  "Toggle AI auto-suggestions in the current buffer (Copilot and Minuet)."
+  (interactive)
+  (let ((enabling (not (or (bound-and-true-p copilot-mode)
+                           (bound-and-true-p minuet-auto-suggestion-mode)))))
+    (when (fboundp 'copilot-mode)
+      (copilot-mode (if enabling 1 -1)))
+    (when (fboundp 'minuet-auto-suggestion-mode)
+      (minuet-auto-suggestion-mode (if enabling 1 -1)))
+    (message "AI auto-suggestions %s" (if enabling "ON" "OFF"))))
+
+(define-key eej-ai-map (kbd "a") #'eej/toggle-auto-suggestions)
+
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
