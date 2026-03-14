@@ -91,7 +91,7 @@
 
 (defun spectral-modeline-git-name ()
   "Return the current branch name for Git."
-  (when-let* ((file (or buffer-file-name default-directory))
+  (when-let* ((file (file-truename (or buffer-file-name default-directory)))
               (backend (vc-responsible-backend file t))
               ((eq backend 'Git)))
     (or (when-let ((ml (ignore-errors
