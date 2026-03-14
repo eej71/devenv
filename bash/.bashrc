@@ -20,12 +20,33 @@ shopt -s cdspell checkwinsize cmdhist execfail histverify mailwarn no_empty_cmd_
 if [ -z "$PS1" ]; then
     return
 fi
+# Git completion and prompt - search common locations
+_git_completion_candidates=(
+    /usr/share/doc/git/contrib/completion/git-completion.bash
+    /usr/share/bash-completion/completions/git
+    /usr/local/etc/bash_completion.d/git-completion.bash
+    /opt/homebrew/etc/bash_completion.d/git-completion.bash
+)
+for _f in "${_git_completion_candidates[@]}"; do
+    if [ -f "$_f" ]; then source "$_f"; break; fi
+done
+
+_git_prompt_candidates=(
+    /usr/share/doc/git/contrib/completion/git-prompt.sh
+    /usr/lib/git-core/git-sh-prompt
+    /etc/bash_completion.d/git-prompt
+    /usr/local/etc/bash_completion.d/git-prompt.sh
+    /opt/homebrew/etc/bash_completion.d/git-prompt.sh
+)
+for _f in "${_git_prompt_candidates[@]}"; do
+    if [ -f "$_f" ]; then source "$_f"; break; fi
+done
+unset _f _git_completion_candidates _git_prompt_candidates
+
 # Specific domains
 case "$EEJ_PROFILE" in
     Home)
         _ps1_bg="35;70;80"
-        source /usr/share/doc/git/contrib/completion/git-completion.bash
-        source /usr/share/doc/git/contrib/completion/git-prompt.sh
         function ed { emacsclient -nw $@; }
         function ed { emacsclient -nw $@; }
         function xed { emacsclient -n -c $@ 2> /dev/null; }
@@ -34,9 +55,6 @@ case "$EEJ_PROFILE" in
 
     Work)
         _ps1_bg="0;0;175"
-        alias ls='ls --color=auto'
-        source /usr/share/doc/git/contrib/completion/git-completion.bash
-        source /usr/share/doc/git/contrib/completion/git-prompt.sh
         function ed { TERM=xterm-256color emacsclient -nw $@; }
         function xed { emacsclient -n -c --frame-parameters="((width . 170)(height . 40)(top . 10)(left . 10))" $@ 2> /dev/null; }
         function ted { emacsclient -n -c --frame-parameters="((width . 170)(height . 40)(top . 10)(left . 10))" $@ 2> /dev/null; }
@@ -47,6 +65,7 @@ case "$EEJ_PROFILE" in
         echo "Unrecognized PROFILE=${EEJ_PROFILE}"
         ;;
 esac
+alias ls='ls --color=auto'
 alias ll="ls -lAXF --color=auto --block-size=512 --time-style=long-iso"
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
