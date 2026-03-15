@@ -137,3 +137,7 @@ unset https_proxy
 unset FTP_PROXY
 unset ftp_proxy
 export PATH="$HOME/.claude/bin:$HOME/.local/bin:$PATH"
+
+# Flush stale terminal query responses (e.g. OSC 11) that tmux
+# sends on session startup before the shell is ready.
+[[ -n "$TMUX" ]] && { sleep 0.05; read -r -t 0.1 -d '' -n 10000 2>/dev/null; clear; }
