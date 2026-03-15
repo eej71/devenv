@@ -9,6 +9,7 @@ then
     source ~/.bashrc_local
 fi
 
+
 # Common bash settings
 set -o emacs
 set -b
@@ -16,10 +17,11 @@ set -o ignoreeof
 set completion-ignore-case on
 shopt -s cdspell checkwinsize cmdhist execfail histverify mailwarn no_empty_cmd_completion histappend gnu_errfmt histreedit extglob
 
-# A primative way to see if there is no shell
-if [ -z "$PS1" ]; then
-    return
-fi
+# Exit early for non-interactive shells
+[[ $- == *i* ]] || return
+
+# Nudge if local config is missing
+[[ -x ~/devenv/check-local.sh ]] && ~/devenv/check-local.sh
 # Git completion and prompt - search common locations
 _git_completion_candidates=(
     /usr/share/doc/git/contrib/completion/git-completion.bash
