@@ -1,0 +1,4 @@
+;; Machine-specific emacs configuration
+;; Customize org-agenda-custom-commands, org-capture-templates, etc.
+
+(provide 'local-config)

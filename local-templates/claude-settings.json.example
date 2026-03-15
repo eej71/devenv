@@ -1,0 +1,10 @@
+{
+  "model": "opus",
+  "effortLevel": "high",
+  "permissions": {
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+# Set your profile: "Home" or "Work"
+EEJ_PROFILE="Home"
+EEJ_EMAIL="you@example.com"
+export EEJ_PROFILE
+export EEJ_EMAIL
+
+# Add machine-specific PATH entries here
+# PATH=~/some/path:$PATH
+
+# Claude API key (keep this secret)
+# export CLAUDE_API_KEY="sk-ant-..."
