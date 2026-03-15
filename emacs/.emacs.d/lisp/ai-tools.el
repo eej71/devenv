@@ -114,6 +114,68 @@
       (message "ai-tools: GitHub Copilot configured"))
   (message "ai-tools: GitHub Copilot not available, skipping"))
 
+;;; Claude Code IDE — multiline compose buffer
+;; C-c e in a claude-code-ide terminal opens a small editing buffer.
+;; Write your prompt with normal Enter for newlines, then:
+;;   C-c C-c  — send to Claude and close
+;;   C-c C-k  — cancel
+
+(defvar eej/claude-code-compose-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-c") #'eej/claude-code-compose-send)
+    (define-key map (kbd "C-c C-k") #'eej/claude-code-compose-cancel)
+    map)
+  "Keymap for Claude Code compose buffer.")
+
+(define-minor-mode eej/claude-code-compose-mode
+  "Minor mode for composing multiline Claude Code input."
+  :lighter " Compose"
+  :keymap eej/claude-code-compose-mode-map)
+
+(defun eej/claude-code-compose ()
+  "Open a buffer to compose multiline input for the current Claude Code session."
+  (interactive)
+  (let ((target (current-buffer)))
+    (let ((buf (get-buffer-create "*claude-code-compose*")))
+      (pop-to-buffer buf
+                     '((display-buffer-below-selected)
+                       (window-height . 10)))
+      (erase-buffer)
+      (text-mode)
+      (eej/claude-code-compose-mode 1)
+      (setq-local eej/claude-code-compose--target-buffer target)
+      (message "Compose your message. C-c C-c to send, C-c C-k to cancel."))))
+
+(defun eej/claude-code-compose-send ()
+  "Send composed text to the Claude Code terminal and close the compose buffer."
+  (interactive)
+  (let ((text (string-trim (buffer-string)))
+        (target eej/claude-code-compose--target-buffer))
+    (when (string-empty-p text)
+      (user-error "Nothing to send"))
+    (unless (buffer-live-p target)
+      (user-error "Claude Code session is no longer active"))
+    (quit-window t)
+    (with-current-buffer target
+      (let* ((lines (split-string text "\n"))
+             (total (length lines))
+             (i 0))
+        (dolist (line lines)
+          (claude-code-ide--terminal-send-string line)
+          (if (< (cl-incf i) total)
+              (progn
+                (claude-code-ide--terminal-send-string "\\")
+                (sit-for 0.1)
+                (claude-code-ide--terminal-send-return)
+                (sit-for 0.05))
+            (claude-code-ide--terminal-send-return)))))))
+
+(defun eej/claude-code-compose-cancel ()
+  "Cancel composition and close the compose buffer."
+  (interactive)
+  (quit-window t)
+  (message "Composition cancelled."))
+
 (use-package claude-code-ide
   :straight (claude-code-ide :type git :host github :repo "manzaltu/claude-code-ide.el")
   :custom
@@ -121,16 +183,9 @@
   (claude-code-ide-window-side 'left)
   (claude-code-ide-window-width 130)
   :config
-  (defun eej/claude-code-send-return ()
-    "Submit input to the Claude Code terminal process."
-    (interactive)
-    (claude-code-ide--terminal-send-return))
   (advice-add 'claude-code-ide--setup-terminal-keybindings :after
               (lambda ()
-                (local-set-key (kbd "RET") #'claude-code-ide-insert-newline)
-                (local-set-key (kbd "C-c RET") #'eej/claude-code-send-return)
-                (local-set-key (kbd "C-c C-c") #'eej/claude-code-send-return)))
-)
+                (local-set-key (kbd "C-c e") #'eej/claude-code-compose))))
 
 ;; Minuet — inline code completion via Claude API
 (if (getenv "CLAUDE_API_KEY")
