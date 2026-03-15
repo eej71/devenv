@@ -98,8 +98,6 @@
                ("M-f" . copilot-accept-completion-by-word)
                ("M-e" . copilot-accept-completion-by-line))
 
-        :hook (prog-mode . copilot-mode)
-
         :config
         ;; Map major-mode (symbol) -> Copilot language id (string)
         (add-to-list 'copilot-major-mode-alist '(c++-ts-mode . "cpp"))
@@ -139,7 +137,6 @@
     (progn
       (use-package minuet
         :straight (:host github :repo "milanglacier/minuet-ai.el")
-        :hook (prog-mode . minuet-auto-suggestion-mode)
         :bind (:map minuet-active-mode-map
                ("M-/" . minuet-show-suggestion)
                ("TAB" . minuet-accept-suggestion)
