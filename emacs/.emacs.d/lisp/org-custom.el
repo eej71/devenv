@@ -371,12 +371,18 @@ property already exists so multiple entries accumulate."
       ("notebook.org" . "#+TITLE: Notebook\n#+FILETAGS: :notebook:\n#+STARTUP: overview indent\n#+PROPERTY: CREATED_ALL t\n#+TAGS: reference bookmark snippet howto\n\n* References\n* Bookmarks\n* How-To\n* Snippets\n"))
     "Alist of (FILENAME . SCAFFOLD) for org files that should exist.")
 
-  (dolist (entry eej/org-file-scaffolds)
-    (let ((path (expand-file-name (car entry) org-directory)))
-      (unless (file-exists-p path)
-        (make-directory (file-name-directory path) t)
-        (write-region (cdr entry) nil path)
-        (message "Created %s" path))))
+  (let ((org-dir (expand-file-name org-directory)))
+    (unless (file-directory-p org-dir)
+      (make-directory org-dir t))
+    (unless (file-directory-p (expand-file-name ".git" org-dir))
+      (let ((default-directory org-dir))
+        (call-process "git" nil nil nil "init")
+        (message "Initialized git repository in %s" org-dir)))
+    (dolist (entry eej/org-file-scaffolds)
+      (let ((path (expand-file-name (car entry) org-dir)))
+        (unless (file-exists-p path)
+          (write-region (cdr entry) nil path)
+          (message "Created %s" path)))))
 
   ;; Generic capture templates — site-specific templates are appended
   ;; in local-config.el via `add-to-list'.
