@@ -185,6 +185,14 @@
   (claude-code-ide-window-side 'left)
   (claude-code-ide-window-width 130)
   :config
+  ;; Open question as to whether or not this advice-add is still needed to untangle the difficulties with multiple claude-ides
+  (advice-add 'claude-code-ide :before
+              (lambda (&rest _)
+                (walk-windows
+                 (lambda (w)
+                   (when (window-parameter w 'window-side)
+                     (delete-window w)))
+                 nil (selected-frame))))
   (advice-add 'claude-code-ide--setup-terminal-keybindings :after
               (lambda ()
                 (local-set-key (kbd "C-c e") #'eej/claude-code-compose))))
