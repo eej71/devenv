@@ -53,7 +53,7 @@
           :models '(claude-sonnet-4-5-20250929))))
 
 ;; GitHub Copilot (completion + chat) — only configure when available
-(if (locate-library "copilot")
+(if (executable-find "copilot")
     (progn
       (defun eej/copilot-chat--project-instance (directory)
         "Return Copilot Chat instance for DIRECTORY, creating one when needed."
