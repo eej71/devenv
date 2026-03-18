@@ -38,6 +38,7 @@
 (define-key eej-ai-map (kbd "g") #'gptel)
 (define-key eej-ai-map (kbd "l") #'claude-code-ide)
 (define-key eej-ai-map (kbd "b") #'claude-code-ide-switch-to-buffer)
+(define-key eej-ai-map (kbd "d") #'eej/claude-code-ide-redock)
 (define-key eej-ai-map (kbd "x") #'eej/start-codex)
 
 (with-eval-after-load 'project
@@ -175,6 +176,34 @@
   (interactive)
   (quit-window t)
   (message "Composition cancelled."))
+
+(defun eej/claude-code-ide-redock ()
+  "Force a Claude Code session back into its side window."
+  (interactive)
+  (require 'claude-code-ide nil t)
+  (let* ((target
+          (cond
+           ((and (fboundp 'claude-code-ide--session-buffer-p)
+                 (claude-code-ide--session-buffer-p (current-buffer)))
+            (current-buffer))
+           ((fboundp 'claude-code-ide--get-buffer-name)
+            (let* ((default-directory (eej/project-root-or-default))
+                   (buffer (get-buffer (claude-code-ide--get-buffer-name))))
+              (or buffer
+                  (and (buffer-live-p claude-code-ide--last-accessed-buffer)
+                       claude-code-ide--last-accessed-buffer))))
+           (t nil))))
+    (unless (buffer-live-p target)
+      (user-error "No Claude Code session to redock"))
+    (let ((fallback (other-buffer target t)))
+      (walk-windows
+       (lambda (window)
+         (when (and (eq (window-buffer window) target)
+                    (not (window-parameter window 'window-side)))
+           (set-window-buffer window fallback)))
+       nil (selected-frame)))
+    (claude-code-ide--display-buffer-in-side-window target)
+    (message "Claude Code redocked: %s" (buffer-name target))))
 
 (use-package claude-code-ide
   :straight (claude-code-ide :type git :host github :repo "manzaltu/claude-code-ide.el")
