@@ -248,7 +248,7 @@
   (symbol-value (intern
                  (format "spectral-%s-%02d"
                          (nth (mod idx (length spectral-color-palette-names)) spectral-color-palette-names)
-                         (+ (1+ (mod idx 5)) offset)))))
+                         (min 12 (+ (1+ (mod idx 5)) offset))))))
 
 (defun eej/project-hash-value ()
   "Return an integer that is a distinct value for where this project is located."
