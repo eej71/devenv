@@ -180,6 +180,8 @@
   :straight (claude-code-ide :type git :host github :repo "manzaltu/claude-code-ide.el")
   :custom
   (claude-code-ide-cli-extra-flags "--model claude-opus-4-6 --effort max")
+  (claude-code-ide-vterm-anti-flicker nil)
+  (claude-code-ide-prevent-reflow-glitch nil)
   (claude-code-ide-window-side 'left)
   (claude-code-ide-window-width 130)
   :config
