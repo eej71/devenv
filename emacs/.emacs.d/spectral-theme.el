@@ -460,13 +460,34 @@
  `(git-commit-summary ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-00))))
  `(git-rebase-hash ((t (:foreground, spectral-orange-04))))
 
- `(diff-added          ((t (:background ,spectral-green-10 :foreground ,spectral-green-01))))
- `(diff-changed        ((t (:background ,spectral-yellow-10 :foreground ,spectral-yellow-04))))
- `(diff-removed        ((t (:background ,spectral-red-02 :foreground ,spectral-red-08))))
+ `(diff-added          ((t (:background ,spectral-green-09 :foreground ,spectral-foreground-17))))
+ `(diff-changed        ((t (:background ,spectral-yellow-10 :foreground ,spectral-foreground-17))))
+ `(diff-removed        ((t (:background ,spectral-red-10 :foreground ,spectral-foreground-17))))
 
  `(diff-refine-added   ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-05 :italic t :bold t))))
  `(diff-refine-change  ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-00b :italic t :bold t))))
  `(diff-refine-removed ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-06 :italic t :bold t))))
+
+ ;; ediff faces — visually matched to magit-diff / diff-mode above.
+ ;; A = old/removed (red), B = new/added (green), C = ancestor merge (yellow).
+ ;; current-diff = active hunk, fine-diff = refined word-level change,
+ ;; even/odd-diff = non-selected context hunks (subtle alternating greys).
+ `(ediff-current-diff-A        ((t (:background ,spectral-red-10 :foreground ,spectral-foreground-06))))
+ `(ediff-current-diff-B        ((t (:background ,spectral-green-09 :foreground ,spectral-foreground-06))))
+ `(ediff-current-diff-C        ((t (:background ,spectral-yellow-10 :foreground ,spectral-foreground-06))))
+ `(ediff-current-diff-Ancestor ((t (:background ,spectral-azure-11 :foreground ,spectral-foreground-06))))
+ `(ediff-fine-diff-A           ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-06 :bold t))))
+ `(ediff-fine-diff-B           ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-05 :bold t))))
+ `(ediff-fine-diff-C           ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-00b :bold t))))
+ `(ediff-fine-diff-Ancestor    ((t (:foreground ,spectral-foreground-00 :background ,spectral-azure-09 :bold t))))
+ `(ediff-even-diff-A           ((t (:background ,spectral-background-03 :foreground ,spectral-foreground-17))))
+ `(ediff-even-diff-B           ((t (:background ,spectral-background-04 :foreground ,spectral-foreground-17))))
+ `(ediff-even-diff-C           ((t (:background ,spectral-background-03 :foreground ,spectral-foreground-17))))
+ `(ediff-even-diff-Ancestor    ((t (:background ,spectral-background-04 :foreground ,spectral-foreground-17))))
+ `(ediff-odd-diff-A            ((t (:background ,spectral-background-04 :foreground ,spectral-foreground-17))))
+ `(ediff-odd-diff-B            ((t (:background ,spectral-background-03 :foreground ,spectral-foreground-17))))
+ `(ediff-odd-diff-C            ((t (:background ,spectral-background-04 :foreground ,spectral-foreground-17))))
+ `(ediff-odd-diff-Ancestor     ((t (:background ,spectral-background-03 :foreground ,spectral-foreground-17))))
 
  `(dired-async-failures ((t (:foreground ,spectral-red-01 :weight bold))))
  `(dired-async-message ((t (:foreground ,spectral-yellow-01 :weight bold))))
@@ -474,7 +495,7 @@
 
  `(flymake-error    ((t (:foreground ,spectral-red-03 :background ,spectral-red-10 :underline t :bold t))))
  `(flymake-warning  ((t (:foreground ,spectral-orange-06 :underline t))))
- `(flymake-infoline ((t (:foreground ,spectral-blue-03 :bacgrkound ,spectral-blue-10))))
+ `(flymake-infoline ((t (:foreground ,spectral-blue-03 :background ,spectral-blue-10))))
 
  `(ack-separator ((t (:foreground ,spectral-foreground-05))))
  `(ack-file ((t (:foreground ,spectral-azure-03))))
@@ -501,7 +522,7 @@
  `(magit-diff-removed ((t (:background ,spectral-red-10 :foreground ,spectral-foreground-17))))
 
  `(magit-diff-file-heading           ((t (:foreground ,spectral-green-01 :bold t))))  ;; filename in the diff?
- `(magit-diff-file-heading-highlight ((t (:foregorund ,spectral-orange-03 :backround ,spectral-foreground-32 :bold t))))
+ `(magit-diff-file-heading-highlight ((t (:foreground ,spectral-orange-03 :background ,spectral-foreground-32 :bold t))))
  `(magit-diff-file-heading-selection ((t (:foreground ,spectral-red-04 :background ,spectral-foreground-32 :bold t))))
 
  `(magit-diff-hunk-heading           ((t (:foreground ,spectral-background-14 :background ,spectral-background-04 ))))
@@ -597,7 +618,7 @@
  `(org-date ((t (:foreground ,spectral-azure-03 :underline t))))
  `(org-deadline-announce ((t (:foreground ,spectral-red-04))))
  `(org-formula ((t (:foreground ,spectral-yellow-05))))
- `(org-headline-todo ((t :(:foreground ,spectral-foreground-00 :bold t))))
+ `(org-headline-todo ((t (:foreground ,spectral-foreground-00 :bold t))))
  `(org-headline-done ((t (:foreground ,spectral-foreground-12))))
  `(org-hide ((t (:foreground ,spectral-background-04))))
  `(org-link ((t (:foreground ,spectral-yellow-05 :underline t))))
@@ -609,7 +630,7 @@
  `(org-table ((t (:foreground ,spectral-azure-03 ))))
  `(org-table-row ((t (:foreground ,spectral-azure-08 ))))
  `(org-table-header ((t (:foreground ,spectral-azure-10 ))))
- `(org-tag ((t (:weight bold :weight bold))))
+ `(org-tag ((t (:weight bold))))
  `(org-time-grid ((t (:foreground ,spectral-orange-04))))
 
  `(org-todo-todo ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-09 :weight bold))))
