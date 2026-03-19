@@ -244,24 +244,27 @@
 
 (defconst spectral-color-palette-names '("red" "orange" "yellow" "chartreuse" "green" "springgreen" "cyan" "azure" "blue" "violet" "magenta" "rose"))
 
-(defun eej/create-color-name (idx offset)
-  (symbol-value (intern
-                 (format "spectral-%s-%02d"
-                         (nth (mod idx (length spectral-color-palette-names)) spectral-color-palette-names)
-                         (min 12 (+ (1+ (mod idx 5)) offset))))))
-
 (defun eej/project-hash-value ()
   "Return an integer that is a distinct value for where this project is located."
   (when-let* ((current-project (project-current nil (file-truename default-directory)))
               (project-dir (project-root current-project)))
     (string-to-number (md5 (concat (system-name) project-dir)) 16)))
 
+(defun eej/modeline-color-pair (hash)
+  "Return (FG . BG) hex color strings for the project modeline.
+Always uses the same hue for both — light foreground (-02) on dark
+background (-09) — so pairs are always monochromatic and readable."
+  (let ((hue (nth (mod hash (length spectral-color-palette-names))
+                  spectral-color-palette-names)))
+    (cons (symbol-value (intern (format "spectral-%s-02" hue)))
+          (symbol-value (intern (format "spectral-%s-09" hue))))))
+
 (defun eej/modify-modeline-face ()
-  "Modifies the modeline face for the git project name based on a hash value."
-  (when-let ((hash (eej/project-hash-value)))
+  "Set the modeline project-branch face using a monochromatic color pair."
+  (when-let* ((hash (eej/project-hash-value))
+              (pair (eej/modeline-color-pair hash)))
     (face-remap-add-relative 'spectral-modeline-project-branch-face
-                             `(:foreground ,(eej/create-color-name hash 0)
-                                           :background ,(eej/create-color-name (/ hash 7) 8)))))
+                             `(:foreground ,(car pair) :background ,(cdr pair)))))
 
 (add-hook 'find-file-hook #'eej/modify-modeline-face)
 
@@ -274,8 +277,8 @@
 
 (custom-theme-set-faces
  'spectral
- `(bold                         ((t (:bold t))))
- `(bold-italic                  ((t (:bold t :italic t))))
+ `(bold                         ((t (:weight bold))))
+ `(bold-italic                  ((t (:weight bold :italic t))))
  `(border-glyph                 ((t (nil))))
  `(default                      ((((type graphic)) (:foreground ,spectral-foreground-00 :background ,spectral-background-00))
                                  (t (:foreground ,spectral-foreground-00 :background unspecified))))
@@ -290,10 +293,10 @@
  `(left-margin                  ((t (nil))))
  `(toolbar                      ((t (nil))))
  `(menu                         ((t (:foreground ,spectral-foreground-05 :background ,spectral-background-08))))
- `(highlight                    ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-08 :italic t :bold t :extend t))))
+ `(highlight                    ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-08 :italic t :weight bold :extend t))))
 
  ;; Faces related to commenting all get the same basic style
- `(font-lock-comment-delimiter-face    ((t (:foreground ,spectral-springgreen-01 :bold t))))
+ `(font-lock-comment-delimiter-face    ((t (:foreground ,spectral-springgreen-01 :weight bold))))
  `(font-lock-comment-face              ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-doc-face                  ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-doc-string-face           ((t (:foreground ,spectral-springgreen-01 :italic t))))
@@ -302,7 +305,7 @@
  `(font-lock-constant-face             ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
  `(font-lock-keyword-face              ((t (:foreground ,spectral-cyan-02 :background ,spectral-blue-11 :underline t))))
  `(font-lock-type-face                 ((t (:foreground ,spectral-foreground-15 :italic t))))
- `(font-lock-variable-name-face        ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-03 :bold t))))
+ `(font-lock-variable-name-face        ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-03 :weight bold))))
  `(font-lock-property-name-face        ((t (:inherit font-lock-variable-name-face))))
 
  ;; These two should be the same
@@ -324,7 +327,7 @@
  `(completions-highlight        ((t (:foreground ,spectral-magenta-01 :background ,spectral-rose-07))))
 
  ;; Portion of text typed in minibuffer completion - orderless faces after a space is typed
- `(completions-common-part      ((t (:foreground ,spectral-rose-06 :bold t :underline t))))
+ `(completions-common-part      ((t (:foreground ,spectral-rose-06 :weight bold :underline t))))
  `(completions-annotations      ((t (:foreground ,spectral-background-13))))
 
  `(orderless-match-face-0       ((t (:inherit completions-common-part))))
@@ -336,7 +339,7 @@
  `(vertico-current              ((t (:inherit highlight))))
  `(vertico-indexed              ((t (:inherit font-lock-comment-face))))
  `(vertico-multiline            ((t (:inherit shadow))))
- `(vertico-group-title          ((t (:foreground ,spectral-yellow-00 :italic t :bold t))))
+ `(vertico-group-title          ((t (:foreground ,spectral-yellow-00 :italic t :weight bold))))
  `(vertico-group-separator      ((t (:strike-through t :foreground ,spectral-foreground-00))))
 
  ;; This captures the headline levels of org mode
@@ -352,10 +355,10 @@
  ;; Rename these to spectral
  `(spectral-modeline-saved-face ((t (:foreground ,spectral-green-01))))
  `(spectral-modeline-modified-face ((t (:foreground ,spectral-red-06))))
- `(spectral-modeline-kbd-macro-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-07 :bold t))))
- `(spectral-modeline-narrow-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-09 :bold t))))
+ `(spectral-modeline-kbd-macro-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-07 :weight bold))))
+ `(spectral-modeline-narrow-face ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-09 :weight bold))))
  `(spectral-modeline-project-branch-face ((t (:foreground ,spectral-magenta-04))))
- `(spectral-modeline-buffer-identification-face ((t :foreground ,spectral-background-00 :background ,spectral-foreground-00 :bold t)))
+ `(spectral-modeline-buffer-identification-face ((t :foreground ,spectral-background-00 :background ,spectral-foreground-00 :weight bold)))
  `(spectral-modeline-org-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-green-09 :italic t)))
  `(spectral-modeline-org-task-inactive-face ((t :foreground ,spectral-foreground-05 :background ,spectral-background-03 :italic t)))
  `(spectral-modeline-org-no-task-active-face ((t :foreground ,spectral-foreground-00 :background ,spectral-red-08)))
@@ -365,7 +368,7 @@
  ;; Not reviewed or verified
  `(compilation-column-number ((t (:foreground ,spectral-yellow-01))))
  `(compilation-line-number ((t (:foreground ,spectral-red-06))))
- `(compilation-error ((t (:background ,spectral-red-08 :foreground ,spectral-foreground-00 :bold t :italic t))))
+ `(compilation-error ((t (:background ,spectral-red-08 :foreground ,spectral-foreground-00 :weight bold :italic t))))
  `(compilation-info ((t (:foreground ,spectral-springgreen-04 :underline t))))
  `(compilation-mode-line-exit ((t (:foreground ,spectral-springgreen-02 :weight bold))))
  `(compilation-mode-line-fail ((t (:foreground ,spectral-red-01 :weight bold))))
@@ -437,13 +440,13 @@
  ;;
 
  ;; isearch faces
- `(isearch         ((t (:background ,spectral-rose-05 :foreground ,spectral-background-00 :underline t :bold t))))
+ `(isearch         ((t (:background ,spectral-rose-05 :foreground ,spectral-background-00 :underline t :weight bold))))
  `(lazy-highlight  ((t (:foreground ,spectral-rose-05 :background ,spectral-background-00))))
- `(isearch-fail    ((t (:foreground ,spectral-red-03 :background ,spectral-red-09 :bold t))))
+ `(isearch-fail    ((t (:foreground ,spectral-red-03 :background ,spectral-red-09 :weight bold))))
 
  `(linum ((t (:foreground ,spectral-foreground-10 :background ,spectral-background-00 ))))
  `(line-number ((t (:foreground ,spectral-foreground-26 :background ,spectral-background-01))))
- `(line-number-current-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-01 :inverse-video t :bold t))))
+ `(line-number-current-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-01 :inverse-video t :weight bold))))
 
  `(minibuffer-prompt ((t (:foreground ,spectral-yellow-01))))
 
@@ -465,9 +468,9 @@
  `(diff-changed        ((t (:background ,spectral-yellow-10 :foreground ,spectral-foreground-17))))
  `(diff-removed        ((t (:background ,spectral-red-10 :foreground ,spectral-foreground-17))))
 
- `(diff-refine-added   ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-05 :italic t :bold t))))
- `(diff-refine-change  ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-00b :italic t :bold t))))
- `(diff-refine-removed ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-06 :italic t :bold t))))
+ `(diff-refine-added   ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-05 :italic t :weight bold))))
+ `(diff-refine-change  ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-00b :italic t :weight bold))))
+ `(diff-refine-removed ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-06 :italic t :weight bold))))
 
  ;; ediff faces — visually matched to magit-diff / diff-mode above.
  ;; A = old/removed (red), B = new/added (green), C = ancestor merge (yellow).
@@ -477,10 +480,10 @@
  `(ediff-current-diff-B        ((t (:background ,spectral-green-09 :foreground ,spectral-foreground-06))))
  `(ediff-current-diff-C        ((t (:background ,spectral-yellow-10 :foreground ,spectral-foreground-06))))
  `(ediff-current-diff-Ancestor ((t (:background ,spectral-azure-11 :foreground ,spectral-foreground-06))))
- `(ediff-fine-diff-A           ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-06 :bold t))))
- `(ediff-fine-diff-B           ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-05 :bold t))))
- `(ediff-fine-diff-C           ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-00b :bold t))))
- `(ediff-fine-diff-Ancestor    ((t (:foreground ,spectral-foreground-00 :background ,spectral-azure-09 :bold t))))
+ `(ediff-fine-diff-A           ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-06 :weight bold))))
+ `(ediff-fine-diff-B           ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-05 :weight bold))))
+ `(ediff-fine-diff-C           ((t (:foreground ,spectral-foreground-00 :background ,spectral-yellow-00b :weight bold))))
+ `(ediff-fine-diff-Ancestor    ((t (:foreground ,spectral-foreground-00 :background ,spectral-azure-09 :weight bold))))
  `(ediff-even-diff-A           ((t (:background ,spectral-background-03 :foreground ,spectral-foreground-17))))
  `(ediff-even-diff-B           ((t (:background ,spectral-background-04 :foreground ,spectral-foreground-17))))
  `(ediff-even-diff-C           ((t (:background ,spectral-background-03 :foreground ,spectral-foreground-17))))
@@ -494,7 +497,7 @@
  `(dired-async-message ((t (:foreground ,spectral-yellow-01 :weight bold))))
  `(dired-async-mode-message ((t (:foreground ,spectral-yellow-01))))
 
- `(flymake-error    ((t (:foreground ,spectral-red-03 :background ,spectral-red-10 :underline t :bold t))))
+ `(flymake-error    ((t (:foreground ,spectral-red-03 :background ,spectral-red-10 :underline t :weight bold))))
  `(flymake-warning  ((t (:foreground ,spectral-orange-06 :underline t))))
  `(flymake-infoline ((t (:foreground ,spectral-blue-03 :background ,spectral-blue-10))))
 
@@ -508,8 +511,8 @@
  `(magit-item-highlight   ((t (:inherit region))))
 
  `(magit-section-highlight           ((t (:background ,spectral-foreground-32)))) ;; Not sure if I like the highlight line or not
- `(magit-section-heading             ((t (:underline t :bold t))))
- `(magit-section-heading-selection   ((t (:foreground ,spectral-orange-04 :bold t))))
+ `(magit-section-heading             ((t (:underline t :weight bold))))
+ `(magit-section-heading-selection   ((t (:foreground ,spectral-orange-04 :weight bold))))
 
  ;; This is the unchanged text that provides context in a diff - so a grey is good
  `(magit-diff-context-highlight      ((t (:foreground ,spectral-foreground-24))))
@@ -522,9 +525,9 @@
  `(magit-diff-added ((t (:background ,spectral-green-09 :foreground ,spectral-foreground-17))))
  `(magit-diff-removed ((t (:background ,spectral-red-10 :foreground ,spectral-foreground-17))))
 
- `(magit-diff-file-heading           ((t (:foreground ,spectral-green-01 :bold t))))  ;; filename in the diff?
- `(magit-diff-file-heading-highlight ((t (:foreground ,spectral-orange-03 :background ,spectral-foreground-32 :bold t))))
- `(magit-diff-file-heading-selection ((t (:foreground ,spectral-red-04 :background ,spectral-foreground-32 :bold t))))
+ `(magit-diff-file-heading           ((t (:foreground ,spectral-green-01 :weight bold))))  ;; filename in the diff?
+ `(magit-diff-file-heading-highlight ((t (:foreground ,spectral-orange-03 :background ,spectral-foreground-32 :weight bold))))
+ `(magit-diff-file-heading-selection ((t (:foreground ,spectral-red-04 :background ,spectral-foreground-32 :weight bold))))
 
  `(magit-diff-hunk-heading           ((t (:foreground ,spectral-background-14 :background ,spectral-background-04 ))))
  `(magit-diff-hunk-heading-highlight ((t (:foreground ,spectral-azure-05 :background ,spectral-background-04))))
@@ -573,7 +576,7 @@
 
  ;; TODO: Make this background unique?
  `(magit-branch-remote  ((t (:foreground ,spectral-background-00  :background ,spectral-green-04))))
- `(magit-branch-current ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-06 :bold t))))
+ `(magit-branch-current ((t (:foreground ,spectral-foreground-00 :background ,spectral-green-06 :weight bold))))
  `(magit-branch-local   ((t (:foreground ,spectral-green-tictac-green :underline t ))))
  `(magit-head           ((t (:foreground ,spectral-chartreuse-01 :background ,spectral-foreground-32 :weight bold))))
 
@@ -619,7 +622,7 @@
  `(org-date ((t (:foreground ,spectral-azure-03 :underline t))))
  `(org-deadline-announce ((t (:foreground ,spectral-red-04))))
  `(org-formula ((t (:foreground ,spectral-yellow-05))))
- `(org-headline-todo ((t (:foreground ,spectral-foreground-00 :bold t))))
+ `(org-headline-todo ((t (:foreground ,spectral-foreground-00 :weight bold))))
  `(org-headline-done ((t (:foreground ,spectral-foreground-09))))
  `(org-hide ((t (:foreground ,spectral-background-04))))
  `(org-link ((t (:foreground ,spectral-yellow-05 :underline t))))
@@ -632,7 +635,7 @@
  `(org-property-value ((t (:foreground ,spectral-foreground-13))))
  `(org-table ((t (:foreground ,spectral-azure-03 ))))
  `(org-table-row ((t (:foreground ,spectral-azure-08 ))))
- `(org-table-header ((t (:foreground ,spectral-azure-10 :bold t :underline t))))
+ `(org-table-header ((t (:foreground ,spectral-azure-10 :weight bold :underline t))))
  `(org-tag ((t (:weight bold))))
  `(org-time-grid ((t (:foreground ,spectral-orange-04))))
 
@@ -669,14 +672,14 @@
  ;; For fun? https://colordesigner.io/gradient-generator and https://huey.design/
  ;; huey.design - starting 255, 0, 0, scaling mode: lightness
  ;; Warm cycle: vivid yellow → orange → burnt sienna
- `(rainbow-delimiters-depth-1-face ((t (:foreground ,spectral-yellow-00a :bold t))))
- `(rainbow-delimiters-depth-2-face ((t (:foreground ,spectral-orange-04 :bold t))))
- `(rainbow-delimiters-depth-3-face ((t (:foreground ,spectral-orange-09 :bold t))))
- `(rainbow-delimiters-depth-4-face ((t (:foreground ,spectral-yellow-00a :bold t))))
- `(rainbow-delimiters-depth-5-face ((t (:foreground ,spectral-orange-04 :bold t))))
- `(rainbow-delimiters-depth-6-face ((t (:foreground ,spectral-orange-09 :bold t))))
- `(rainbow-delimiters-depth-7-face ((t (:foreground ,spectral-yellow-00a :bold t))))
- `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground ,spectral-red-03 :background ,spectral-red-12))))
+ `(rainbow-delimiters-depth-1-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
+ `(rainbow-delimiters-depth-2-face ((t (:foreground ,spectral-orange-04 :weight bold))))
+ `(rainbow-delimiters-depth-3-face ((t (:foreground ,spectral-orange-09 :weight bold))))
+ `(rainbow-delimiters-depth-4-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
+ `(rainbow-delimiters-depth-5-face ((t (:foreground ,spectral-orange-04 :weight bold))))
+ `(rainbow-delimiters-depth-6-face ((t (:foreground ,spectral-orange-09 :weight bold))))
+ `(rainbow-delimiters-depth-7-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
+ `(rainbow-delimiters-unmatched-face ((t (:weight bold :foreground ,spectral-red-03 :background ,spectral-red-12))))
 
  `(symbol-overlay-default-face ((t (:underline t))))
 

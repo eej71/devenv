@@ -289,7 +289,7 @@
     (let* ((name (format " %s " (spectral-modeline-format-filename)))
            (fill (make-string (max 0 (- (window-total-width) (length name))) ?\s)))
       (if (mode-line-window-selected-p)
-          (concat (propertize name 'face '(:foreground "#000000" :background "#ffffff" :bold t))
+          (concat (propertize name 'face '(:foreground "#000000" :background "#ffffff" :weight bold))
                   (propertize fill 'face '(:background "#0000f4")))
         (propertize (concat name fill)
                     'face '(:foreground "#9aa3b2" :background "#1f2430")))))
