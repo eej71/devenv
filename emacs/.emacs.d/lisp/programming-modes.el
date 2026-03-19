@@ -69,7 +69,7 @@
   :custom
   ;; We are limited to a total of 9 faces - so we just skip every other color group
   (rainbow-x-colors nil) ;; Dislike the names of colors being colored
-  (rainbow-delimiters-max-face-count 7))
+  (rainbow-delimiters-max-face-count 3))
 
 (use-package smartparens)
 
@@ -80,6 +80,22 @@
   (add-hook 'emacs-lisp-mode-hook #'spectral-enable-colorized-words))
 
 (use-package buttercup)
+
+;; Override c++-ts-mode's default fontification of namespace names.
+;; The grammar correctly parses them as `namespace_identifier`, but the
+;; default rules assign font-lock-constant-face which is too loud.
+;; We append a rule with :override t so it wins over the default.
+(defun eej/cpp-fix-namespace-fontification ()
+  "Fontify C++ namespace identifiers with type face instead of constant face."
+  (let ((rules (treesit-font-lock-rules
+                :language 'cpp
+                :feature 'type
+                :override t
+                '((namespace_identifier) @font-lock-type-face))))
+    (setq-local treesit-font-lock-settings
+                (append treesit-font-lock-settings rules))))
+
+(add-hook 'c++-ts-mode-hook #'eej/cpp-fix-namespace-fontification)
 
 ;; Programming mode hooks
 (add-hook 'prog-mode-hook #'eej/prog-mode-setup)

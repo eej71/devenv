@@ -293,10 +293,10 @@
  `(highlight                    ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-08 :italic t :bold t :extend t))))
 
  ;; Faces related to commenting all get the same basic style
- `(font-lock-comment-delimiter-face    ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :bold t))))
- `(font-lock-comment-face              ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
- `(font-lock-doc-face                  ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
- `(font-lock-doc-string-face           ((t (:foreground ,spectral-springgreen-01 :background ,spectral-background-02 :italic t))))
+ `(font-lock-comment-delimiter-face    ((t (:foreground ,spectral-springgreen-01 :bold t))))
+ `(font-lock-comment-face              ((t (:foreground ,spectral-springgreen-01 :italic t))))
+ `(font-lock-doc-face                  ((t (:foreground ,spectral-springgreen-01 :italic t))))
+ `(font-lock-doc-string-face           ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-string-face               ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
  `(font-lock-preprocessor-face         ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
  `(font-lock-constant-face             ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
@@ -306,10 +306,11 @@
  `(font-lock-property-name-face        ((t (:inherit font-lock-variable-name-face))))
 
  ;; These two should be the same
- `(font-lock-variable-use-face         ((t (:foreground ,spectral-orange-01 :background ,spectral-background-00 :italic t))))
+ ;; "Twilight Lavender" — blue-hour palette chosen by visual comparison
+ `(font-lock-variable-use-face         ((t (:foreground "#7888cc" :italic t))))
  `(font-lock-property-use-face         ((t (:inherit font-lock-variable-use-face))))
- `(font-lock-function-name-face        ((t (:foreground ,spectral-yellow-01 :background ,spectral-background-04))))
- `(font-lock-function-call-face        ((t (:foreground ,spectral-magenta-03 :italic t :bold nil))))
+ `(font-lock-function-name-face        ((t (:foreground "#a99ee3" :background "#14065e"))))
+ `(font-lock-function-call-face        ((t (:foreground "#6cb4e4"))))
 
  ;; When is this one used? elisp-mode uses this for autoload in a comment, why?
  `(font-lock-warning-face              ((t (:foreground ,spectral-foreground-00 :background ,spectral-rose-06))))
@@ -318,7 +319,7 @@
  `(font-lock-regexp-grouping-backslash ((t (:foreground ,spectral-green-01 :weight bold))))
 
  ;; property keywords in elisp, unused otherwise - maybe ease up on the foreground color?
- `(font-lock-builtin-face              ((t (:foreground ,spectral-foreground-10 :background ,spectral-violet-12 :italic t))))
+ `(font-lock-builtin-face              ((t (:foreground "#9090b0" :italic t))))
 
  `(completions-highlight        ((t (:foreground ,spectral-magenta-01 :background ,spectral-rose-07))))
 
@@ -442,7 +443,7 @@
 
  `(linum ((t (:foreground ,spectral-foreground-10 :background ,spectral-background-00 ))))
  `(line-number ((t (:foreground ,spectral-foreground-26 :background ,spectral-background-01))))
- `(line-number-current-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-01 :underline t :bold t))))
+ `(line-number-current-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-01 :inverse-video t :bold t))))
 
  `(minibuffer-prompt ((t (:foreground ,spectral-yellow-01))))
 
@@ -619,7 +620,7 @@
  `(org-deadline-announce ((t (:foreground ,spectral-red-04))))
  `(org-formula ((t (:foreground ,spectral-yellow-05))))
  `(org-headline-todo ((t (:foreground ,spectral-foreground-00 :bold t))))
- `(org-headline-done ((t (:foreground ,spectral-foreground-12))))
+ `(org-headline-done ((t (:foreground ,spectral-foreground-09))))
  `(org-hide ((t (:foreground ,spectral-background-04))))
  `(org-link ((t (:foreground ,spectral-yellow-05 :underline t))))
  `(org-scheduled ((t (:foreground ,spectral-springgreen-04))))
@@ -627,9 +628,11 @@
  `(org-scheduled-today ((t (:foreground ,spectral-blue-04))))
  `(org-sexp-date ((t (:foreground ,spectral-blue-04 :underline t))))
  `(org-special-keyword ((t (:inherit font-lock-comment-face))))
+ `(org-drawer ((t (:foreground ,spectral-foreground-15))))
+ `(org-property-value ((t (:foreground ,spectral-foreground-13))))
  `(org-table ((t (:foreground ,spectral-azure-03 ))))
  `(org-table-row ((t (:foreground ,spectral-azure-08 ))))
- `(org-table-header ((t (:foreground ,spectral-azure-10 ))))
+ `(org-table-header ((t (:foreground ,spectral-azure-10 :bold t :underline t))))
  `(org-tag ((t (:weight bold))))
  `(org-time-grid ((t (:foreground ,spectral-orange-04))))
 
@@ -665,14 +668,17 @@
 
  ;; For fun? https://colordesigner.io/gradient-generator and https://huey.design/
  ;; huey.design - starting 255, 0, 0, scaling mode: lightness
- `(rainbow-delimiters-depth-1-face ((t ( :foreground ,spectral-azure-02 :background ,spectral-azure-12 :bold t))))
- `(rainbow-delimiters-depth-2-face ((t ( :foreground ,spectral-red-02 :background ,spectral-red-12 ))))
- `(rainbow-delimiters-depth-3-face ((t ( :foreground ,spectral-yellow-00 :background ,spectral-yellow-10 :bold t))))
- `(rainbow-delimiters-depth-4-face ((t ( :foreground ,spectral-green-02 :background ,spectral-green-12 ))))
- `(rainbow-delimiters-depth-5-face ((t ( :foreground ,spectral-blue-03 :background ,spectral-blue-10 :bold t :overline t))))
- `(rainbow-delimiters-depth-6-face ((t ( :foreground ,spectral-magenta-03 :background ,spectral-magenta-12 ))))
- `(rainbow-delimiters-depth-7-face ((t ( :foreground ,spectral-orange-02 :background ,spectral-orange-08 :bold t))))
+ ;; Warm cycle: vivid yellow → orange → burnt sienna
+ `(rainbow-delimiters-depth-1-face ((t (:foreground ,spectral-yellow-00a :bold t))))
+ `(rainbow-delimiters-depth-2-face ((t (:foreground ,spectral-orange-04 :bold t))))
+ `(rainbow-delimiters-depth-3-face ((t (:foreground ,spectral-orange-09 :bold t))))
+ `(rainbow-delimiters-depth-4-face ((t (:foreground ,spectral-yellow-00a :bold t))))
+ `(rainbow-delimiters-depth-5-face ((t (:foreground ,spectral-orange-04 :bold t))))
+ `(rainbow-delimiters-depth-6-face ((t (:foreground ,spectral-orange-09 :bold t))))
+ `(rainbow-delimiters-depth-7-face ((t (:foreground ,spectral-yellow-00a :bold t))))
  `(rainbow-delimiters-unmatched-face ((t (:bold t :foreground ,spectral-red-03 :background ,spectral-red-12))))
+
+ `(symbol-overlay-default-face ((t (:underline t))))
 
 ;;;;; re-builder
  `(reb-match-0 ((t (:foreground ,spectral-background-08 :background ,spectral-magenta-01))))
