@@ -75,6 +75,7 @@ All `:eval` constructs are marked `risky-local-variable` to enable evaluation.
 
 ### Working With This Config
 
+- **Emacs runs in TTY mode (terminal)**, not GUI. Face attributes like `:box` with cons cell line-width don't work. Stick to attributes that terminals support: foreground, background, bold, italic, underline, inverse-video.
 - Emacs is built from source with native-compilation and tree-sitter. Build instructions are in `init.el` header comments.
 - Machine-specific config lives in `local/local-config.el` (symlinked into `.emacs.d/`), not tracked in this repo's lisp/ modules.
 - The `.dir-locals.el` disables `emacs-lisp-checkdoc` for all elisp files under `.emacs.d/` since these are config, not library code.
