@@ -78,6 +78,7 @@ export TERM=xterm-256color
 export LD_LIBRARY_PATH
 export EDITOR='emacsclient -nw'
 export VISUAL='emacsclient -nw'
+export GREP_COLORS='ms=01;32:mc=01;32:sl=:cx=:fn=01;33:ln=01;96:bn=32:se=36'
 
 # This is required for tree-sitter
 LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
