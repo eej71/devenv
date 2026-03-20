@@ -5,6 +5,7 @@
 	pager = less -x2 -R
 	packedGitWindowSize = 16m
 	packedGitLimit = 128m
+	excludesFile = ~/.gitignore_global
 
 [color]
 	diff = auto

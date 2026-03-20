@@ -1,0 +1,26 @@
+# Global gitignore — applies to all repositories
+
+# Agent/AI tools
+.agent-shell/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# Vim
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# General cache
+.cache/
