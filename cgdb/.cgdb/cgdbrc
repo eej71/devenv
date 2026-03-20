@@ -1,0 +1,24 @@
+# cgdbrc — Spectral theme approximation
+# Colors mapped from Emacs spectral-theme to 256-color terminal values.
+#
+# Emacs face → 256-color approximation
+# -----------------------------------------------------------
+# Comment      spectral-springgreen-01 (#c0ffd8 range) → 157 (#afffaf)
+# Statement    spectral-cyan-02 on blue-11             → 87 on 17, underline
+# PreProc      foreground-00 on red-10 (#760000)       → 231 on 88
+# Constant     spectral-green-tictac-green (#00ff87)   → 48  (exact match)
+# Type         spectral-foreground-15 (medium grey)    → 102 (#878787), italic
+# Identifier   variable-use-face (#7888cc periwinkle)  → 110 (#87afd7)
+# Special      function-call-face (#6cb4e4 cornflower) → 111 (#87afff)
+
+highlight Comment    ctermfg=157  cterm=italic
+highlight Statement  ctermfg=87   ctermbg=17   cterm=underline
+highlight PreProc    ctermfg=231  ctermbg=88
+highlight Constant   ctermfg=48
+highlight Type       ctermfg=102  cterm=italic
+highlight Identifier ctermfg=110
+highlight Special    ctermfg=111
+
+# General settings
+set ignorecase=0
+set autosourcereload=1
