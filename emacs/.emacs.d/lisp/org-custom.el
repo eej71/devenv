@@ -319,7 +319,7 @@ property already exists so multiple entries accumulate."
         org-agenda-tags-column 150
         org-agenda-time-grid '((daily today require-timed) ""
                                (500 800 900 930 1000 1030 1100 1130 1200 1300 1330 1400 1430 1500 1530 1600 1630 1700 1800))
-        org-babel-load-languages '((emacs-lisp . t) (sql . t))
+        org-babel-load-languages '((emacs-lisp . t) (sql . t) (shell . t))
         org-checkbox-hierarchical-statistics nil
         org-clock-history-length 25
         org-clock-in-switch-to-state "STARTED"
