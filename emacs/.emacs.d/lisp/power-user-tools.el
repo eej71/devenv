@@ -258,7 +258,7 @@
 
 ;; Mouse support in terminal (for when you need it)
 (unless (display-graphic-p)
-  (xterm-mouse-mode 1)
+  (xterm-mouse-mode -1)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 

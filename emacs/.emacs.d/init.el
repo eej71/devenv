@@ -91,10 +91,7 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'compilation-search-path 'safe-local-variable 'string-or-null-p)
 
-;; Don't grab mouse events in terminal Emacs (keeps Windows Terminal selection working)
-;; TODO: This should be put into something more generic for frame creation
-(unless (display-graphic-p)
-  (xterm-mouse-mode -1))
+;; Mouse support in terminal is configured in power-user-tools.el
 
 (use-package ack :init
   (setq
