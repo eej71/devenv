@@ -9,7 +9,7 @@ skip=(local local-templates terminal)
 
 # Packages that need --no-folding because their target directory
 # contains runtime state that shouldn't be replaced by a symlink
-no_folding=(claude)
+no_folding=(claude cgdb)
 
 for dir in */; do
     dir="${dir%/}"
