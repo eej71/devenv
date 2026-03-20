@@ -259,5 +259,27 @@
 
 (define-key eej-ai-map (kbd "a") #'eej/toggle-auto-suggestions)
 
+;; agent-shell — ACP-based agent interface, defaulting to Claude Code
+(use-package shell-maker
+  :straight (:host github :repo "xenodium/shell-maker"))
+
+(use-package acp
+  :straight (:host github :repo "xenodium/acp.el"))
+
+(use-package agent-shell
+  :straight (:host github :repo "xenodium/agent-shell")
+  :after (shell-maker acp)
+  :config
+  ;; Use the claude CLI login rather than a raw API key —
+  ;; authentication is handled by whatever `claude auth` has stored.
+  (setq agent-shell-preferred-agent-config 'claude-code)
+  (setq agent-shell-session-strategy 'prompt)
+  (setq agent-shell-prefer-session-resume nil)
+  (setq agent-shell-anthropic-claude-acp-command
+        '("claude-agent-acp" "--effort" "max"))
+  (setq agent-shell-anthropic-authentication
+        (agent-shell-anthropic-make-authentication :login t))
+  (define-key eej-ai-map (kbd "A") #'agent-shell))
+
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
