@@ -47,8 +47,8 @@
   (recentf-mode t)
   (run-at-time nil 600 'recentf-save-list)
   :custom
-  (recentf-max-menu-items 50
-   recentf-max-saved-items 50))
+  (recentf-max-menu-items 50)
+  (recentf-max-saved-items 50))
 
 ;; Disable GUI chrome
 (tool-bar-mode -1)
