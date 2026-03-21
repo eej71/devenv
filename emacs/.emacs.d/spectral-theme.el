@@ -301,7 +301,7 @@ background (-09) — so pairs are always monochromatic and readable."
  `(font-lock-doc-face                  ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-doc-string-face           ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-string-face               ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
- `(font-lock-preprocessor-face         ((t (:foreground ,spectral-foreground-00 :background ,spectral-red-10))))
+ `(font-lock-preprocessor-face         ((t (:foreground ,spectral-orange-04 :weight bold))))
  `(font-lock-constant-face             ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
  `(font-lock-keyword-face              ((t (:foreground ,spectral-cyan-02 :background ,spectral-blue-11 :underline t))))
  `(font-lock-type-face                 ((t (:foreground ,spectral-foreground-15 :italic t))))
