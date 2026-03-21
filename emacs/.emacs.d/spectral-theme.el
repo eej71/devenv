@@ -671,14 +671,14 @@ background (-09) — so pairs are always monochromatic and readable."
 
  ;; For fun? https://colordesigner.io/gradient-generator and https://huey.design/
  ;; huey.design - starting 255, 0, 0, scaling mode: lightness
- ;; Warm cycle: vivid yellow → orange → burnt sienna
+ ;; 5-color cycle: yellow → orange → rose → cyan → chartreuse
  `(rainbow-delimiters-depth-1-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
  `(rainbow-delimiters-depth-2-face ((t (:foreground ,spectral-orange-04 :weight bold))))
- `(rainbow-delimiters-depth-3-face ((t (:foreground ,spectral-orange-09 :weight bold))))
- `(rainbow-delimiters-depth-4-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
- `(rainbow-delimiters-depth-5-face ((t (:foreground ,spectral-orange-04 :weight bold))))
- `(rainbow-delimiters-depth-6-face ((t (:foreground ,spectral-orange-09 :weight bold))))
- `(rainbow-delimiters-depth-7-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
+ `(rainbow-delimiters-depth-3-face ((t (:foreground ,spectral-rose-05 :weight bold))))
+ `(rainbow-delimiters-depth-4-face ((t (:foreground ,spectral-cyan-03 :weight bold))))
+ `(rainbow-delimiters-depth-5-face ((t (:foreground ,spectral-chartreuse-02 :weight bold))))
+ `(rainbow-delimiters-depth-6-face ((t (:foreground ,spectral-yellow-00a :weight bold))))
+ `(rainbow-delimiters-depth-7-face ((t (:foreground ,spectral-orange-04 :weight bold))))
  `(rainbow-delimiters-unmatched-face ((t (:weight bold :foreground ,spectral-red-03 :background ,spectral-red-12))))
 
  `(symbol-overlay-default-face ((t (:underline t))))
