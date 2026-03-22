@@ -300,19 +300,19 @@ background (-09) — so pairs are always monochromatic and readable."
  `(font-lock-comment-face              ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-doc-face                  ((t (:foreground ,spectral-springgreen-01 :italic t))))
  `(font-lock-doc-string-face           ((t (:foreground ,spectral-springgreen-01 :italic t))))
- `(font-lock-string-face               ((t (:foreground ,spectral-green-tictac-green :background ,spectral-background-00 :italic t))))
+ `(font-lock-string-face               ((t (:foreground ,spectral-chartreuse-02 :italic t))))
  `(font-lock-preprocessor-face         ((t (:foreground ,spectral-orange-04 :weight bold))))
- `(font-lock-constant-face             ((t (:foreground ,spectral-violet-03 :background ,spectral-violet-10 :italic t))))
- `(font-lock-keyword-face              ((t (:foreground ,spectral-cyan-02 :background ,spectral-blue-11 :underline t))))
+ `(font-lock-constant-face             ((t (:foreground ,spectral-yellow-02 :italic t))))
+ `(font-lock-keyword-face              ((t (:foreground ,spectral-azure-03 :weight bold))))
  `(font-lock-type-face                 ((t (:foreground ,spectral-foreground-15 :italic t))))
- `(font-lock-variable-name-face        ((t (:foreground ,spectral-foreground-00 :background ,spectral-background-03 :weight bold))))
+ `(font-lock-variable-name-face        ((t (:foreground ,spectral-foreground-00 :weight bold))))
  `(font-lock-property-name-face        ((t (:inherit font-lock-variable-name-face))))
 
  ;; These two should be the same
  ;; "Twilight Lavender" — blue-hour palette chosen by visual comparison
  `(font-lock-variable-use-face         ((t (:foreground "#7888cc" :italic t))))
  `(font-lock-property-use-face         ((t (:inherit font-lock-variable-use-face))))
- `(font-lock-function-name-face        ((t (:foreground "#a99ee3" :background "#14065e"))))
+ `(font-lock-function-name-face        ((t (:foreground ,spectral-violet-04))))
  `(font-lock-function-call-face        ((t (:foreground "#6cb4e4"))))
 
  ;; When is this one used? elisp-mode uses this for autoload in a comment, why?
@@ -343,14 +343,14 @@ background (-09) — so pairs are always monochromatic and readable."
  `(vertico-group-separator      ((t (:strike-through t :foreground ,spectral-foreground-00))))
 
  ;; This captures the headline levels of org mode
- `(org-level-1                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-2                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-3                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-4                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-5                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-6                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-7                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
- `(org-level-8                  ((t (:background ,spectral-foreground-32 :foreground ,spectral-foreground-00))))
+ `(org-level-1                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-2                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-3                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-4                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-5                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-6                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-7                  ((t (:foreground ,spectral-foreground-00))))
+ `(org-level-8                  ((t (:foreground ,spectral-foreground-00))))
 
  ;; Rename these to spectral
  `(spectral-modeline-saved-face ((t (:foreground ,spectral-green-01))))
