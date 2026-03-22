@@ -279,7 +279,17 @@
         '("claude-agent-acp" "--effort" "max"))
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication :login t))
-  (define-key eej-ai-map (kbd "A") #'agent-shell))
+  (define-key eej-ai-map (kbd "A") #'agent-shell)
+  (advice-add 'agent-shell--make-header :filter-return
+              #'eej/agent-shell-header-black-bg))
+
+(defun eej/agent-shell-header-black-bg (header)
+  "Style HEADER content with black text on white background."
+  (if (stringp header)
+      (let ((s (copy-sequence header)))
+        (remove-text-properties 0 (length s) '(font-lock-face nil) s)
+        (propertize s 'face '(:foreground "#000000" :background "#ffffff" :weight bold)))
+    header))
 
 (provide 'ai-tools)
 ;;; ai-tools.el ends here
