@@ -315,10 +315,10 @@ background (-09) — so pairs are always monochromatic and readable."
 
  ;; These two should be the same
  ;; "Twilight Lavender" — blue-hour palette chosen by visual comparison
- `(font-lock-variable-use-face         ((t (:foreground ,spectral-periwinkle :italic t))))
+ `(font-lock-variable-use-face         ((t (:foreground ,spectral-blue-05 :italic t))))
  `(font-lock-property-use-face         ((t (:inherit font-lock-variable-use-face))))
  `(font-lock-function-name-face        ((t (:foreground ,spectral-violet-04))))
- `(font-lock-function-call-face        ((t (:foreground ,spectral-cornflower))))
+ `(font-lock-function-call-face        ((t (:foreground ,spectral-azure-04))))
 
  ;; When is this one used? elisp-mode uses this for autoload in a comment, why?
  `(font-lock-warning-face              ((t (:foreground ,spectral-foreground-00 :background ,spectral-rose-06))))
@@ -327,7 +327,7 @@ background (-09) — so pairs are always monochromatic and readable."
  `(font-lock-regexp-grouping-backslash ((t (:foreground ,spectral-green-01 :weight bold))))
 
  ;; property keywords in elisp, unused otherwise - maybe ease up on the foreground color?
- `(font-lock-builtin-face              ((t (:foreground ,spectral-slate :italic t))))
+ `(font-lock-builtin-face              ((t (:foreground ,spectral-blue-04 :italic t))))
 
  `(completions-highlight        ((t (:foreground ,spectral-magenta-01 :background ,spectral-rose-07))))
 
@@ -456,10 +456,10 @@ background (-09) — so pairs are always monochromatic and readable."
  `(minibuffer-prompt ((t (:foreground ,spectral-yellow-01))))
 
  ;; This is still used - fold it in better...
- `(mode-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-11))))
+ `(mode-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-08))))
  `(mode-line-inactive ((t (:foreground ,spectral-foreground-20 :background ,spectral-background-03))))
 
- `(header-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-11))))
+ `(header-line ((t (:foreground ,spectral-foreground-00 :background ,spectral-blue-08))))
 
  `(secondary-selection ((t (:background ,spectral-background-12))))
  `(trailing-whitespace ((t (:background ,spectral-rose-01))))

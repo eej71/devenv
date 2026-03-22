@@ -19,7 +19,8 @@
  '(completion-ignore-case t t)
  '(custom-enabled-themes '(spectral))
  '(custom-safe-themes
-   '("841f05044422544925a592e810c73b6e44d41fb9f40d86960dc79a3fd2ce4803"
+   '("d5b919ffc18c71de44e5aa865874591d29a6a2ac2f1a393ce1abc65e9bf67549"
+     "841f05044422544925a592e810c73b6e44d41fb9f40d86960dc79a3fd2ce4803"
      "fbcba8deb199e323f26cf4244ceadfc54c5914a473490456707c109701e14909"
      "9932992fd74b289a1ceda66b9a34c882e11a3189e25cc7398710f03ab8f0144f"
      default))
