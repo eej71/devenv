@@ -290,9 +290,9 @@
            (fill (make-string (max 0 (- (window-total-width) (length name))) ?\s)))
       (if (mode-line-window-selected-p)
           (concat (propertize name 'face '(:foreground "#000000" :background "#ffffff" :weight bold))
-                  (propertize fill 'face '(:background "#0000f4")))
+                  (propertize fill 'face '(:background "#3333ff")))
         (propertize (concat name fill)
-                    'face '(:foreground "#9aa3b2" :background "#1f2430")))))
+                    'face '(:foreground "#989898" :background "#181818")))))
   "Header line format for active/inactive window perimeter highlighting.")
 (put 'spectral-header-line-format 'risky-local-variable t)
 
