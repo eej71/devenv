@@ -3,21 +3,25 @@
 #
 # Emacs face → 256-color approximation
 # -----------------------------------------------------------
-# Comment      spectral-springgreen-01 (#c0ffd8 range) → 157 (#afffaf)
-# Statement    spectral-cyan-02 on blue-11             → 87 on 17, underline
-# PreProc      foreground-00 on red-10 (#760000)       → 231 on 88
-# Constant     spectral-green-tictac-green (#00ff87)   → 48  (exact match)
-# Type         spectral-foreground-15 (medium grey)    → 102 (#878787), italic
-# Identifier   variable-use-face (#7888cc periwinkle)  → 110 (#87afd7)
-# Special      function-call-face (#6cb4e4 cornflower) → 111 (#87afff)
+# Comment      springgreen-01 (#8affc9)                → 157 (#afffaf), italic
+# String       chartreuse-02 (#8ceb2e)                 → 112 (#87d700), italic
+# Statement    azure-03 (#80c4ff) bold                 → 111 (#87afff), bold
+# PreProc      orange-04 (#f09335) bold                → 172 (#d78700), bold
+# Constant     yellow-02 (#d9d95f)                     → 185 (#d7d75f), italic
+# Type         foreground-15 (#888888)                 → 102 (#878787), italic
+# Identifier   variable-use-face (#7888cc)             → 104 (#8787d7), italic
+# Special      function-call-face (#6cb4e4)            → 110 (#87afd7)
+# Function     violet-04 (#cc8fff)                     → 177 (#d787ff)
 
 highlight Comment    ctermfg=157  cterm=italic
-highlight Statement  ctermfg=87   ctermbg=17   cterm=underline
-highlight PreProc    ctermfg=231  ctermbg=88
-highlight Constant   ctermfg=48
+highlight String     ctermfg=112  cterm=italic
+highlight Statement  ctermfg=111  cterm=bold
+highlight PreProc    ctermfg=172  cterm=bold
+highlight Constant   ctermfg=185  cterm=italic
 highlight Type       ctermfg=102  cterm=italic
-highlight Identifier ctermfg=110
-highlight Special    ctermfg=111
+highlight Identifier ctermfg=104  cterm=italic
+highlight Special    ctermfg=110
+highlight Function   ctermfg=177
 
 # General settings
 set ignorecase=0

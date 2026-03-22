@@ -242,6 +242,11 @@
 (defconst spectral-foreground-31 "#080808")
 (defconst spectral-foreground-32 "#000000")
 
+;; Hand-picked desaturated blue-grey tones outside the generated ramps
+(defconst spectral-periwinkle "#7888cc")  ;; variable-use — twilight lavender
+(defconst spectral-cornflower "#6cb4e4")  ;; function-call — sky blue
+(defconst spectral-slate      "#9090b0")  ;; builtin — muted blue-grey
+
 (defconst spectral-color-palette-names '("red" "orange" "yellow" "chartreuse" "green" "springgreen" "cyan" "azure" "blue" "violet" "magenta" "rose"))
 
 (defun eej/project-hash-value ()
@@ -310,10 +315,10 @@ background (-09) — so pairs are always monochromatic and readable."
 
  ;; These two should be the same
  ;; "Twilight Lavender" — blue-hour palette chosen by visual comparison
- `(font-lock-variable-use-face         ((t (:foreground "#7888cc" :italic t))))
+ `(font-lock-variable-use-face         ((t (:foreground ,spectral-periwinkle :italic t))))
  `(font-lock-property-use-face         ((t (:inherit font-lock-variable-use-face))))
  `(font-lock-function-name-face        ((t (:foreground ,spectral-violet-04))))
- `(font-lock-function-call-face        ((t (:foreground "#6cb4e4"))))
+ `(font-lock-function-call-face        ((t (:foreground ,spectral-cornflower))))
 
  ;; When is this one used? elisp-mode uses this for autoload in a comment, why?
  `(font-lock-warning-face              ((t (:foreground ,spectral-foreground-00 :background ,spectral-rose-06))))
@@ -322,7 +327,7 @@ background (-09) — so pairs are always monochromatic and readable."
  `(font-lock-regexp-grouping-backslash ((t (:foreground ,spectral-green-01 :weight bold))))
 
  ;; property keywords in elisp, unused otherwise - maybe ease up on the foreground color?
- `(font-lock-builtin-face              ((t (:foreground "#9090b0" :italic t))))
+ `(font-lock-builtin-face              ((t (:foreground ,spectral-slate :italic t))))
 
  `(completions-highlight        ((t (:foreground ,spectral-magenta-01 :background ,spectral-rose-07))))
 
