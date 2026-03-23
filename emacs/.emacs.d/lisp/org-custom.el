@@ -293,6 +293,51 @@ property already exists so multiple entries accumulate."
 (add-hook 'org-capture-prepare-finalize-hook #'eej/capture-clock-link-ensure-id)
 (add-hook 'org-capture-after-finalize-hook #'eej/capture-clock-link-add-backlink)
 
+;;; Project Journal capture
+;;
+;; Walks up from the clocked task to find the nearest ancestor with a
+;; :project: property, then targets a "Journal" child heading there.
+;; Journal entries are plain list items with inactive timestamps.
+
+(defun eej/find-project-heading ()
+  "From the clocked task, walk up to the nearest heading with a :project: property.
+Returns (BUFFER . POSITION) or nil."
+  (when (org-clocking-p)
+    (org-with-point-at org-clock-marker
+      (save-excursion
+        (org-back-to-heading t)
+        (let (result)
+          (while (and (not result) (not (bobp)))
+            (if (org-entry-get nil "project")
+                (setq result (cons (current-buffer) (point)))
+              (unless (org-up-heading-safe)
+                (goto-char (point-min)))))
+          result)))))
+
+(defun eej/find-or-create-project-journal ()
+  "Navigate to the Journal heading under the current project.
+Creates the heading if it does not exist.  For use as an
+`org-capture' target function."
+  (let ((project (eej/find-project-heading)))
+    (unless project
+      (user-error "No clocked task or no :project: property found in ancestors"))
+    (set-buffer (car project))
+    (goto-char (cdr project))
+    (let* ((level (org-outline-level))
+           (child-level (1+ level))
+           (subtree-end (save-excursion (org-end-of-subtree t t)))
+           (journal-re (format "^\\*\\{%d\\} Journal$" child-level))
+           found)
+      (save-excursion
+        (forward-line 1)
+        (setq found (re-search-forward journal-re subtree-end t)))
+      (if found
+          (goto-char (line-beginning-position))
+        (goto-char subtree-end)
+        (unless (bolp) (insert "\n"))
+        (insert (make-string child-level ?*) " Journal\n")
+        (forward-line -1)))))
+
 ;; TODO: consult-org-heading or consult-org-agenda
 (use-package org
   ;; It's necessary to place everything in :config otherwise org mode loading is sad
@@ -400,7 +445,9 @@ property already exists so multiple entries accumulate."
           ("b" "Bookmark" entry (file+headline "notebook.org" "Bookmarks")
            (function eej/capture-template-bookmark))
           ("s" "Snippet" entry (file+headline "notebook.org" "Snippets")
-           (function eej/capture-template-snippet))))
+           (function eej/capture-template-snippet))
+          ("J" "Project Journal" item (function eej/find-or-create-project-journal)
+           "- %U %?" :prepend t)))
 
   (org-clock-persistence-insinuate)
   (add-hook 'org-mode-hook #'spectral-org-setup)
