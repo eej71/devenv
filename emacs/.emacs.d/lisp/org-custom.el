@@ -206,6 +206,21 @@ This skip function is intended for a `todo \"TODO|STARTED\"' matcher."
 
 (advice-add 'org-sort-entries :around #'spectral-org-todo-order-sort)
 
+;;; Preserve fold state when moving subtrees
+
+(defun eej/preserve-fold-on-move (orig-fun &rest args)
+  "Refold the subtree after moving if it was folded."
+  (let ((folded (and (org-at-heading-p)
+                     (save-excursion
+                       (end-of-line)
+                       (org-fold-folded-p)))))
+    (apply orig-fun args)
+    (when folded
+      (org-fold-hide-subtree))))
+
+(advice-add 'org-move-subtree-up :around #'eej/preserve-fold-on-move)
+(advice-add 'org-move-subtree-down :around #'eej/preserve-fold-on-move)
+
 ;;; Capture <-> Clock bidirectional linking
 ;;
 ;; For configured capture keys, when a task is clocked in:
