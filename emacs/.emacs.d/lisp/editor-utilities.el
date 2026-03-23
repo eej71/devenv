@@ -57,7 +57,20 @@
          ("C-c v n" . multi-vterm-next)
          ("C-c v p" . multi-vterm-prev)
          ("C-c v d" . multi-vterm-dedicated-toggle)
-         ("C-c v r" . multi-vterm-project)))
+         ("C-c v r" . multi-vterm-project))
+  :config
+  (defun eej/multi-vterm-format-buffer-index-with-project (orig-fn index)
+    "Include project name in vterm buffer name when available."
+    (let ((project (project-current)))
+      (if project
+          (format "*%s:%s<%s>*"
+                  multi-vterm-buffer-name
+                  (file-name-nondirectory
+                   (directory-file-name (project-root project)))
+                  index)
+        (funcall orig-fn index))))
+  (advice-add 'multi-vterm-format-buffer-index :around
+              #'eej/multi-vterm-format-buffer-index-with-project))
 
 (require 'tramp)
 (require 'vterm)
