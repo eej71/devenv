@@ -315,7 +315,7 @@ background (-09) — so pairs are always monochromatic and readable."
 
  ;; These two should be the same
  ;; "Twilight Lavender" — blue-hour palette chosen by visual comparison
- `(font-lock-variable-use-face         ((t (:foreground ,spectral-blue-05 :italic t))))
+ `(font-lock-variable-use-face         ((t (:foreground ,spectral-cyan-03 :italic t))))
  `(font-lock-property-use-face         ((t (:inherit font-lock-variable-use-face))))
  `(font-lock-function-name-face        ((t (:foreground ,spectral-violet-04))))
  `(font-lock-function-call-face        ((t (:foreground ,spectral-azure-04))))
