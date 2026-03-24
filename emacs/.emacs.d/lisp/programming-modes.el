@@ -97,6 +97,51 @@
 
 (add-hook 'c++-ts-mode-hook #'eej/cpp-fix-namespace-fontification)
 
+;; Enhanced C++ fontification — tree-sitter parses these correctly but
+;; the built-in c-ts-mode font-lock rules miss several patterns.
+(defun eej/cpp-enhanced-fontification ()
+  "Add tree-sitter font-lock rules for patterns c-ts-mode misses."
+  (let ((rules (treesit-font-lock-rules
+                ;; Qualified function calls: std::move(), std::sort()
+                ;; Built-in rules only match plain (identifier) as the
+                ;; function: child, missing (qualified_identifier).
+                :language 'cpp
+                :feature 'function
+                :override t
+                '((call_expression
+                   function: (qualified_identifier
+                     name: (identifier) @font-lock-function-call-face)))
+
+                ;; Template function calls: make_unique<T>(), static_cast<T>()
+                :language 'cpp
+                :feature 'function
+                :override t
+                '((call_expression
+                   function: (template_function
+                     name: (identifier) @font-lock-function-call-face))
+                  (call_expression
+                   function: (template_function
+                     name: (qualified_identifier
+                       name: (identifier) @font-lock-function-call-face))))
+
+                ;; Member initializer list field names: device_name_(...)
+                :language 'cpp
+                :feature 'property
+                :override t
+                '((field_initializer
+                   (field_identifier) @font-lock-property-name-face))
+
+                ;; Structured bindings: auto& [a, b] = ...
+                :language 'cpp
+                :feature 'definition
+                :override t
+                '((structured_binding_declarator
+                   (identifier) @font-lock-variable-name-face)))))
+    (setq-local treesit-font-lock-settings
+                (append treesit-font-lock-settings rules))))
+
+(add-hook 'c++-ts-mode-hook #'eej/cpp-enhanced-fontification)
+
 ;; Programming mode hooks
 (add-hook 'prog-mode-hook #'eej/prog-mode-setup)
 (add-hook 'nxml-mode-hook #'eej/prog-mode-setup)
