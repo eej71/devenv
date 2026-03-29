@@ -629,7 +629,7 @@ background (-09) — so pairs are always monochromatic and readable."
  `(org-formula ((t (:foreground ,spectral-yellow-05))))
  `(org-headline-todo ((t (:foreground ,spectral-foreground-00 :weight bold))))
  `(org-headline-done ((t (:foreground ,spectral-foreground-09))))
- `(org-hide ((t (:foreground ,spectral-background-04))))
+ `(org-hide ((t (:foreground ,spectral-background-00))))
  `(org-link ((t (:foreground ,spectral-yellow-05 :underline t))))
  `(org-scheduled ((t (:foreground ,spectral-springgreen-04))))
  `(org-scheduled-previously ((t (:foreground ,spectral-red-01))))
